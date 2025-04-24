@@ -100,6 +100,7 @@ public class Form_List_Produk_Minuman extends javax.swing.JFrame {
         });
 
         jButton3.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jButton3.setText("Cari");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);

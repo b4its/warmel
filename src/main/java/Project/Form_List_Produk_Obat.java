@@ -99,6 +99,9 @@ public class Form_List_Produk_Obat extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jButton3.setText("Cari");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
