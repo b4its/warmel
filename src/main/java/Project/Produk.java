@@ -130,7 +130,7 @@ public class Produk extends javax.swing.JFrame {
         jLabel10.setText("Lainnya");
 
         jButton1.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        jButton1.setText("Tambah Produk");
+        jButton1.setText("Daftar Produk");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
