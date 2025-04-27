@@ -1,0 +1,81 @@
+drop database warmel;
+-- Create Database
+CREATE DATABASE IF NOT EXISTS warmel;
+USE warmel;
+
+-- Tabel Kategori
+CREATE TABLE kategori (
+    idKategori INT(11) PRIMARY KEY AUTO_INCREMENT,
+    namaKategori VARCHAR(100) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+-- Tabel Produk
+CREATE TABLE produk (
+    idProduk INT(11) PRIMARY KEY AUTO_INCREMENT,
+    namaProduk VARCHAR(255) NOT NULL,
+    idKategori INT(11),
+    hargaBeli DECIMAL(15,2),
+    hargaJual DECIMAL(15,2),
+    stok INT(11),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX (idKategori),
+    CONSTRAINT fk_produk_kategori FOREIGN KEY (idKategori) REFERENCES kategori(idKategori)
+) ENGINE=InnoDB;
+
+-- Tabel Agen
+CREATE TABLE agen (
+    idAgen INT(11) PRIMARY KEY AUTO_INCREMENT,
+    namaAgen VARCHAR(255) NOT NULL,
+    alamat TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+-- Tabel Pembelian
+CREATE TABLE pembelian (
+    idPembelian INT(11) PRIMARY KEY AUTO_INCREMENT,
+    idAgen INT(11),
+    keterangan TEXT,
+    totalHarga DECIMAL(15,2),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    INDEX (idAgen),
+    CONSTRAINT fk_pembelian_agen FOREIGN KEY (idAgen) REFERENCES agen(idAgen)
+) ENGINE=InnoDB;
+
+-- Tabel Detail Pembelian
+CREATE TABLE detail_pembelian (
+    idDetailPembelian INT(11) PRIMARY KEY AUTO_INCREMENT,
+    idPembelian INT(11),
+    idProduk INT(11),
+    jumlah INT(11),
+    subtotal DECIMAL(15,2),
+    INDEX (idPembelian),
+    INDEX (idProduk),
+    CONSTRAINT fk_detailpembelian_pembelian FOREIGN KEY (idPembelian) REFERENCES pembelian(idPembelian),
+    CONSTRAINT fk_detailpembelian_produk FOREIGN KEY (idProduk) REFERENCES produk(idProduk)
+) ENGINE=InnoDB;
+
+-- Tabel Transaksi
+CREATE TABLE transaksi (
+    idTransaksi INT(11) PRIMARY KEY AUTO_INCREMENT,
+    jenisTransaksi VARCHAR(50) NOT NULL,
+    keterangan TEXT,
+    total DECIMAL(15,2),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+-- Tabel Detail Transaksi
+CREATE TABLE detail_transaksi (
+    idDetailTransaksi INT(11) PRIMARY KEY AUTO_INCREMENT,
+    idTransaksi INT(11),
+    idDetailPembelian INT(11),
+    jumlah INT(11),
+    subtotal DECIMAL(15,2),
+    INDEX (idTransaksi),
+    INDEX (idDetailPembelian),
+    CONSTRAINT fk_detailtransaksi_transaksi FOREIGN KEY (idTransaksi) REFERENCES transaksi(idTransaksi),
+    CONSTRAINT fk_detailtransaksi_detailpembelian FOREIGN KEY (idDetailPembelian) REFERENCES detail_pembelian(idDetailPembelian)
+) ENGINE=InnoDB;

@@ -8,12 +8,12 @@ package Project.Pages.Receipt;
  *
  * @author dicky
  */
-public class Laporan_Keuangan extends javax.swing.JFrame {
+public class Laporan_Keuangan_Menu extends javax.swing.JFrame {
 
     /**
      * Creates new form Produk
      */
-    public Laporan_Keuangan() {
+    public Laporan_Keuangan_Menu() {
         initComponents();
     }
 
@@ -240,21 +240,23 @@ public class Laporan_Keuangan extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Laporan_Keuangan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Laporan_Keuangan_Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Laporan_Keuangan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Laporan_Keuangan_Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Laporan_Keuangan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Laporan_Keuangan_Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Laporan_Keuangan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Laporan_Keuangan_Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Laporan_Keuangan().setVisible(true);
+                new Laporan_Keuangan_Menu().setVisible(true);
             }
         });
     }
