@@ -3,8 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Project;
-import Project.Pages.Produk.ProdukMenu;
-import Project.Pages.Produk.KategoriProdukMenu;
+import Project.Pages.Produk.*;
+import Project.Pages.Agen.AgenMenu;
 
 /**
  *
@@ -39,7 +39,7 @@ public class Index extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        daftarAgenView = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
@@ -143,8 +143,13 @@ public class Index extends javax.swing.JFrame {
 
         jMenu2.setText("Menu");
 
-        jMenuItem1.setText("Agen");
-        jMenu2.add(jMenuItem1);
+        daftarAgenView.setText("Agen");
+        daftarAgenView.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                daftarAgenViewActionPerformed(evt);
+            }
+        });
+        jMenu2.add(daftarAgenView);
 
         jMenuItem2.setText("Pembelian");
         jMenu2.add(jMenuItem2);
@@ -239,6 +244,15 @@ public class Index extends javax.swing.JFrame {
         menuKategori.show();
 
     }//GEN-LAST:event_daftarKategoriViewActionPerformed
+
+    private void daftarAgenViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_daftarAgenViewActionPerformed
+        // TODO add your handling code here:
+        panelViews.removeAll();
+        panelViews.repaint();
+        AgenMenu menuAgen = new AgenMenu();
+        panelViews.add(menuAgen);
+        menuAgen.show();
+    }//GEN-LAST:event_daftarAgenViewActionPerformed
 
     /**
      * @param args the command line arguments
@@ -339,6 +353,7 @@ public class Index extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem daftarAgenView;
     private javax.swing.JMenuItem daftarKategoriView;
     private javax.swing.JMenuItem daftarProdukView;
     private javax.swing.JLabel jLabel1;
@@ -350,7 +365,6 @@ public class Index extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
