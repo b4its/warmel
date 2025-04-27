@@ -13,11 +13,30 @@
         </repository>
     </repositories>
     <dependencies>
+<!--        dependency list start-->
+
         <dependency>
             <groupId>unknown.binary</groupId>
             <artifactId>jcalendar-1.4</artifactId>
             <version>SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.26</version>
+        </dependency>
+          <dependency>
+            <groupId>commons-dbutils</groupId>
+            <artifactId>commons-dbutils</artifactId>
+            <version>1.7</version>
+        </dependency>
+        <dependency>
+           <groupId>net.proteanit.sql</groupId>
+           <artifactId>rs2xml</artifactId>
+           <version>1.0.6</version>
+        </dependency>
+        <!--        dependency list end -->
+        
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
