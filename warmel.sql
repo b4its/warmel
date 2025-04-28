@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 28 Apr 2025 pada 15.26
+-- Waktu pembuatan: 28 Apr 2025 pada 15.39
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.0.30
 
@@ -94,7 +94,8 @@ INSERT INTO `kategori` (`idKategori`, `namaKategori`, `created_at`, `updated_at`
 (2, 'Minuman', '2025-04-28 15:06:55', '2025-04-28 15:06:55'),
 (3, 'Obat-obatan', '2025-04-28 20:18:00', '2025-04-28 20:18:00'),
 (4, 'Sabun dan Pewangi', '2025-04-28 20:19:19', '2025-04-28 20:19:19'),
-(5, 'Lainnya', '2025-04-28 20:19:32', '2025-04-28 20:19:32');
+(5, 'Lainnya', '2025-04-28 20:19:32', '2025-04-28 20:19:32'),
+(6, 'Bahan Masak', '2025-04-28 21:31:35', '2025-04-28 21:31:35');
 
 -- --------------------------------------------------------
 
@@ -245,7 +246,26 @@ INSERT INTO `produk` (`idProduk`, `namaProduk`, `idKategori`, `hargaBeli`, `harg
 (112, 'Larutan CAP Kaki Tiga Anak rasa Leci', 2, 3000.00, 4000.00, 1, '2025-04-28 21:23:36', '2025-04-28 21:23:36'),
 (113, 'Larutan Penyegar cap Badak rasa Leci', 2, 6500.00, 7000.00, 2, '2025-04-28 21:24:15', '2025-04-28 21:24:15'),
 (114, 'cap ENAAK Milky Creamy', 2, 10000.00, 11000.00, 2, '2025-04-28 21:24:46', '2025-04-28 21:24:46'),
-(115, 'Nestle Bear Brand', 2, 11000.00, 12000.00, 4, '2025-04-28 21:25:18', '2025-04-28 21:25:18');
+(115, 'Nestle Bear Brand', 2, 11000.00, 12000.00, 4, '2025-04-28 21:25:18', '2025-04-28 21:25:18'),
+(116, 'Sajiku Tepung Bumbu Serbaguna', 6, 3000.00, 3500.00, 5, '2025-04-28 21:32:10', '2025-04-28 21:32:10'),
+(117, 'Racik Bumbu Sayur Sop', 6, 2000.00, 2500.00, 5, '2025-04-28 21:32:37', '2025-04-28 21:32:37'),
+(118, 'Sajiku bumbu Nasi Goreng', 6, 2000.00, 2500.00, 5, '2025-04-28 21:32:54', '2025-04-28 21:32:54'),
+(119, 'Racik bumbu Ikan Goreng', 6, 2000.00, 2500.00, 5, '2025-04-28 21:33:10', '2025-04-28 21:33:10'),
+(120, 'Racik bumbu Ayam Goreng', 6, 2000.00, 2500.00, 5, '2025-04-28 21:33:19', '2025-04-28 21:33:19'),
+(121, 'Royco rasa Ayam', 6, 700.00, 1000.00, 10, '2025-04-28 21:33:42', '2025-04-28 21:33:42'),
+(122, 'Masako rasa Ayam', 6, 700.00, 1000.00, 10, '2025-04-28 21:33:53', '2025-04-28 21:33:53'),
+(123, 'Ladaku Merica Bubuk', 6, 1000.00, 1500.00, 8, '2025-04-28 21:34:16', '2025-04-28 21:34:16'),
+(124, 'Desaku Ketumbar Bubuk', 6, 1000.00, 1500.00, 8, '2025-04-28 21:34:37', '2025-04-28 21:34:37'),
+(125, 'Desaku Kunyit Bubuk', 6, 1000.00, 1500.00, 6, '2025-04-28 21:34:56', '2025-04-28 21:34:56'),
+(126, 'Desaku Marinasi', 6, 1000.00, 2000.00, 1, '2025-04-28 21:35:20', '2025-04-28 21:35:20'),
+(127, 'Tepung Segitiga Biru', 6, 9000.00, 10000.00, 2, '2025-04-28 21:36:02', '2025-04-28 21:36:02'),
+(128, 'Tepung Tapioka', 6, 9000.00, 10000.00, 1, '2025-04-28 21:36:28', '2025-04-28 21:36:28'),
+(129, 'Minyak Kita ', 6, 19000.00, 20000.00, 3, '2025-04-28 21:37:04', '2025-04-28 21:37:04'),
+(130, 'Kecap Sedaap Manis', 6, 3000.00, 3500.00, 3, '2025-04-28 21:37:31', '2025-04-28 21:37:31'),
+(131, 'Telur', 6, 2000.00, 2500.00, 9, '2025-04-28 21:37:51', '2025-04-28 21:37:51'),
+(132, 'ABC Terasi Udang', 6, 700.00, 1000.00, 7, '2025-04-28 21:38:14', '2025-04-28 21:38:14'),
+(133, 'Ajinomoto', 6, 6000.00, 7000.00, 3, '2025-04-28 21:38:38', '2025-04-28 21:38:38'),
+(134, 'Garam Jempol', 6, 3000.00, 4000.00, 4, '2025-04-28 21:39:01', '2025-04-28 21:39:01');
 
 -- --------------------------------------------------------
 
@@ -339,7 +359,7 @@ ALTER TABLE `detail_transaksi`
 -- AUTO_INCREMENT untuk tabel `kategori`
 --
 ALTER TABLE `kategori`
-  MODIFY `idKategori` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `idKategori` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT untuk tabel `pembelian`
@@ -351,7 +371,7 @@ ALTER TABLE `pembelian`
 -- AUTO_INCREMENT untuk tabel `produk`
 --
 ALTER TABLE `produk`
-  MODIFY `idProduk` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
+  MODIFY `idProduk` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=135;
 
 --
 -- AUTO_INCREMENT untuk tabel `transaksi`
