@@ -261,6 +261,7 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
             }
         });
 
+        produkTable.setForeground(new java.awt.Color(255, 0, 0));
         produkTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
