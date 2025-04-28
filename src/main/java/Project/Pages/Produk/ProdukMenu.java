@@ -16,6 +16,10 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import Project.Helper.CurrencyFormat;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -36,24 +40,39 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
 
      
     }
-            private void getData()
-    {
+    
+    private void getData() {
         CurrencyFormat formatIDCurrency = new CurrencyFormat();
-        // menampilkan data dari database
-        try (Connection conn = (Connection) Connections.ConnectionDB();
-            java.sql.Statement stm = conn.createStatement();
-            java.sql.ResultSet sql = stm.executeQuery(
-                    "SELECT p.namaProduk, k.namaKategori, p.hargaBeli, p.hargaJual, p.stok, p.created_at, p.updated_at " +
-            "FROM produk p " +
-            "INNER JOIN kategori k ON p.idKategori = k.idKategori"
-            ))
-        {
 
-            
+        java.sql.Connection conn = null;
+        java.sql.Statement stm = null;
+        java.sql.ResultSet sql = null;
+
+        try {
+            conn = (Connection) Connections.ConnectionDB();
+
+            // Memeriksa apakah koneksi berhasil
+            if (conn == null) {
+                JOptionPane.showMessageDialog(null, "Koneksi ke database gagal.");
+                return;
+            }
+
+            // Menjalankan query
+            stm = conn.createStatement();
+            sql = stm.executeQuery(
+                "SELECT p.namaProduk, k.namaKategori, p.hargaBeli, p.hargaJual, p.stok, p.created_at, p.updated_at " +
+                "FROM produk p " +
+                "INNER JOIN kategori k ON p.idKategori = k.idKategori"
+            );
+
+            // Memeriksa apakah query mengembalikan hasil
+            if (!sql.isBeforeFirst()) {
+                JOptionPane.showMessageDialog(null, "Tidak ada data yang ditemukan.");
+                return;
+            }
+
             // Membuat model tabel untuk menampilkan data
             DefaultTableModel model = new DefaultTableModel();
-
-            // Menambahkan kolom baru untuk 'no'
             model.addColumn("No");
             model.addColumn("Nama Produk");
             model.addColumn("Kategori");
@@ -65,69 +84,106 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
 
             // Menambahkan data ke dalam model
             int no = 1;  // Variabel untuk nomor urut
-            
+
+            // Menambahkan data dari ResultSet ke model tabel
             while (sql.next()) {
-                
-                model.addRow(new Object[] {
-                    
+                model.addRow(new Object[]{
                     no++, // Menambahkan nomor urut
-                    sql.getString("namaProduk"), // Menambahkan nama kategori
-                    sql.getString("namaKategori"),   // Menambahkan created_at
-                    formatIDCurrency.formatCurrency(sql.getDouble("hargaBeli")), // Menambahkan nama kategori
-                    formatIDCurrency.formatCurrency(sql.getDouble("hargaJual")),   // Menambahkan created_at
-                    sql.getString("stok"), // Menambahkan nama kategori
-                    sql.getString("created_at"),   // Menambahkan created_at
-                    sql.getString("updated_at")    // Menambahkan updated_at
+                    sql.getString("namaProduk"), // Menambahkan nama produk
+                    sql.getString("namaKategori"), // Menambahkan kategori
+                    formatIDCurrency.formatCurrency(sql.getDouble("hargaBeli")), // Menambahkan harga beli
+                    formatIDCurrency.formatCurrency(sql.getDouble("hargaJual")), // Menambahkan harga jual
+                    sql.getInt("stok"), // Menambahkan stok
+                    sql.getString("created_at"), // Menambahkan created_at
+                    sql.getString("updated_at")  // Menambahkan updated_at
                 });
             }
 
             // Menampilkan model ke dalam tabel
             produkTable.setModel(model);
-            
-        }
-        catch (SQLException | HeadlessException e) 
-        {
-        }
-    }
 
-    
-    
-            private void getKategori()
-    {
-        // menampilkan data dari database
-        try 
-        {
-            Connection conn = (Connection) Connections.ConnectionDB();
-            java.sql.Statement stm = conn.createStatement();
-            java.sql.ResultSet queryKategori = stm.executeQuery("select namaKategori from kategori");
-            cbKategori.removeAllItems();
-            cbKategori.addItem("silahkan pilih kategori..");
-            // Menambahkan data ke dalam model
-            while (queryKategori.next()) {
-                String namaKategori = queryKategori.getString("namaKategori");
-                cbKategori.addItem(namaKategori);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error SQL: " + e.getMessage());
+            e.printStackTrace(); // Untuk debugging
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "Error Antarmuka: " + e.getMessage());
+            e.printStackTrace(); // Untuk debugging
+        } finally {
+            // Menutup koneksi dan statement di dalam blok finally untuk memastikan selalu ditutup
+            try {
+                if (sql != null) sql.close();
+                if (stm != null) stm.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Error saat menutup koneksi: " + e.getMessage());
+                e.printStackTrace();
             }
-            
-            // Tambahkan listener
-            cbKategori.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    if (cbKategori.getSelectedIndex() == 0) {
-                        // Kalau user pilih "Pilih data...", kembalikan ke sebelumnya
-                        JOptionPane.showMessageDialog(null, "Silakan pilih item yang valid!");
-                        cbKategori.setSelectedIndex(1); // Reset pilihan
-                    }
-                }
-            });
-            
-            
-            
-
-            
-        }
-        catch (SQLException | HeadlessException e) 
-        {
         }
     }
+
+
+
+    
+    
+        private void getKategori() {
+            try (Connection conn = (Connection) Connections.ConnectionDB();
+                 java.sql.Statement stm = conn.createStatement();
+                 java.sql.ResultSet queryKategori = stm.executeQuery("select idKategori, namaKategori from kategori")) {
+
+                cbKategori.removeAllItems();
+                cbKategori.addItem("Silakan pilih kategori...");
+
+                // Menyimpan idKategori dalam map untuk memetakan namaKategori ke idKategori
+                Map<String, String> kategoriMap = new HashMap<>();
+
+                // Menambahkan data ke dalam model
+                while (queryKategori.next()) {
+                    String idKategori = queryKategori.getString("idKategori");
+                    String namaKategori = queryKategori.getString("namaKategori");
+                    kategoriMap.put(namaKategori, idKategori);  // Menyimpan mapping antara nama dan idKategori
+                    cbKategori.addItem(namaKategori);
+                }
+
+                // Menambahkan listener untuk combo box
+                cbKategori.addActionListener(new ActionListener() {
+                    private boolean firstSelection = true; // Flag untuk menangani pilihan pertama
+
+                    public void actionPerformed(ActionEvent e) {
+                        String selectedKategori = (String) cbKategori.getSelectedItem();
+
+                        // Cek apakah kategori yang valid dipilih
+                        if (selectedKategori != null && !selectedKategori.equals("Silakan pilih kategori...")) {
+                            // Setel idKategori ke txtIdKategori
+                            String idKategori = kategoriMap.get(selectedKategori);
+                            txtIdKategori.setText(idKategori);
+                            labelKategori.setText(selectedKategori);
+
+                            // Hanya set pertama kali saat valid dipilih
+                            if (firstSelection) {
+                                firstSelection = false; // Tandai bahwa sudah memilih yang valid
+                            }
+                        } else {
+                            // Jika memilih "Silakan pilih kategori...", tampilkan pesan hanya sekali
+                            if (!firstSelection) {
+//                                JOptionPane.showMessageDialog(null, "Silakan pilih item yang valid!");
+                                txtIdKategori.setText("0"); // Reset teks di txtIdKategori
+                                labelKategori.setText("anda belum memilih..");
+                            }
+
+                            // Jangan reset cbKategori jika sudah memilih yang valid sebelumnya
+                            // biarkan pengguna memilih tanpa reset otomatis
+                        }
+                    }
+                });
+
+                // Mengambil data lebih lanjut jika diperlukan
+                getData();
+
+            } catch (SQLException | HeadlessException e) {
+                // Tangani exception jika ada kesalahan
+                e.printStackTrace();
+            }
+        }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -159,6 +215,8 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
         txtCari = new javax.swing.JTextField();
         btnCari = new javax.swing.JButton();
         txtIdProduk = new javax.swing.JTextField();
+        txtIdKategori = new javax.swing.JTextField();
+        labelKategori = new javax.swing.JLabel();
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel1.setText("Daftar Produk");
@@ -179,6 +237,11 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
         jLabel6.setText("Stok");
 
         cbKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbKategori.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbKategoriActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("Bersihkan");
 
@@ -214,6 +277,9 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
         txtCari.setText("cari produk..");
 
         btnCari.setText("Cari");
+
+        labelKategori.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        labelKategori.setText("anda belum memilih..");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -251,9 +317,14 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
                                     .addComponent(textHBeli, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
                                     .addComponent(textHJual, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
                                     .addComponent(spinStok)
-                                    .addComponent(cbKategori, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addComponent(txtIdProduk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                                    .addComponent(cbKategori, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addComponent(labelKategori))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtIdProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtIdKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 466, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(12, 12, 12)
                 .addComponent(jScrollBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -276,7 +347,8 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
-                            .addComponent(cbKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cbKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelKategori))
                         .addGap(15, 15, 15)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
@@ -298,7 +370,9 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
                             .addComponent(jButton3)
                             .addComponent(btnKembali))
                         .addGap(18, 18, 18)
-                        .addComponent(txtIdProduk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtIdProduk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtIdKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 449, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(51, Short.MAX_VALUE))
         );
@@ -309,65 +383,84 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
     private void btnKembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKembaliActionPerformed
         // TODO add your handling code here:
         dispose();
+        
     }//GEN-LAST:event_btnKembaliActionPerformed
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
-      String inputHBeli = textHBeli.getText();
+//
+//        // Mendapatkan kategori (panggil metode getKategori() jika perlu)
+        String inputHBeli = textHBeli.getText();
         String inputHJual = textHJual.getText();
+        String pesan;
 
-        Connection conn = null;
-        java.sql.PreparedStatement pst = null;
-
-        try {
-            // Membuka koneksi database
-            conn = Connections.ConnectionDB();
-
+        try (Connection conn = Connections.ConnectionDB()) {
             if (conn == null) {
                 JOptionPane.showMessageDialog(null, "Koneksi ke database gagal.");
                 return;
             }
 
-            // Verifikasi bahwa koneksi berhasil sebelum menyiapkan query
+            java.sql.Statement stmt = conn.createStatement();
             String sql = "";
-            if (dataBaru) { // proses simpan atau edit
+
+            // Validasi idKategori
+            String idKategoriStr = txtIdKategori.getText();
+            if (idKategoriStr == null || idKategoriStr.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Silakan pilih kategori terlebih dahulu!");
+                return;
+            }
+
+            int idKategoriItems = Integer.parseInt(idKategoriStr);
+
+            // Pastikan idKategori ada di tabel kategori
+            java.sql.ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM kategori WHERE idKategori = " + idKategoriItems);
+            if (rs.next() && rs.getInt(1) == 0) {
+                JOptionPane.showMessageDialog(null, "Kategori yang dipilih tidak valid!");
+                return;
+            }
+            
+            if (dataBaru) { // Proses simpan data baru
                 sql = "INSERT INTO produk (namaProduk, idKategori, hargaBeli, hargaJual, stok, created_at, updated_at) "
-                        + "VALUES (?, ?, ?, ?, ?, NOW(), NOW())";
-
-                // Inisialisasi PreparedStatement
-                pst = conn.prepareStatement(sql);
-                pst.setString(1, textNama.getText()); // Menggunakan parameter untuk menghindari SQL injection
-                pst.setInt(2, Integer.parseInt(cbKategori.getSelectedItem().toString())); // idKategori as Integer
-                pst.setDouble(3, Double.parseDouble(inputHBeli));
-                pst.setDouble(4, Double.parseDouble(inputHJual));
-                pst.setInt(5, (int) spinStok.getValue());
-            } else {
-                sql = "UPDATE produk SET namaProduk=?, updated_at=NOW() WHERE idProduk=?";
-
-                // Inisialisasi PreparedStatement
-                pst = conn.prepareStatement(sql);
-                pst.setString(1, textNama.getText()); // Menggunakan parameter untuk menghindari SQL injection
-                pst.setInt(2, Integer.parseInt(txtIdProduk.getText()));
+                    + "VALUES ('" + textNama.getText() + "', "
+                    + idKategoriItems + ", "
+                    + Double.parseDouble(inputHBeli) + ", "
+                    + Double.parseDouble(inputHJual) + ", "
+                    + (int) spinStok.getValue() + ", NOW(), NOW())";
+               pesan = "Produk telah berhasil ditambahkan!";
+            } else { // Proses update data
+                sql = "UPDATE produk SET namaProduk='" + textNama.getText() + "', updated_at=NOW() "
+                    + "WHERE idProduk=" + Integer.parseInt(txtIdProduk.getText());
+                pesan = "Produk telah berhasil diperbarui!";
             }
-
-            // Mengeksekusi query
-            if (pst != null) {
-                pst.execute();
-                JOptionPane.showMessageDialog(null, dataBaru ? "Produk telah berhasil disimpan" : "Kategori telah berhasil diperbarui");
-            } else {
-                JOptionPane.showMessageDialog(null, "PreparedStatement gagal dibuat.");
-            }
+            
+            stmt.executeUpdate(sql);
+            JOptionPane.showMessageDialog(null, pesan);
 
             getData();
-        } catch (SQLException | HeadlessException e) {
-            JOptionPane.showMessageDialog(null, e);
-            e.printStackTrace(); // Log untuk debugging
-        } 
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Terjadi kesalahan dalam koneksi atau eksekusi query: " + e.getMessage());
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Input tidak valid: " + e.getMessage());
+            e.printStackTrace();
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "Kesalahan pada GUI: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+
+
+
 
 
 
 
         
     }//GEN-LAST:event_btnSubmitActionPerformed
+
+    private void cbKategoriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbKategoriActionPerformed
+      getKategori();
+    }//GEN-LAST:event_cbKategoriActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -385,12 +478,14 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollBar jScrollBar1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel labelKategori;
     private javax.swing.JTable produkTable;
     private javax.swing.JSpinner spinStok;
     private javax.swing.JTextField textHBeli;
     private javax.swing.JTextField textHJual;
     private javax.swing.JTextField textNama;
     private javax.swing.JTextField txtCari;
+    private javax.swing.JTextField txtIdKategori;
     private javax.swing.JTextField txtIdProduk;
     // End of variables declaration//GEN-END:variables
 }

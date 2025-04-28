@@ -9,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
+
 /**
  *
  * @author brsap
@@ -16,20 +17,23 @@ import javax.swing.JOptionPane;
 public class Connections {
     private static Connection connectionDatabase;
     public static Connection ConnectionDB() throws SQLException {
-        if(connectionDatabase==null)
-        {
+        if (connectionDatabase == null || connectionDatabase.isClosed()) {
             try {
-                String DB="jdbc:mysql://localhost:3306/warmel"; // delta_db database
-                String user="root"; // user database
-                String pass=""; // password database
-                DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-                connectionDatabase = (Connection) DriverManager.getConnection(DB,user,pass);
+                // Tidak perlu lagi mendaftarkan driver secara manual
+                String DB = "jdbc:mysql://localhost:3306/warmel"; // Nama database
+                String user = "root"; // Nama pengguna database
+                String pass = ""; // Password database
+
+                // Membuka koneksi database
+                connectionDatabase = DriverManager.getConnection(DB, user, pass);
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null,"gagal koneksi");
+                JOptionPane.showMessageDialog(null, "Gagal koneksi: " + e.getMessage());
+                throw e;  // Meneruskan exception jika koneksi gagal
             }
         }
         return connectionDatabase;
     }
+
     
     
     

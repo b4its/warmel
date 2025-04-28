@@ -58,10 +58,16 @@
                                   <Component id="spinStok" alignment="0" max="32767" attributes="0"/>
                                   <Component id="cbKategori" alignment="0" max="32767" attributes="0"/>
                               </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="labelKategori" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="txtIdProduk" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="txtIdProduk" min="-2" pref="103" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="txtIdKategori" min="-2" pref="122" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace pref="69" max="32767" attributes="0"/>
+                      <EmptySpace pref="14" max="32767" attributes="0"/>
                       <Component id="jScrollPane1" min="-2" pref="466" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -91,6 +97,7 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cbKategori" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="labelKategori" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -118,7 +125,10 @@
                           <Component id="btnKembali" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="txtIdProduk" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="txtIdProduk" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtIdKategori" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                   <Component id="jScrollPane1" min="-2" pref="449" max="-2" attributes="0"/>
               </Group>
@@ -197,6 +207,9 @@
           </StringArray>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbKategoriActionPerformed"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
@@ -259,6 +272,16 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtIdProduk">
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtIdKategori">
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelKategori">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Arial" size="14" style="0"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="anda belum memilih.."/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>
