@@ -206,9 +206,9 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
         jLabel6 = new javax.swing.JLabel();
         spinStok = new javax.swing.JSpinner();
         cbKategori = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
+        btnBersih = new javax.swing.JButton();
         btnSubmit = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnHapus = new javax.swing.JButton();
         btnKembali = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         produkTable = new javax.swing.JTable();
@@ -243,7 +243,12 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
             }
         });
 
-        jButton1.setText("Bersihkan");
+        btnBersih.setText("Bersihkan");
+        btnBersih.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBersihActionPerformed(evt);
+            }
+        });
 
         btnSubmit.setText("Tambahkan/Update");
         btnSubmit.addActionListener(new java.awt.event.ActionListener() {
@@ -252,7 +257,7 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
             }
         });
 
-        jButton3.setText("Hapus");
+        btnHapus.setText("Hapus");
 
         btnKembali.setText("Kembali");
         btnKembali.addActionListener(new java.awt.event.ActionListener() {
@@ -272,6 +277,11 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        produkTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                produkTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(produkTable);
 
         txtCari.setText("cari produk..");
@@ -298,8 +308,8 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton1)
-                                    .addComponent(jButton3))
+                                    .addComponent(btnBersih)
+                                    .addComponent(btnHapus))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btnKembali)
@@ -363,11 +373,11 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
                             .addComponent(spinStok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(39, 39, 39)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
+                            .addComponent(btnBersih)
                             .addComponent(btnSubmit))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton3)
+                            .addComponent(btnHapus)
                             .addComponent(btnKembali))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -462,14 +472,41 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
       getKategori();
     }//GEN-LAST:event_cbKategoriActionPerformed
 
+    private void btnBersihActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBersihActionPerformed
+        // TODO add your handling code here:
+        textNama.setText("");
+        textHBeli.setText("");
+        textHJual.setText("");
+    }//GEN-LAST:event_btnBersihActionPerformed
+
+    private void produkTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_produkTableMouseClicked
+        // TODO add your handling code here:
+        dataBaru = false; // menampilkan data ke textboxt
+        try {
+            int row =produkTable.getSelectedRow();
+            String tabel_klik=(produkTable.getModel().getValueAt(row, 0).toString());
+            java.sql.Connection conn = (Connection) Connections.ConnectionDB();
+            java.sql.Statement stm = conn.createStatement();
+            java.sql.ResultSet sql = stm.executeQuery("select * from produk where idProduk='"+tabel_klik+"'");
+            if(sql.next()){
+                String nama = sql.getString("namaProduk");
+                textNama.setText(nama);
+                String hBeli = sql.getString("hargaBeli");
+                textHBeli.setText(hBeli);
+                String hJual = sql.getString("hargaJual");
+                textHJual.setText(hJual);
+            }
+        } catch (SQLException e) {}
+    }//GEN-LAST:event_produkTableMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBersih;
     private javax.swing.JButton btnCari;
+    private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnKembali;
     private javax.swing.JButton btnSubmit;
     private javax.swing.JComboBox<String> cbKategori;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

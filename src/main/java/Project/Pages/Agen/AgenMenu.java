@@ -4,6 +4,13 @@
  */
 package Project.Pages.Agen;
 
+import Project.Connection.Connections;
+import java.awt.HeadlessException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import net.proteanit.sql.DbUtils;
+
 
 /**
  *
@@ -14,8 +21,26 @@ public class AgenMenu extends javax.swing.JInternalFrame {
     /**
      * Creates new form Produk
      */
+    public boolean dataBaru;
     public AgenMenu() {
         initComponents();
+
+        getData();
+        dataBaru = true;
+    }
+    private void getData()
+    {
+        // menampilkan data dari database
+        try 
+        {
+            Connection conn = (Connection) Connections.ConnectionDB();
+            java.sql.Statement stm = conn.createStatement();
+            java.sql.ResultSet sql = stm.executeQuery("select * from agen");
+            jTable1.setModel(DbUtils.resultSetToTableModel(sql));
+        }
+        catch (SQLException | HeadlessException e) 
+        {
+        }
     }
 
     /**
@@ -31,9 +56,9 @@ public class AgenMenu extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         textNama = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnBersih = new javax.swing.JButton();
+        btnTambah = new javax.swing.JButton();
+        btnHapus = new javax.swing.JButton();
         btnKembali = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -49,11 +74,21 @@ public class AgenMenu extends javax.swing.JInternalFrame {
         jLabel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel2.setText("Nama Agen");
 
-        jButton1.setText("Bersihkan");
+        btnBersih.setText("Bersihkan");
+        btnBersih.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBersihActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Tambahkan/Update");
+        btnTambah.setText("Tambahkan/Update");
+        btnTambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Hapus");
+        btnHapus.setText("Hapus");
 
         btnKembali.setText("Kembali");
         btnKembali.addActionListener(new java.awt.event.ActionListener() {
@@ -73,6 +108,11 @@ public class AgenMenu extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         txtCari.setText("cari  agen..");
@@ -97,12 +137,12 @@ public class AgenMenu extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton1)
-                                    .addComponent(jButton3))
+                                    .addComponent(btnBersih)
+                                    .addComponent(btnHapus))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btnKembali)
-                                    .addComponent(jButton2)))
+                                    .addComponent(btnTambah)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2)
@@ -150,11 +190,11 @@ public class AgenMenu extends javax.swing.JInternalFrame {
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(jButton2))
+                            .addComponent(btnBersih)
+                            .addComponent(btnTambah))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton3)
+                            .addComponent(btnHapus)
                             .addComponent(btnKembali))))
                 .addContainerGap(51, Short.MAX_VALUE))
         );
@@ -167,13 +207,63 @@ public class AgenMenu extends javax.swing.JInternalFrame {
         dispose();
     }//GEN-LAST:event_btnKembaliActionPerformed
 
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+        dataBaru = false; // menampilkan data ke textboxt
+        try {
+            int row =jTable1.getSelectedRow();
+            String tabel_klik=(jTable1.getModel().getValueAt(row, 0).toString());
+            java.sql.Connection conn = (Connection) Connections.ConnectionDB();
+            java.sql.Statement stm = conn.createStatement();
+            java.sql.ResultSet sql = stm.executeQuery("select * from agen where idAgen='"+tabel_klik+"'");
+            if(sql.next()){
+                String nama = sql.getString("namaAgen");
+                textNama.setText(nama);
+                String alamat = sql.getString("alamat");
+                txtAlamat.setText(alamat);
+            }
+        } catch (SQLException e) {}
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void btnBersihActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBersihActionPerformed
+        // TODO add your handling code here:
+        textNama.setText("");
+        txtAlamat.setText("");
+    }//GEN-LAST:event_btnBersihActionPerformed
+
+    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
+        // TODO add your handling code here:
+        if (dataBaru == true) { // prosess simpan atau edit
+            try {
+                String sql = "insert into agen values('"+textNama.getText()+"','"+txtAlamat.getText();
+                java.sql.Connection conn = (Connection) Connections.ConnectionDB();
+                java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+                pst.execute();
+                JOptionPane.showMessageDialog(null, "berhasil disimpan");
+            } catch (SQLException | HeadlessException e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        } else {
+            try {
+                String sql = "update agen SET namaAgen='"+textNama.getText()+"',alamat='"+txtAlamat.getText();
+                java.sql.Connection conn = (Connection) Connections.ConnectionDB();
+                java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+                pst.execute();
+                JOptionPane.showMessageDialog(null, "berhasil disimpan");
+            } catch (SQLException | HeadlessException e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+        getData();
+    }//GEN-LAST:event_btnTambahActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBersih;
     private javax.swing.JButton btnCari;
+    private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnKembali;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnTambah;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
