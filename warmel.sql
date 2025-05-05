@@ -3,9 +3,15 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
+<<<<<<< HEAD
 -- Generation Time: Apr 28, 2025 at 04:51 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
+=======
+-- Waktu pembuatan: 28 Apr 2025 pada 15.39
+-- Versi server: 10.4.32-MariaDB
+-- Versi PHP: 8.0.30
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +30,11 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+<<<<<<< HEAD
 -- Table structure for table `agen`
+=======
+-- Struktur dari tabel `agen`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 
 CREATE TABLE `agen` (
@@ -36,7 +46,11 @@ CREATE TABLE `agen` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+<<<<<<< HEAD
 -- Dumping data for table `agen`
+=======
+-- Dumping data untuk tabel `agen`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 
 INSERT INTO `agen` (`idAgen`, `namaAgen`, `alamat`, `created_at`, `updated_at`) VALUES
@@ -47,7 +61,11 @@ INSERT INTO `agen` (`idAgen`, `namaAgen`, `alamat`, `created_at`, `updated_at`) 
 -- --------------------------------------------------------
 
 --
+<<<<<<< HEAD
 -- Table structure for table `detail_pembelian`
+=======
+-- Struktur dari tabel `detail_pembelian`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 
 CREATE TABLE `detail_pembelian` (
@@ -61,7 +79,11 @@ CREATE TABLE `detail_pembelian` (
 -- --------------------------------------------------------
 
 --
+<<<<<<< HEAD
 -- Table structure for table `detail_transaksi`
+=======
+-- Struktur dari tabel `detail_transaksi`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 
 CREATE TABLE `detail_transaksi` (
@@ -75,7 +97,11 @@ CREATE TABLE `detail_transaksi` (
 -- --------------------------------------------------------
 
 --
+<<<<<<< HEAD
 -- Table structure for table `kategori`
+=======
+-- Struktur dari tabel `kategori`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 
 CREATE TABLE `kategori` (
@@ -86,7 +112,11 @@ CREATE TABLE `kategori` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+<<<<<<< HEAD
 -- Dumping data for table `kategori`
+=======
+-- Dumping data untuk tabel `kategori`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 
 INSERT INTO `kategori` (`idKategori`, `namaKategori`, `created_at`, `updated_at`) VALUES
@@ -100,7 +130,11 @@ INSERT INTO `kategori` (`idKategori`, `namaKategori`, `created_at`, `updated_at`
 -- --------------------------------------------------------
 
 --
+<<<<<<< HEAD
 -- Table structure for table `pembelian`
+=======
+-- Struktur dari tabel `pembelian`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 
 CREATE TABLE `pembelian` (
@@ -114,7 +148,11 @@ CREATE TABLE `pembelian` (
 -- --------------------------------------------------------
 
 --
+<<<<<<< HEAD
 -- Table structure for table `produk`
+=======
+-- Struktur dari tabel `produk`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 
 CREATE TABLE `produk` (
@@ -129,7 +167,11 @@ CREATE TABLE `produk` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+<<<<<<< HEAD
 -- Dumping data for table `produk`
+=======
+-- Dumping data untuk tabel `produk`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 
 INSERT INTO `produk` (`idProduk`, `namaProduk`, `idKategori`, `hargaBeli`, `hargaJual`, `stok`, `created_at`, `updated_at`) VALUES
@@ -270,12 +312,19 @@ INSERT INTO `produk` (`idProduk`, `namaProduk`, `idKategori`, `hargaBeli`, `harg
 -- --------------------------------------------------------
 
 --
+<<<<<<< HEAD
 -- Table structure for table `transaksi`
+=======
+-- Struktur dari tabel `transaksi`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 
 CREATE TABLE `transaksi` (
   `idTransaksi` int(11) NOT NULL,
+<<<<<<< HEAD
   `kodeTransaksi` varchar(255) NOT NULL,
+=======
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
   `jenisTransaksi` varchar(50) NOT NULL,
   `keterangan` text DEFAULT NULL,
   `total` decimal(15,2) DEFAULT NULL,
@@ -287,13 +336,21 @@ CREATE TABLE `transaksi` (
 --
 
 --
+<<<<<<< HEAD
 -- Indexes for table `agen`
+=======
+-- Indeks untuk tabel `agen`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 ALTER TABLE `agen`
   ADD PRIMARY KEY (`idAgen`);
 
 --
+<<<<<<< HEAD
 -- Indexes for table `detail_pembelian`
+=======
+-- Indeks untuk tabel `detail_pembelian`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 ALTER TABLE `detail_pembelian`
   ADD PRIMARY KEY (`idDetailPembelian`),
@@ -301,7 +358,11 @@ ALTER TABLE `detail_pembelian`
   ADD KEY `idProduk` (`idProduk`);
 
 --
+<<<<<<< HEAD
 -- Indexes for table `detail_transaksi`
+=======
+-- Indeks untuk tabel `detail_transaksi`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 ALTER TABLE `detail_transaksi`
   ADD PRIMARY KEY (`idDetailTransaksi`),
@@ -309,103 +370,171 @@ ALTER TABLE `detail_transaksi`
   ADD KEY `idDetailPembelian` (`idDetailPembelian`);
 
 --
+<<<<<<< HEAD
 -- Indexes for table `kategori`
+=======
+-- Indeks untuk tabel `kategori`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 ALTER TABLE `kategori`
   ADD PRIMARY KEY (`idKategori`);
 
 --
+<<<<<<< HEAD
 -- Indexes for table `pembelian`
+=======
+-- Indeks untuk tabel `pembelian`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 ALTER TABLE `pembelian`
   ADD PRIMARY KEY (`idPembelian`),
   ADD KEY `idAgen` (`idAgen`);
 
 --
+<<<<<<< HEAD
 -- Indexes for table `produk`
+=======
+-- Indeks untuk tabel `produk`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 ALTER TABLE `produk`
   ADD PRIMARY KEY (`idProduk`),
   ADD KEY `idKategori` (`idKategori`);
 
 --
+<<<<<<< HEAD
 -- Indexes for table `transaksi`
+=======
+-- Indeks untuk tabel `transaksi`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 ALTER TABLE `transaksi`
   ADD PRIMARY KEY (`idTransaksi`);
 
 --
+<<<<<<< HEAD
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
 -- AUTO_INCREMENT for table `agen`
+=======
+-- AUTO_INCREMENT untuk tabel yang dibuang
+--
+
+--
+-- AUTO_INCREMENT untuk tabel `agen`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 ALTER TABLE `agen`
   MODIFY `idAgen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+<<<<<<< HEAD
 -- AUTO_INCREMENT for table `detail_pembelian`
+=======
+-- AUTO_INCREMENT untuk tabel `detail_pembelian`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 ALTER TABLE `detail_pembelian`
   MODIFY `idDetailPembelian` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+<<<<<<< HEAD
 -- AUTO_INCREMENT for table `detail_transaksi`
+=======
+-- AUTO_INCREMENT untuk tabel `detail_transaksi`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 ALTER TABLE `detail_transaksi`
   MODIFY `idDetailTransaksi` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+<<<<<<< HEAD
 -- AUTO_INCREMENT for table `kategori`
+=======
+-- AUTO_INCREMENT untuk tabel `kategori`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 ALTER TABLE `kategori`
   MODIFY `idKategori` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
+<<<<<<< HEAD
 -- AUTO_INCREMENT for table `pembelian`
+=======
+-- AUTO_INCREMENT untuk tabel `pembelian`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 ALTER TABLE `pembelian`
   MODIFY `idPembelian` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+<<<<<<< HEAD
 -- AUTO_INCREMENT for table `produk`
+=======
+-- AUTO_INCREMENT untuk tabel `produk`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 ALTER TABLE `produk`
   MODIFY `idProduk` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=135;
 
 --
+<<<<<<< HEAD
 -- AUTO_INCREMENT for table `transaksi`
+=======
+-- AUTO_INCREMENT untuk tabel `transaksi`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 ALTER TABLE `transaksi`
   MODIFY `idTransaksi` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+<<<<<<< HEAD
 -- Constraints for dumped tables
 --
 
 --
 -- Constraints for table `detail_pembelian`
+=======
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+--
+
+--
+-- Ketidakleluasaan untuk tabel `detail_pembelian`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 ALTER TABLE `detail_pembelian`
   ADD CONSTRAINT `fk_detailpembelian_pembelian` FOREIGN KEY (`idPembelian`) REFERENCES `pembelian` (`idPembelian`),
   ADD CONSTRAINT `fk_detailpembelian_produk` FOREIGN KEY (`idProduk`) REFERENCES `produk` (`idProduk`);
 
 --
+<<<<<<< HEAD
 -- Constraints for table `detail_transaksi`
+=======
+-- Ketidakleluasaan untuk tabel `detail_transaksi`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 ALTER TABLE `detail_transaksi`
   ADD CONSTRAINT `fk_detailtransaksi_detailpembelian` FOREIGN KEY (`idDetailPembelian`) REFERENCES `detail_pembelian` (`idDetailPembelian`),
   ADD CONSTRAINT `fk_detailtransaksi_transaksi` FOREIGN KEY (`idTransaksi`) REFERENCES `transaksi` (`idTransaksi`);
 
 --
+<<<<<<< HEAD
 -- Constraints for table `pembelian`
+=======
+-- Ketidakleluasaan untuk tabel `pembelian`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 ALTER TABLE `pembelian`
   ADD CONSTRAINT `fk_pembelian_agen` FOREIGN KEY (`idAgen`) REFERENCES `agen` (`idAgen`);
 
 --
+<<<<<<< HEAD
 -- Constraints for table `produk`
+=======
+-- Ketidakleluasaan untuk tabel `produk`
+>>>>>>> 54c1cf6f895fcc6a14b76afa9b5aad32c4b9258a
 --
 ALTER TABLE `produk`
   ADD CONSTRAINT `fk_produk_kategori` FOREIGN KEY (`idKategori`) REFERENCES `kategori` (`idKategori`);
