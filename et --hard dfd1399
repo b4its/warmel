@@ -1,0 +1,33 @@
+[33m966f6c0[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m fix: memperbaiki fitur pembelian, dan menambahkan fitur list kataegori pada menu yaitu sub menu dari Kategori Produk pada index.java
+[33mdfd1399[m fix: memperbaiki kesalahan penulisan kode dan juga beberapa fitur yang tidak bisa berjalan
+[33m54c1cf6[m feat: perubahan desain Laporan Keuangan
+[33meb8262c[m feat: nambah kodingan dikit di agenMenu dan ProdukMenu
+[33m3b31f42[m tes
+[33mcbbcaab[m Create Pembelian
+[33mede5adb[m feat: menambahkan warmel.sql
+[33m4d309a7[m feat: sql Warmel
+[33mf56bf89[m feat: nambah file sql Warmel
+[33m8f74b6e[m fix: memperbaiki fitur penambahan produk
+[33m21acd56[m feat: ubah nama mamah menjadi mama
+[33m1b5877d[m feat: nambahkan foto makanan, lainnya, sabun dan pewangi
+[33ma417499[m feat: membuat fitur produkMenu
+[33m7fb3a60[m refactor: pemasukan -> pengeluaran di index
+[33ma36e00f[m fix: memperbaiki halaman kategori produk
+[33m62dd9be[m feat: menambahkan halaman agen
+[33medf2632[m fix and refactor: memperbaiki tombol kembali pada kategoriProduk dan produkMenu, serta memperbaiki penulisan file Home -> Index
+[33m8c45ba7[m feat: menambahkan menu produk dan kategori produk beserta halamannya
+[33maac1982[m refactor: mengubah struktur kode
+[33m1cf4121[m refactor: memperbaiki susunan folder agar lebih rapi
+[33m0f7307b[m feat: menambahkan dependecy mysql.connector.java, common-dbutils, protobuf-java
+[33m3a20655[m refactor: memperbaiki susunan kode dan juga file agar mudah dalam pencarian nama file
+[33m2a33be2[m feat: penambahan foto pada list produk
+[33med86b80[m feat: tambah tulisan cari di tombol
+[33mf7ede59[m feat: penambahan tombol cari
+[33m099056c[m feat: menambah bagian dari produk
+[33m69bb5cc[m feat: tambahan
+[33m9dcb6ff[m feat: tambahan
+[33m5f23ab2[m feat: banyak penambahan
+[33m8aa7dc1[m feat: ganti nama Produk menjadi Laporan_Keuangan
+[33m8c01fa1[m fix: menggeser tulisan warung mamah amel
+[33m8f96c42[m fix: menggeser tulisan warung mamah amel
+[33m5472984[m java first project
