@@ -4,6 +4,18 @@
  */
 package Project.Pages.Pembelian;
 
+import Project.Connection.Connections;
+import Project.Helper.CurrencyFormat;
+import java.awt.HeadlessException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author brsap
@@ -15,7 +27,215 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
      */
     public PembelianMenu() {
         initComponents();
+        getAgen();
+        getProduk();
     }
+    
+        private void getData() {
+        CurrencyFormat formatIDCurrency = new CurrencyFormat();
+
+        java.sql.Connection conn = null;
+        java.sql.Statement stm = null;
+        java.sql.ResultSet sql = null;
+
+        try {
+            conn = (Connection) Connections.ConnectionDB();
+
+            // Memeriksa apakah koneksi berhasil
+            if (conn == null) {
+                JOptionPane.showMessageDialog(null, "Koneksi ke database gagal.");
+                return;
+            }
+
+            // Menjalankan query
+            stm = conn.createStatement();
+            sql = stm.executeQuery(
+                "SELECT \n" +
+                "    pembelian.idPembelian,\n" +
+                "    pembelian.created_at AS tanggal_pembelian,\n" +
+                "    pembelian.keterangan,\n" +
+                "    pembelian.totalHarga,\n" +
+                "    agen.idAgen,\n" +
+                "    agen.namaAgen,\n" +
+                "    agen.alamat,\n" +
+                "    detail_pembelian.idDetailPembelian,\n" +
+                "    detail_pembelian.idProduk,\n" +
+                "    detail_pembelian.jumlah,\n" +
+                "    detail_pembelian.subtotal\n" +
+                "FROM pembelian\n" +
+                "JOIN agen ON pembelian.idAgen = agen.idAgen\n" +
+                "JOIN detail_pembelian ON pembelian.idPembelian = detail_pembelian.idPembelian;"
+            );
+
+            // Memeriksa apakah query mengembalikan hasil
+            if (!sql.isBeforeFirst()) {
+                JOptionPane.showMessageDialog(null, "Tidak ada data yang ditemukan.");
+                return;
+            }
+
+            // Membuat model tabel untuk menampilkan data
+            DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("No");
+            model.addColumn("Nama Agen");
+            model.addColumn("Keterangan");
+
+            // Menambahkan data ke dalam model
+            int no = 1;  // Variabel untuk nomor urut
+
+            // Menambahkan data dari ResultSet ke model tabel
+            while (sql.next()) {
+                model.addRow(new Object[]{
+                    no++, // Menambahkan nomor urut
+                    sql.getString("namaAgen"), // Menambahkan nama produk
+                    sql.getString("keterangan"), // Menambahkan kategori
+                });
+            }
+
+            // Menampilkan model ke dalam tabel
+            pembelianTable.setModel(model);
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error SQL: " + e.getMessage());
+            e.printStackTrace(); // Untuk debugging
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "Error Antarmuka: " + e.getMessage());
+            e.printStackTrace(); // Untuk debugging
+        } finally {
+            // Menutup koneksi dan statement di dalam blok finally untuk memastikan selalu ditutup
+            try {
+                if (sql != null) sql.close();
+                if (stm != null) stm.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Error saat menutup koneksi: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    
+    private void getAgen() {
+            try (Connection conn = (Connection) Connections.ConnectionDB();
+                 java.sql.Statement stmAgen = conn.createStatement();
+                 java.sql.ResultSet queryProduk = stmAgen.executeQuery("select idAgen, namaAgen from agen")) {
+
+                cbAgen.removeAllItems();
+                cbAgen.addItem("Silakan pilih agen...");
+
+                // Menyimpan idProduk dalam map untuk memetakan namaProduk ke idProduk
+                Map<String, String> AgenMap = new HashMap<>();
+
+                // Menambahkan data ke dalam model
+                while (queryProduk.next()) {
+                    String idAgen = queryProduk.getString("idAgen");
+                    String namaAgen = queryProduk.getString("namaAgen");
+                    AgenMap.put(namaAgen, idAgen);  // Menyimpan mapping antara nama dan idProduk
+                    cbAgen.addItem(namaAgen);
+                }
+
+                // Menambahkan listener untuk combo box
+                cbAgen.addActionListener(new ActionListener() {
+                    private boolean firstSelection = true; // Flag untuk menangani pilihan pertama
+
+                    public void actionPerformed(ActionEvent e) {
+                        String selectedProduk = (String) cbAgen.getSelectedItem();
+
+                        // Cek apakah kategori yang valid dipilih
+                        if (selectedProduk != null && !selectedProduk.equals("Silakan pilih produk...")) {
+                            // Setel idProduk ke txtIdProduk
+                            String idAgen = AgenMap.get(selectedProduk);
+                            txtIdAgen.setText(idAgen);
+
+
+                            // Hanya set pertama kali saat valid dipilih
+                            if (firstSelection) {
+                                firstSelection = false; // Tandai bahwa sudah memilih yang valid
+                            }
+                        } else {
+                            // Jika memilih "Silakan pilih kategori...", tampilkan pesan hanya sekali
+                            if (!firstSelection) {
+//                                JOptionPane.showMessageDialog(null, "Silakan pilih item yang valid!");
+                                txtIdAgen.setText("0"); // Reset teks di txtIdProduk
+
+                            }
+
+                            // Jangan reset cbProduk jika sudah memilih yang valid sebelumnya
+                            // biarkan pengguna memilih tanpa reset otomatis
+                        }
+                    }
+                });
+
+                // Mengambil data lebih lanjut jika diperlukan
+                // getData();
+
+            } catch (SQLException | HeadlessException e) {
+                // Tangani exception jika ada kesalahan
+                e.printStackTrace();
+            }
+        }
+
+    
+    
+    private void getProduk() {
+            try (Connection conn = (Connection) Connections.ConnectionDB();
+                 java.sql.Statement stm = conn.createStatement();
+                 java.sql.ResultSet queryProduk = stm.executeQuery("select idProduk, namaProduk from produk")) {
+
+                cbProduk.removeAllItems();
+                cbProduk.addItem("Silakan pilih produk...");
+
+                // Menyimpan idProduk dalam map untuk memetakan namaProduk ke idProduk
+                Map<String, String> produkMap = new HashMap<>();
+
+                // Menambahkan data ke dalam model
+                while (queryProduk.next()) {
+                    String idProduk = queryProduk.getString("idProduk");
+                    String namaProduk = queryProduk.getString("namaProduk");
+                    produkMap.put(namaProduk, idProduk);  // Menyimpan mapping antara nama dan idProduk
+                    cbProduk.addItem(namaProduk);
+                }
+
+                // Menambahkan listener untuk combo box
+                cbProduk.addActionListener(new ActionListener() {
+                    private boolean firstSelection = true; // Flag untuk menangani pilihan pertama
+
+                    public void actionPerformed(ActionEvent e) {
+                        String selectedProduk = (String) cbProduk.getSelectedItem();
+
+                        // Cek apakah kategori yang valid dipilih
+                        if (selectedProduk != null && !selectedProduk.equals("Silakan pilih produk...")) {
+                            // Setel idProduk ke txtIdProduk
+                            String idProduk = produkMap.get(selectedProduk);
+                            txtIdProduk.setText(idProduk);
+
+
+                            // Hanya set pertama kali saat valid dipilih
+                            if (firstSelection) {
+                                firstSelection = false; // Tandai bahwa sudah memilih yang valid
+                            }
+                        } else {
+                            // Jika memilih "Silakan pilih kategori...", tampilkan pesan hanya sekali
+                            if (!firstSelection) {
+//                                JOptionPane.showMessageDialog(null, "Silakan pilih item yang valid!");
+                                txtIdProduk.setText("0"); // Reset teks di txtIdProduk
+
+                            }
+
+                            // Jangan reset cbProduk jika sudah memilih yang valid sebelumnya
+                            // biarkan pengguna memilih tanpa reset otomatis
+                        }
+                    }
+                });
+
+                // Mengambil data lebih lanjut jika diperlukan
+                // getData();
+
+            } catch (SQLException | HeadlessException e) {
+                // Tangani exception jika ada kesalahan
+                e.printStackTrace();
+            }
+        }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
