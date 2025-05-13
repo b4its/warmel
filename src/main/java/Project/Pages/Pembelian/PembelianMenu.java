@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
  *
@@ -27,6 +28,9 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
      */
     public PembelianMenu() {
         initComponents();
+        AutoCompleteDecorator.decorate(cbAgen);
+        AutoCompleteDecorator.decorate(cbProduk);
+
         getAgen();
         getProduk();
     }
