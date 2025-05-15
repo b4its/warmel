@@ -6,27 +6,38 @@ package Project.Pages.Pembelian;
 
 import Project.Connection.Connections;
 import Project.Helper.CurrencyFormat;
+import Project.Helper.Tax;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.SQLException;
+import static java.time.LocalDate.now;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author brsap
  */
 public class PembelianMenu extends javax.swing.JInternalFrame {
-
+    private Map<String, String> produkMap = new HashMap<>();
+    private Map<String, String> hargaMap = new HashMap<>();
+    CurrencyFormat formatIDCurrency = new CurrencyFormat();
+    Tax taxInformation = new Tax();
     /**
      * Creates new form Pembelian
      */
     public PembelianMenu() {
+
         initComponents();
         AutoCompleteDecorator.decorate(cbAgen);
         AutoCompleteDecorator.decorate(cbProduk);
@@ -36,7 +47,6 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
     }
     
         private void getData() {
-        CurrencyFormat formatIDCurrency = new CurrencyFormat();
 
         java.sql.Connection conn = null;
         java.sql.Statement stm = null;
@@ -178,68 +188,80 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
             }
         }
 
-    
+
     
     private void getProduk() {
-            try (Connection conn = (Connection) Connections.ConnectionDB();
-                 java.sql.Statement stm = conn.createStatement();
-                 java.sql.ResultSet queryProduk = stm.executeQuery("select idProduk, namaProduk from produk")) {
+        try (Connection conn = (Connection) Connections.ConnectionDB();
+             java.sql.Statement stm = conn.createStatement();
+             java.sql.ResultSet queryProduk = stm.executeQuery("SELECT idProduk, namaProduk, hargaBeli FROM produk");
+                ) {
 
-                cbProduk.removeAllItems();
-                cbProduk.addItem("Silakan pilih produk...");
+            cbProduk.removeAllItems();
+            cbProduk.addItem("Silakan pilih produk...");
 
-                // Menyimpan idProduk dalam map untuk memetakan namaProduk ke idProduk
-                Map<String, String> produkMap = new HashMap<>();
+            // Map untuk menyimpan idProduk dan hargaBeli berdasarkan namaProduk
+            produkMap.clear();
+            hargaMap.clear();
 
-                // Menambahkan data ke dalam model
-                while (queryProduk.next()) {
-                    String idProduk = queryProduk.getString("idProduk");
-                    String namaProduk = queryProduk.getString("namaProduk");
-                    produkMap.put(namaProduk, idProduk);  // Menyimpan mapping antara nama dan idProduk
-                    cbProduk.addItem(namaProduk);
-                }
+            while (queryProduk.next()) {
+                String idProduk = queryProduk.getString("idProduk");
+                String namaProduk = queryProduk.getString("namaProduk");
+                String hargaBeli = queryProduk.getString("hargaBeli");
 
-                // Menambahkan listener untuk combo box
-                cbProduk.addActionListener(new ActionListener() {
-                    private boolean firstSelection = true; // Flag untuk menangani pilihan pertama
-
-                    public void actionPerformed(ActionEvent e) {
-                        String selectedProduk = (String) cbProduk.getSelectedItem();
-
-                        // Cek apakah kategori yang valid dipilih
-                        if (selectedProduk != null && !selectedProduk.equals("Silakan pilih produk...")) {
-                            // Setel idProduk ke txtIdProduk
-                            String idProduk = produkMap.get(selectedProduk);
-                            txtIdProduk.setText(idProduk);
+                produkMap.put(namaProduk, idProduk);
+                hargaMap.put(namaProduk, hargaBeli);
+                cbProduk.addItem(namaProduk);
+            }
 
 
-                            // Hanya set pertama kali saat valid dipilih
-                            if (firstSelection) {
-                                firstSelection = false; // Tandai bahwa sudah memilih yang valid
-                            }
-                        } else {
-                            // Jika memilih "Silakan pilih kategori...", tampilkan pesan hanya sekali
-                            if (!firstSelection) {
-//                                JOptionPane.showMessageDialog(null, "Silakan pilih item yang valid!");
-                                txtIdProduk.setText("0"); // Reset teks di txtIdProduk
+            cbProduk.addActionListener(new ActionListener() {
+                private boolean firstSelection = true;
 
-                            }
+                public void actionPerformed(ActionEvent e) {
+                    String selectedProduk = (String) cbProduk.getSelectedItem();
 
-                            // Jangan reset cbProduk jika sudah memilih yang valid sebelumnya
-                            // biarkan pengguna memilih tanpa reset otomatis
+                    if (selectedProduk != null && !selectedProduk.equals("Silakan pilih produk...")) {
+                        String idProduk = produkMap.get(selectedProduk);
+                        txtHarga.setText(hargaMap.get(selectedProduk));
+                        double hargaBeli = Double.parseDouble(hargaMap.get(selectedProduk));
+                        int jumlahBeli = (int) spinJProduk.getValue();
+                        double subHarga = hargaBeli * jumlahBeli;
+                        double total = subHarga + taxInformation.getTax();
+                        double totalBiasa = hargaBeli + taxInformation.getTax();
+                        String stringTotal = formatIDCurrency.currencyFormat(subHarga);
+                        String stringTotalBiasa = formatIDCurrency.currencyFormat(totalBiasa);
+                        txtIdProduk.setText(idProduk);
+                        if (jumlahBeli > 1)
+                        {
+                            txtVisualSHarga.setText("Rp "+stringTotal);
+                            txtSubHarga.setText(String.valueOf(subHarga));
+                            txtTotalHarga.setText(String.valueOf(total)); // Menampilkan hargaBeli ke field txtHarga
+                            txtVisualTHarga.setText("Rp "+stringTotalBiasa); // Menampilkan hargaBeli ke field txtHarga
+                        }else{
+                            txtVisualSHarga.setText("Rp "+stringTotal);
+                            txtSubHarga.setText(hargaMap.get(selectedProduk));
+                            txtTotalHarga.setText(hargaMap.get(selectedProduk)); // Menampilkan hargaBeli ke field txtHarga
+                            txtVisualTHarga.setText("Rp "+stringTotalBiasa); // Menampilkan hargaBeli ke field txtHarga
+                        }
+
+                        if (firstSelection) {
+                            firstSelection = false;
+                        }
+                    } else {
+                        if (!firstSelection) {
+                            txtIdProduk.setText("0");
+                            txtTotalHarga.setText(""); // Reset harga jika pilihan tidak valid
+                            txtVisualSHarga.setText("");
                         }
                     }
-                });
+                }
+            });
 
-                // Mengambil data lebih lanjut jika diperlukan
-                // getData();
-
-            } catch (SQLException | HeadlessException e) {
-                // Tangani exception jika ada kesalahan
-                e.printStackTrace();
-            }
+        } catch (SQLException | HeadlessException e) {
+            
+            e.printStackTrace();
         }
-
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -265,8 +287,15 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
         pembelianTable = new javax.swing.JTable();
         jLabel7 = new javax.swing.JLabel();
         txtIdAgen = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
         txtIdProduk = new javax.swing.JTextField();
+        txtHarga = new javax.swing.JTextField();
+        txtTotalHarga = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        txtSubHarga = new javax.swing.JTextField();
+        jPanel1 = new javax.swing.JPanel();
+        txtVisualSHarga = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        txtVisualTHarga = new javax.swing.JLabel();
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
         jLabel1.setText("Form Pembelian");
@@ -291,6 +320,16 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel5.setText("Agen");
 
+        SpinnerNumberModel model = new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1);
+        spinJProduk.setModel(model);
+        spinJProduk.setOpaque(true);
+        spinJProduk.setVerifyInputWhenFocusTarget(false);
+        spinJProduk.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spinJProdukStateChanged(evt);
+            }
+        });
+
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel6.setText("Produk");
 
@@ -302,8 +341,18 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
         });
 
         btnKembali.setText("Kembali");
+        btnKembali.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKembaliActionPerformed(evt);
+            }
+        });
 
         btnSubmit.setText("Tambahkan/Update");
+        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubmitActionPerformed(evt);
+            }
+        });
 
         btnBersihkan.setText("Bersihkan");
         btnBersihkan.addActionListener(new java.awt.event.ActionListener() {
@@ -328,6 +377,52 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel7.setText("Total Harga");
 
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel8.setText("Sub Total");
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        txtVisualSHarga.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        txtVisualSHarga.setText("Rp 0.000");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txtVisualSHarga, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(txtVisualSHarga)
+                .addGap(0, 27, Short.MAX_VALUE))
+        );
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+
+        txtVisualTHarga.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        txtVisualTHarga.setText("Rp 0.000");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txtVisualTHarga, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txtVisualTHarga)
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -338,37 +433,50 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
                         .addGap(12, 12, 12)
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addGap(24, 24, 24)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnBersihkan, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(btnBersihkan, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(btnSubmit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(btnKembali, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel6)
+                                            .addComponent(jLabel5))
+                                        .addGap(54, 54, 54)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(cbProduk, 0, 147, Short.MAX_VALUE)
+                                            .addComponent(cbAgen, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(spinJProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel7)
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtTotalHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtSubHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(txtIdAgen, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(btnSubmit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnKembali, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel7)
+                                .addComponent(txtIdProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtIdAgen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtIdProduk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel5))
-                                .addGap(54, 54, 54)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(cbProduk, 0, 147, Short.MAX_VALUE)
-                                    .addComponent(cbAgen, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(33, 33, 33)
-                                .addComponent(spinJProduk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(36, 36, 36)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 54, Short.MAX_VALUE))
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(44, Short.MAX_VALUE))
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -379,7 +487,7 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -404,13 +512,21 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtIdAgen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtIdProduk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtIdProduk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtSubHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(44, 44, 44)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(41, Short.MAX_VALUE))
+                .addGap(10, 10, 10)
+                .addComponent(txtTotalHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel7)
+                        .addComponent(jLabel8))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(116, Short.MAX_VALUE))
         );
 
         pack();
@@ -424,6 +540,78 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnBersihkanActionPerformed
 
+    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
+        // TODO add your handling code here:
+        int idAgen = Integer.parseInt(txtIdAgen.getText());
+        int idProduk = Integer.parseInt(txtIdProduk.getText());
+        String nama_agen = cbAgen.getSelectedItem().toString();
+        String nama_produk = cbProduk.getSelectedItem().toString();
+        int jumlah_produk = (int) spinJProduk.getValue();
+        double harga = Double.parseDouble(txtHarga.getText());
+        double subTotal = Double.parseDouble(txtSubHarga.getText());
+        double totalHarga = Double.parseDouble(txtTotalHarga.getText());
+        String keterangan = "Telah berhasil memesan Produk: " + nama_produk + "| Jumlah Produk: "+ jumlah_produk
+                +"| dari agen "+nama_agen;
+        System.out.println("idAgen      : " + idAgen);
+        System.out.println("nama_agen   : " + nama_agen);
+        System.out.println("idProduk    : " + idProduk);
+        System.out.println("nama_produk   : " + nama_produk);
+        System.out.println("jumlahProduk: " + jumlah_produk);
+        System.out.println("harga    : " + harga);
+        System.out.println("subTotal    : " + subTotal);
+        System.out.println("totalHarga  : " + totalHarga);
+        System.out.println("keterangan  : " + keterangan);
+
+        
+    }//GEN-LAST:event_btnSubmitActionPerformed
+
+    private void spinJProdukStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spinJProdukStateChanged
+        // TODO add your handling code here:
+        try {
+ 
+
+            
+            // Ambil nilai dari txtHarga dan spinner
+            double hargaBeli = Double.parseDouble(txtHarga.getText());
+            int jumlahBeli = (int) spinJProduk.getValue();
+            System.out.println("jumlah beli: " + jumlahBeli);
+            // txtIdProduk.setText(title);
+            // Hitung total dan tampilkan
+            double subTotal = hargaBeli * jumlahBeli;
+            double total = subTotal + taxInformation.getTax();
+            double totalBiasa = hargaBeli + taxInformation.getTax();
+            String stringTotal = formatIDCurrency.currencyFormat(total);
+            String stringTotalBiasa = formatIDCurrency.currencyFormat(totalBiasa);
+            String stringSub = formatIDCurrency.currencyFormat(subTotal);
+            System.out.println(stringTotal);
+            if(jumlahBeli > 1)
+            {
+                txtVisualSHarga.setText("Rp "+stringSub);
+                txtSubHarga.setText(String.valueOf(subTotal));
+                txtTotalHarga.setText(String.valueOf(total));
+                txtVisualTHarga.setText("Rp "+String.valueOf(stringTotal));
+            }else
+            {
+                txtVisualSHarga.setText("Rp "+stringSub);
+                txtSubHarga.setText(String.valueOf(hargaBeli));
+                txtTotalHarga.setText(String.valueOf(hargaBeli));
+                txtVisualTHarga.setText("Rp "+String.valueOf(stringTotalBiasa));   
+            }
+
+
+        } catch (NumberFormatException ex) {
+            txtTotalHarga.setText("0.0"); // fallback jika txtHarga belum valid
+            txtSubHarga.setText("0.0");
+            txtVisualSHarga.setText("0.000");
+            txtVisualTHarga.setText("0.000");
+        }
+    }//GEN-LAST:event_spinJProdukStateChanged
+
+    private void btnKembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKembaliActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_btnKembaliActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBersihkan;
@@ -436,12 +624,19 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JTable pembelianTable;
     private javax.swing.JSpinner spinJProduk;
+    private javax.swing.JTextField txtHarga;
     private javax.swing.JTextField txtIdAgen;
     private javax.swing.JTextField txtIdProduk;
+    private javax.swing.JTextField txtSubHarga;
+    private javax.swing.JTextField txtTotalHarga;
+    private javax.swing.JLabel txtVisualSHarga;
+    private javax.swing.JLabel txtVisualTHarga;
     // End of variables declaration//GEN-END:variables
 }

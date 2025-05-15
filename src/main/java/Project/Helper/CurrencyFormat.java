@@ -28,6 +28,10 @@ public class CurrencyFormat {
         NumberFormat format = currencyFormat();
         return format.format(nominalAngka);  // Mengembalikan angka yang diformat
     }
+    
+    public String currencyFormat(double total) {
+        return formatCurrency(total);
+    }
 
     public static void main(String[] args) {
         //cara penggunaan
