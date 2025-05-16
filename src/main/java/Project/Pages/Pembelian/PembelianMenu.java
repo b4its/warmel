@@ -34,6 +34,7 @@ import java.util.logging.Logger;
 public class PembelianMenu extends javax.swing.JInternalFrame {
     private Map<String, String> produkMap = new HashMap<>();
     private Map<String, String> hargaMap = new HashMap<>();
+    private Map<String, String> stokMap = new HashMap<>();
     CurrencyFormat formatIDCurrency = new CurrencyFormat();
     Tax taxInformation = new Tax();
     /**
@@ -81,9 +82,11 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
                 "    detail_pembelian.idProduk,\n" +
                 "    detail_pembelian.jumlah,\n" +
                 "    detail_pembelian.subtotal\n" +
+                "    produk.namaProduk\n" +       
                 "FROM pembelian\n" +
                 "JOIN agen ON pembelian.idAgen = agen.idAgen\n" +
-                "JOIN detail_pembelian ON pembelian.idPembelian = detail_pembelian.idPembelian;"
+                "JOIN detail_pembelian ON pembelian.idPembelian = detail_pembelian.idPembelian"+
+                "JOIN produk ON detail_pembelian.idProduk = produk.idProduk;" 
             );
 
             // Memeriksa apakah query mengembalikan hasil
@@ -96,7 +99,10 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
             DefaultTableModel model = new DefaultTableModel();
             model.addColumn("No");
             model.addColumn("Nama Agen");
-            model.addColumn("Keterangan");
+            model.addColumn("Produk");
+            model.addColumn("Stok");
+            model.addColumn("Sub Total");
+            model.addColumn("Total Keseluruhan");
 
             // Menambahkan data ke dalam model
             int no = 1;  // Variabel untuk nomor urut
@@ -106,7 +112,10 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
                 model.addRow(new Object[]{
                     no++, // Menambahkan nomor urut
                     sql.getString("namaAgen"), // Menambahkan nama produk
-                    sql.getString("keterangan"), // Menambahkan kategori
+                    sql.getString("produk"), // Menambahkan kategori
+                    sql.getInt("stok"), // Menambahkan kategori
+                    formatIDCurrency.currencyFormat(sql.getDouble("subtotal")), // Menambahkan kategori
+                    formatIDCurrency.currencyFormat(sql.getDouble("totalHarga")),
                 });
             }
 
@@ -198,7 +207,7 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
     private void getProduk() {
         try (Connection conn = (Connection) Connections.ConnectionDB();
              java.sql.Statement stm = conn.createStatement();
-             java.sql.ResultSet queryProduk = stm.executeQuery("SELECT idProduk, namaProduk, hargaBeli FROM produk");
+             java.sql.ResultSet queryProduk = stm.executeQuery("SELECT idProduk, namaProduk, hargaBeli, stok FROM produk");
                 ) {
 
             cbProduk.removeAllItems();
@@ -207,14 +216,17 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
             // Map untuk menyimpan idProduk dan hargaBeli berdasarkan namaProduk
             produkMap.clear();
             hargaMap.clear();
+            stokMap.clear();
 
             while (queryProduk.next()) {
                 String idProduk = queryProduk.getString("idProduk");
                 String namaProduk = queryProduk.getString("namaProduk");
                 String hargaBeli = queryProduk.getString("hargaBeli");
+                String stok = queryProduk.getString("stok");
 
                 produkMap.put(namaProduk, idProduk);
                 hargaMap.put(namaProduk, hargaBeli);
+                stokMap.put(namaProduk, stok);
                 cbProduk.addItem(namaProduk);
             }
 
@@ -228,6 +240,7 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
                     if (selectedProduk != null && !selectedProduk.equals("Silakan pilih produk...")) {
                         String idProduk = produkMap.get(selectedProduk);
                         txtHarga.setText(hargaMap.get(selectedProduk));
+                        txtStok.setText(stokMap.get(selectedProduk));
                         double hargaBeli = Double.parseDouble(hargaMap.get(selectedProduk));
                         int jumlahBeli = (int) spinJProduk.getValue();
                         double subHarga = hargaBeli * jumlahBeli;
@@ -301,6 +314,7 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
         txtVisualSHarga = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         txtVisualTHarga = new javax.swing.JLabel();
+        txtStok = new javax.swing.JTextField();
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
         jLabel1.setText("Form Pembelian");
@@ -477,7 +491,9 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
                                 .addComponent(txtIdAgen, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(txtIdProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtStok, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -518,6 +534,7 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtIdAgen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtIdProduk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtStok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(txtSubHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -575,28 +592,43 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
                 Connection conn = Connections.ConnectionDB();
                 PreparedStatement pstPembelian = conn.prepareStatement(queryPembelian, Statement.RETURN_GENERATED_KEYS);
             ) {
-                pstPembelian.setInt(1, idAgen);
-                pstPembelian.setString(2, keterangan);
-                pstPembelian.setDouble(3, totalHarga);
+                int stokAwal = Integer.parseInt(txtStok.getText());
+                int totalStok = stokAwal + jumlah_produk;
+                System.out.println("Total Stok: "+totalStok);
+                if(totalStok > 0)
+                {
+                    pstPembelian.setInt(1, idAgen);
+                    pstPembelian.setString(2, keterangan);
+                    pstPembelian.setDouble(3, totalHarga);
 
-                pstPembelian.executeUpdate();
+                    pstPembelian.executeUpdate();
 
-                try (ResultSet generatedKeys = pstPembelian.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        int idPembelian = generatedKeys.getInt(1);
-                        String queryDetailPembelian = "INSERT INTO detail_pembelian (idPembelian, idProduk, jumlah, subtotal, created_at) VALUES (?, ?, ?, ?, NOW())";
-                        PreparedStatement pstDetail_Pembelian = conn.prepareStatement(queryDetailPembelian, Statement.RETURN_GENERATED_KEYS);
-                        pstDetail_Pembelian.setInt(1, idPembelian);
-                        pstDetail_Pembelian.setInt(2, idProduk);
-                        pstDetail_Pembelian.setInt(3, jumlah_produk);
-                        pstDetail_Pembelian.setDouble(4, subTotal);
-                        pstDetail_Pembelian.executeUpdate();
-                        
-                        JOptionPane.showMessageDialog(null, "Pembelian anda telah berhasil");
-                    } else {
-                        System.out.println("ID pembelian tidak tersedia.");
+                    try (ResultSet generatedKeys = pstPembelian.getGeneratedKeys()) {
+                        if (generatedKeys.next()) {
+                            int idPembelian = generatedKeys.getInt(1);
+                            String queryUpdateStok = "update produk set stok = ? where idProduk = ?";
+                                // update stok produk
+                                PreparedStatement pstUpdateStok = conn.prepareStatement(queryUpdateStok);
+                                pstUpdateStok.setInt(1, totalStok);
+                                pstUpdateStok.setInt(2, idProduk);
+                                pstUpdateStok.executeUpdate();
+                                
+                                // penambahan detail pembelian
+                            String queryDetailPembelian = "INSERT INTO detail_pembelian (idPembelian, idProduk, jumlah, subtotal) VALUES (?, ?, ?, ?)";
+                                PreparedStatement pstDetail_Pembelian = conn.prepareStatement(queryDetailPembelian);
+                                pstDetail_Pembelian.setInt(1, idPembelian);
+                                pstDetail_Pembelian.setInt(2, idProduk);
+                                pstDetail_Pembelian.setInt(3, jumlah_produk);
+                                pstDetail_Pembelian.setDouble(4, subTotal);
+                                pstDetail_Pembelian.executeUpdate();
+                            JOptionPane.showMessageDialog(null, "Pembelian anda telah berhasil");
+                        } else {
+                            System.out.println("ID pembelian tidak tersedia.");
+                        }
                     }
+            
                 }
+                
             } catch (SQLException | NumberFormatException e) {
                 e.printStackTrace();
             }
@@ -688,6 +720,7 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtHarga;
     private javax.swing.JTextField txtIdAgen;
     private javax.swing.JTextField txtIdProduk;
+    private javax.swing.JTextField txtStok;
     private javax.swing.JTextField txtSubHarga;
     private javax.swing.JTextField txtTotalHarga;
     private javax.swing.JLabel txtVisualSHarga;
