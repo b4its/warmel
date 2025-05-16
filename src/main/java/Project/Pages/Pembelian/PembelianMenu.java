@@ -11,7 +11,9 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import static java.time.LocalDate.now;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +38,7 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
     /**
      * Creates new form Pembelian
      */
+    public boolean dataBaru;
     public PembelianMenu() {
 
         initComponents();
@@ -44,6 +47,7 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
 
         getAgen();
         getProduk();
+        dataBaru = true;
     }
     
         private void getData() {
@@ -553,15 +557,54 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
         double totalHarga = Double.parseDouble(txtTotalHarga.getText());
         String keterangan = "Telah berhasil memesan Produk: " + nama_produk + "| Jumlah Produk: "+ jumlah_produk
                 +"| dari agen "+nama_agen;
-        System.out.println("idAgen      : " + idAgen);
-        System.out.println("nama_agen   : " + nama_agen);
-        System.out.println("idProduk    : " + idProduk);
-        System.out.println("nama_produk   : " + nama_produk);
-        System.out.println("jumlahProduk: " + jumlah_produk);
-        System.out.println("harga    : " + harga);
-        System.out.println("subTotal    : " + subTotal);
-        System.out.println("totalHarga  : " + totalHarga);
-        System.out.println("keterangan  : " + keterangan);
+//        System.out.println("idAgen      : " + idAgen);
+//        System.out.println("nama_agen   : " + nama_agen);
+//        System.out.println("idProduk    : " + idProduk);
+//        System.out.println("nama_produk   : " + nama_produk);
+//        System.out.println("jumlahProduk: " + jumlah_produk);
+//        System.out.println("harga    : " + harga);
+//        System.out.println("subTotal    : " + subTotal);
+//        System.out.println("totalHarga  : " + totalHarga);
+//        System.out.println("keterangan  : " + keterangan);
+        // TODO add your handling code here:
+        if (dataBaru == true) { // prosess simpan atau edit
+            try {
+                String queryPembelian = "INSERT INTO pembelian (idAgen, keterangan, totalHarga, created_at) VALUES ('" + idAgen + "','" + keterangan + "','" + totalHarga + "', NOW())";
+                Connection conn = (Connection) Connections.ConnectionDB();
+                java.sql.PreparedStatement pstPembelian = conn.prepareStatement(queryPembelian, Statement.RETURN_GENERATED_KEYS);
+                pstPembelian.execute();
+                
+                // Ambil ID yang baru saja dibuat
+                try (ResultSet generatedKeys = pstPembelian.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int idPembelian = generatedKeys.getInt(1);
+                        System.out.println("ID Pembelian baru: " + idPembelian);
+
+                        // Lanjutkan insert ke detail_pembelian jika perlu
+                    } else {
+                        throw new SQLException("Gagal mengambil ID pembelian.");
+                    }
+                }
+               // String queryDetailPembelian = "INSERT INTO detail_pembelian (idAgen, keterangan, totalHarga, created_at) VALUES ('" + idAgen + "'," + keterangan + "," + totalHarga + ", NOW())";
+
+                JOptionPane.showMessageDialog(null, "Kategori telah berhasil disimpan");
+            } catch (SQLException | HeadlessException e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        } 
+//        else {
+//            try {
+//                String sql = "update kategori SET namaKategori='"+textNama.getText()+"', updated_at= now() where idKategori='"+txtIdKategori.getText()+"'";
+//                Connection conn = (Connection) Connections.ConnectionDB();
+//                java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+//                pst.execute();
+//                JOptionPane.showMessageDialog(null, "Kategori telah berhasil diperbarui");
+//            } catch (SQLException | HeadlessException e) {
+//                JOptionPane.showMessageDialog(null, e);
+//            }
+//        }
+        
+        getData();
 
         
     }//GEN-LAST:event_btnSubmitActionPerformed
