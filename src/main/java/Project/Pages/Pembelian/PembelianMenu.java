@@ -590,7 +590,8 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
                         pstDetail_Pembelian.setInt(2, idProduk);
                         pstDetail_Pembelian.setInt(3, jumlah_produk);
                         pstDetail_Pembelian.setDouble(4, subTotal);
-                        pstPembelian.executeUpdate();
+                        pstDetail_Pembelian.executeUpdate();
+                        
                         JOptionPane.showMessageDialog(null, "Pembelian anda telah berhasil");
                     } else {
                         System.out.println("ID pembelian tidak tersedia.");
