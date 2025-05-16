@@ -79,3 +79,14 @@ CREATE TABLE detail_transaksi (
     CONSTRAINT fk_detailtransaksi_transaksi FOREIGN KEY (idTransaksi) REFERENCES transaksi(idTransaksi),
     CONSTRAINT fk_detailtransaksi_detailpembelian FOREIGN KEY (idDetailPembelian) REFERENCES detail_pembelian(idDetailPembelian)
 ) ENGINE=InnoDB;
+
+
+
+
+
+
+
+
+
+
+delete from pembelian; delete from detail_pembelian; delete from transaksi; delete from detail_transaksi;

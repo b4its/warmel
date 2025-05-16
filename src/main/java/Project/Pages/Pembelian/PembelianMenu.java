@@ -49,6 +49,7 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
 
         getAgen();
         getProduk();
+        getData();
         dataBaru = true;
     }
     
@@ -81,12 +82,13 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
                 "    detail_pembelian.idDetailPembelian,\n" +
                 "    detail_pembelian.idProduk,\n" +
                 "    detail_pembelian.jumlah,\n" +
-                "    detail_pembelian.subtotal\n" +
-                "    produk.namaProduk\n" +       
+                "    detail_pembelian.subtotal,\n" +
+                "    produk.namaProduk,\n" +
+                "    produk.stok\n" + // asumsikan kamu ingin stok produk juga
                 "FROM pembelian\n" +
                 "JOIN agen ON pembelian.idAgen = agen.idAgen\n" +
-                "JOIN detail_pembelian ON pembelian.idPembelian = detail_pembelian.idPembelian"+
-                "JOIN produk ON detail_pembelian.idProduk = produk.idProduk;" 
+                "JOIN detail_pembelian ON pembelian.idPembelian = detail_pembelian.idPembelian\n" +
+                "JOIN produk ON detail_pembelian.idProduk = produk.idProduk"
             );
 
             // Memeriksa apakah query mengembalikan hasil
@@ -98,6 +100,7 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
             // Membuat model tabel untuk menampilkan data
             DefaultTableModel model = new DefaultTableModel();
             model.addColumn("No");
+            model.addColumn("Id Pembelian");
             model.addColumn("Nama Agen");
             model.addColumn("Produk");
             model.addColumn("Stok");
@@ -111,8 +114,9 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
             while (sql.next()) {
                 model.addRow(new Object[]{
                     no++, // Menambahkan nomor urut
+                    sql.getInt("idPembelian"), // Menambahkan nama produk
                     sql.getString("namaAgen"), // Menambahkan nama produk
-                    sql.getString("produk"), // Menambahkan kategori
+                    sql.getString("namaProduk"), // Menambahkan kategori
                     sql.getInt("stok"), // Menambahkan kategori
                     formatIDCurrency.currencyFormat(sql.getDouble("subtotal")), // Menambahkan kategori
                     formatIDCurrency.currencyFormat(sql.getDouble("totalHarga")),
@@ -121,6 +125,11 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
 
             // Menampilkan model ke dalam tabel
             pembelianTable.setModel(model);
+            
+            //sembunyikan idPembelian
+            pembelianTable.getColumnModel().getColumn(1).setMinWidth(0);
+            pembelianTable.getColumnModel().getColumn(1).setMaxWidth(0);
+            pembelianTable.getColumnModel().getColumn(1).setWidth(0);
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error SQL: " + e.getMessage());
@@ -391,6 +400,11 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
                 "Produk", "Jumlah", "Harga"
             }
         ));
+        pembelianTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pembelianTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(pembelianTable);
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
@@ -496,8 +510,8 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(44, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(19, Short.MAX_VALUE))
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -585,7 +599,7 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
 //        System.out.println("totalHarga  : " + totalHarga);
 //        System.out.println("keterangan  : " + keterangan);
         // TODO add your handling code here:
-        if (dataBaru == true) { // prosess simpan atau edit
+        if (dataBaru == true) {  // prosess simpan atau edit
             String queryPembelian = "INSERT INTO pembelian (idAgen, keterangan, totalHarga, created_at) VALUES (?, ?, ?, NOW())";
 
             try (
@@ -595,7 +609,7 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
                 int stokAwal = Integer.parseInt(txtStok.getText());
                 int totalStok = stokAwal + jumlah_produk;
                 System.out.println("Total Stok: "+totalStok);
-                if(totalStok > 0)
+                if (totalStok > 0)
                 {
                     pstPembelian.setInt(1, idAgen);
                     pstPembelian.setString(2, keterangan);
@@ -623,6 +637,8 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
                                 pstDetail_Pembelian.executeUpdate();
                             JOptionPane.showMessageDialog(null, "Pembelian anda telah berhasil");
                         } else {
+                            JOptionPane.showMessageDialog(null, "Pembelian anda gagal");
+
                             System.out.println("ID pembelian tidak tersedia.");
                         }
                     }
@@ -697,6 +713,57 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         dispose();
     }//GEN-LAST:event_btnKembaliActionPerformed
+
+    private void pembelianTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pembelianTableMouseClicked
+        dataBaru = false;
+        System.out.println("DONE BANG");
+
+        try {
+            int row = pembelianTable.getSelectedRow();
+            if (row == -1) {
+                JOptionPane.showMessageDialog(null, "Silakan pilih data dari tabel.");
+                return;
+            }
+
+            String tableClicked = pembelianTable.getModel().getValueAt(row, 1).toString();
+            System.out.println("Clicked ID: " + tableClicked);
+
+            Connection conn = Connections.ConnectionDB();
+            String query = "select p.idPembelian, p.idAgen, dp.idProduk, dp.jumlah from pembelian p join detail_pembelian dp on p.idPembelian = dp.idPembelian where dp.idPembelian = ?;";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, tableClicked);
+            ResultSet sql = ps.executeQuery();
+
+            if (sql.next()) {
+                int idAgen = sql.getInt("idAgen")-1;
+                int idProduk = sql.getInt("idProduk")-1;
+                int jumlah = sql.getInt("jumlah");
+
+                // Validasi index
+                if (idProduk < cbProduk.getItemCount()) {
+                    cbProduk.setSelectedIndex(idProduk);
+                }
+                
+                if (idAgen < cbAgen.getItemCount()) {
+                    cbAgen.setSelectedIndex(idAgen);
+                }
+
+                if (jumlah >= 1) {
+                    spinJProduk.setValue(jumlah);
+                }
+
+                System.out.println("ID Produk: " + idProduk);
+                System.out.println("ID Agen: " + idAgen);
+                System.out.println("Jumlah: " + jumlah);
+            } else {
+                System.out.println("Tidak ada data ditemukan untuk ID tersebut.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }//GEN-LAST:event_pembelianTableMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
