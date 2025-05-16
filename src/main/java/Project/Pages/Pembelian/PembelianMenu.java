@@ -11,6 +11,7 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -555,7 +556,7 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
         double harga = Double.parseDouble(txtHarga.getText());
         double subTotal = Double.parseDouble(txtSubHarga.getText());
         double totalHarga = Double.parseDouble(txtTotalHarga.getText());
-        String keterangan = "Telah berhasil memesan Produk: " + nama_produk + "| Jumlah Produk: "+ jumlah_produk
+        String keterangan = "Telah berhasil memesan Produk: " + nama_produk + "| Jumlah Produk: "+ jumlah_produk + "| Harga Satuan: "+ harga
                 +"| dari agen "+nama_agen;
 //        System.out.println("idAgen      : " + idAgen);
 //        System.out.println("nama_agen   : " + nama_agen);
@@ -568,29 +569,37 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
 //        System.out.println("keterangan  : " + keterangan);
         // TODO add your handling code here:
         if (dataBaru == true) { // prosess simpan atau edit
-            try {
-                String queryPembelian = "INSERT INTO pembelian (idAgen, keterangan, totalHarga, created_at) VALUES ('" + idAgen + "','" + keterangan + "','" + totalHarga + "', NOW())";
-                Connection conn = (Connection) Connections.ConnectionDB();
-                java.sql.PreparedStatement pstPembelian = conn.prepareStatement(queryPembelian, Statement.RETURN_GENERATED_KEYS);
-                pstPembelian.execute();
-                
-                // Ambil ID yang baru saja dibuat
+            String queryPembelian = "INSERT INTO pembelian (idAgen, keterangan, totalHarga, created_at) VALUES (?, ?, ?, NOW())";
+
+            try (
+                Connection conn = Connections.ConnectionDB();
+                PreparedStatement pstPembelian = conn.prepareStatement(queryPembelian, Statement.RETURN_GENERATED_KEYS);
+            ) {
+                pstPembelian.setInt(1, idAgen);
+                pstPembelian.setString(2, keterangan);
+                pstPembelian.setDouble(3, totalHarga);
+
+                pstPembelian.executeUpdate();
+
                 try (ResultSet generatedKeys = pstPembelian.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         int idPembelian = generatedKeys.getInt(1);
-                        System.out.println("ID Pembelian baru: " + idPembelian);
-
-                        // Lanjutkan insert ke detail_pembelian jika perlu
+                        String queryDetailPembelian = "INSERT INTO detail_pembelian (idPembelian, idProduk, jumlah, subtotal, created_at) VALUES (?, ?, ?, ?, NOW())";
+                        PreparedStatement pstDetail_Pembelian = conn.prepareStatement(queryDetailPembelian, Statement.RETURN_GENERATED_KEYS);
+                        pstDetail_Pembelian.setInt(1, idPembelian);
+                        pstDetail_Pembelian.setInt(2, idProduk);
+                        pstDetail_Pembelian.setInt(3, jumlah_produk);
+                        pstDetail_Pembelian.setDouble(4, subTotal);
+                        pstPembelian.executeUpdate();
+                        JOptionPane.showMessageDialog(null, "Pembelian anda telah berhasil");
                     } else {
-                        throw new SQLException("Gagal mengambil ID pembelian.");
+                        System.out.println("ID pembelian tidak tersedia.");
                     }
                 }
-               // String queryDetailPembelian = "INSERT INTO detail_pembelian (idAgen, keterangan, totalHarga, created_at) VALUES ('" + idAgen + "'," + keterangan + "," + totalHarga + ", NOW())";
-
-                JOptionPane.showMessageDialog(null, "Kategori telah berhasil disimpan");
-            } catch (SQLException | HeadlessException e) {
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException | NumberFormatException e) {
+                e.printStackTrace();
             }
+
         } 
 //        else {
 //            try {
