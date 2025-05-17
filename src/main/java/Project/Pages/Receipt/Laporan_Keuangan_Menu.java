@@ -79,7 +79,7 @@ public class Laporan_Keuangan_Menu extends javax.swing.JFrame {
         jTable1.setBackground(new java.awt.Color(178, 255, 142));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null}
+
             },
             new String [] {
                 "Nama Barang", "Harga Barang"
@@ -93,7 +93,7 @@ public class Laporan_Keuangan_Menu extends javax.swing.JFrame {
         jTable2.setBackground(new java.awt.Color(255, 151, 151));
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null}
+
             },
             new String [] {
                 "Nama Barang", "Harga Barang"

@@ -406,10 +406,7 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
 
         pembelianTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Produk", "Jumlah", "Harga"
