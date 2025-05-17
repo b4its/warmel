@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
  *
@@ -34,6 +35,7 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
     public ProdukMenu() {
         
         initComponents();
+        AutoCompleteDecorator.decorate(cbKategori);
         getKategori();
         getData();
         dataBaru = true;
@@ -60,7 +62,7 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
             // Menjalankan query
             stm = conn.createStatement();
             sql = stm.executeQuery(
-                "SELECT p.namaProduk, k.namaKategori, p.hargaBeli, p.hargaJual, p.stok, p.created_at, p.updated_at " +
+                "SELECT p.idProduk, p.namaProduk, k.namaKategori, p.hargaBeli, p.hargaJual, p.stok, p.created_at, p.updated_at " +
                 "FROM produk p " +
                 "INNER JOIN kategori k ON p.idKategori = k.idKategori"
             );
@@ -74,6 +76,7 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
             // Membuat model tabel untuk menampilkan data
             DefaultTableModel model = new DefaultTableModel();
             model.addColumn("No");
+            model.addColumn("Id Produk");
             model.addColumn("Nama Produk");
             model.addColumn("Kategori");
             model.addColumn("Harga Beli");
@@ -89,6 +92,7 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
             while (sql.next()) {
                 model.addRow(new Object[]{
                     no++, // Menambahkan nomor urut
+                    sql.getString("idProduk"), // Menambahkan nama produk
                     sql.getString("namaProduk"), // Menambahkan nama produk
                     sql.getString("namaKategori"), // Menambahkan kategori
                     formatIDCurrency.formatCurrency(sql.getDouble("hargaBeli")), // Menambahkan harga beli
@@ -101,6 +105,11 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
 
             // Menampilkan model ke dalam tabel
             produkTable.setModel(model);
+            
+            //sembunyikan idPembelian
+            produkTable.getColumnModel().getColumn(1).setMinWidth(0);
+            produkTable.getColumnModel().getColumn(1).setMaxWidth(0);
+            produkTable.getColumnModel().getColumn(1).setWidth(0);
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error SQL: " + e.getMessage());
@@ -289,6 +298,11 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
         txtCari.setText("cari produk..");
 
         btnCari.setText("Cari");
+        btnCari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCariActionPerformed(evt);
+            }
+        });
 
         labelKategori.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         labelKategori.setText("anda belum memilih..");
@@ -412,8 +426,7 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
             }
 
             java.sql.Statement stmt = conn.createStatement();
-            String sql = "";
-
+            String sql;
             // Validasi idKategori
             String idKategoriStr = txtIdKategori.getText();
             if (idKategoriStr == null || idKategoriStr.isEmpty()) {
@@ -486,10 +499,11 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
         dataBaru = false; // menampilkan data ke textboxt
         try {
             int row =produkTable.getSelectedRow();
-            String tabel_klik=(produkTable.getModel().getValueAt(row, 0).toString());
+            String clickedTable=(produkTable.getModel().getValueAt(row, 1).toString());
+            txtIdProduk.setText(clickedTable);
             java.sql.Connection conn = (Connection) Connections.ConnectionDB();
             java.sql.Statement stm = conn.createStatement();
-            java.sql.ResultSet sql = stm.executeQuery("select * from produk where idProduk='"+tabel_klik+"'");
+            java.sql.ResultSet sql = stm.executeQuery("select * from produk where idProduk='"+clickedTable+"'");
             if(sql.next()){
                 String nama = sql.getString("namaProduk");
                 textNama.setText(nama);
@@ -503,7 +517,28 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
         // TODO add your handling code here:
+                try { // hapus data
+                    String sql ="delete from produk where idProduk='"+txtIdProduk.getText()+"'";
+                    Connection conn = (Connection) Connections.ConnectionDB();
+                    java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+                    pst.execute();
+                    JOptionPane.showMessageDialog(null, "Data telah berhasil dihapus..");
+
+                    dataBaru=true;
+
+                    // kosongkan data
+                    textNama.setText("");
+                    txtIdKategori.setText("");
+
+                } catch (SQLException | HeadlessException e) {}
+
+        getData();
     }//GEN-LAST:event_btnHapusActionPerformed
+
+    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_btnCariActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -58,27 +58,30 @@ CREATE TABLE detail_pembelian (
     CONSTRAINT fk_detailpembelian_produk FOREIGN KEY (idProduk) REFERENCES produk(idProduk)
 ) ENGINE=InnoDB;
 
--- Tabel Transaksi
-CREATE TABLE transaksi (
-    idTransaksi INT(11) PRIMARY KEY AUTO_INCREMENT,
-    jenisTransaksi VARCHAR(50) NOT NULL,
+-- Tabel Penjualan
+CREATE TABLE penjualan (
+    idPenjualan INT(11) PRIMARY KEY AUTO_INCREMENT,
     keterangan TEXT,
-    total DECIMAL(15,2),
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    totalHarga DECIMAL(15,2),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
--- Tabel Detail Transaksi
-CREATE TABLE detail_transaksi (
-    idDetailTransaksi INT(11) PRIMARY KEY AUTO_INCREMENT,
-    idTransaksi INT(11),
-    idDetailPembelian INT(11),
+-- Tabel Detail Penjualan
+CREATE TABLE detail_penjualan (
+    idDetailPenjualan INT(11) PRIMARY KEY AUTO_INCREMENT,
+    idPenjualan INT(11),
+    idProduk INT(11),
     jumlah INT(11),
     subtotal DECIMAL(15,2),
-    INDEX (idTransaksi),
-    INDEX (idDetailPembelian),
-    CONSTRAINT fk_detailtransaksi_transaksi FOREIGN KEY (idTransaksi) REFERENCES transaksi(idTransaksi),
-    CONSTRAINT fk_detailtransaksi_detailpembelian FOREIGN KEY (idDetailPembelian) REFERENCES detail_pembelian(idDetailPembelian)
+    INDEX (idPenjualan),
+    INDEX (idProduk),
+    CONSTRAINT fk_detailpenjualan_penjualan FOREIGN KEY (idPenjualan) REFERENCES penjualan(idPenjualan),
+    CONSTRAINT fk_detailpenjualan_produk FOREIGN KEY (idProduk) REFERENCES produk(idProduk)
 ) ENGINE=InnoDB;
+
+
+
 
 
 

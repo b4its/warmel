@@ -12,6 +12,7 @@ import Project.Pages.Produk.*;
 import Project.Pages.Agen.AgenMenu;
 import Project.Pages.Pembelian.PembelianMenu;
 import Project.Pages.Receipt.KeuanganMenu;
+import Project.Pages.Penjualan.PenjualanMenu;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -107,6 +108,7 @@ public static Index instance; // instance global
         jMenu2 = new javax.swing.JMenu();
         daftarAgenView = new javax.swing.JMenuItem();
         daftarPembelianView = new javax.swing.JMenuItem();
+        penjualanView = new javax.swing.JMenuItem();
         daftarKeuanganView = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         menuKategori = new javax.swing.JMenu();
@@ -239,6 +241,14 @@ public static Index instance; // instance global
         });
         jMenu2.add(daftarPembelianView);
 
+        penjualanView.setText("Penjualan");
+        penjualanView.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                penjualanViewActionPerformed(evt);
+            }
+        });
+        jMenu2.add(penjualanView);
+
         daftarKeuanganView.setText("Keuangan");
         daftarKeuanganView.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -353,6 +363,15 @@ public static Index instance; // instance global
         panelViews.add(pembelianMenu);
         pembelianMenu.show();
     }//GEN-LAST:event_daftarPembelianViewActionPerformed
+
+    private void penjualanViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_penjualanViewActionPerformed
+        // TODO add your handling code here:
+        panelViews.removeAll();
+        panelViews.repaint();
+        PenjualanMenu penjualanMenu = new PenjualanMenu();
+        panelViews.add(penjualanMenu);
+        penjualanMenu.show();
+    }//GEN-LAST:event_penjualanViewActionPerformed
 
     /**
      * @param args the command line arguments
@@ -472,5 +491,6 @@ public static Index instance; // instance global
     private javax.swing.JLabel labelPengeluaran;
     private javax.swing.JMenu menuKategori;
     private javax.swing.JDesktopPane panelViews;
+    private javax.swing.JMenuItem penjualanView;
     // End of variables declaration//GEN-END:variables
 }

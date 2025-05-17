@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
  */
-package Project.Pages.Pembelian;
+package Project.Pages.Penjualan;
 
+import Project.Pages.Pembelian.*;
 import Project.Connection.Connections;
 import Project.Helper.CurrencyFormat;
 import Project.Helper.Tax;
@@ -29,7 +30,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  *
  * @author brsap
  */
-public class PembelianMenu extends javax.swing.JInternalFrame {
+public class PenjualanMenu extends javax.swing.JInternalFrame {
     private Map<String, String> produkMap = new HashMap<>();
     private Map<String, String> hargaMap = new HashMap<>();
     private Map<String, String> stokMap = new HashMap<>();
@@ -41,13 +42,12 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
      * Creates new form Pembelian
      */
     public boolean dataBaru;
-    public PembelianMenu() {
+    public PenjualanMenu() {
         this.halamanUtama = Index.instance; // ✅ sekarang aman
         initComponents();
-        AutoCompleteDecorator.decorate(cbAgen);
         AutoCompleteDecorator.decorate(cbProduk);
 
-        getAgen();
+//        getAgen();
         getProduk();
         getData();
         dataBaru = true;
@@ -155,64 +155,6 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
     }
 
     
-    private void getAgen() {
-            try (Connection conn = (Connection) Connections.ConnectionDB();
-                 java.sql.Statement stmAgen = conn.createStatement();
-                 java.sql.ResultSet queryProduk = stmAgen.executeQuery("select idAgen, namaAgen from agen")) {
-                cbAgen.removeAllItems();
-                cbAgen.addItem("Silakan pilih agen...");
-
-                // Menyimpan idProduk dalam map untuk memetakan namaProduk ke idProduk
-                Map<String, String> AgenMap = new HashMap<>();
-
-                // Menambahkan data ke dalam model
-                while (queryProduk.next()) {
-                    String idAgen = queryProduk.getString("idAgen");
-                    String namaAgen = queryProduk.getString("namaAgen");
-                    AgenMap.put(namaAgen, idAgen);  // Menyimpan mapping antara nama dan idProduk
-                    cbAgen.addItem(namaAgen);
-                }
-
-                // Menambahkan listener untuk combo box
-                cbAgen.addActionListener(new ActionListener() {
-                    private boolean firstSelection = true; // Flag untuk menangani pilihan pertama
-
-                    public void actionPerformed(ActionEvent e) {
-                        String selectedProduk = (String) cbAgen.getSelectedItem();
-
-                        // Cek apakah kategori yang valid dipilih
-                        if (selectedProduk != null && !selectedProduk.equals("Silakan pilih produk...")) {
-                            // Setel idProduk ke txtIdProduk
-                            String idAgen = AgenMap.get(selectedProduk);
-                            txtIdAgen.setText(idAgen);
-
-
-                            // Hanya set pertama kali saat valid dipilih
-                            if (firstSelection) {
-                                firstSelection = false; // Tandai bahwa sudah memilih yang valid
-                            }
-                        } else {
-                            // Jika memilih "Silakan pilih kategori...", tampilkan pesan hanya sekali
-                            if (!firstSelection) {
-//                                JOptionPane.showMessageDialog(null, "Silakan pilih item yang valid!");
-                                txtIdAgen.setText("0"); // Reset teks di txtIdProduk
-
-                            }
-
-                            // Jangan reset cbProduk jika sudah memilih yang valid sebelumnya
-                            // biarkan pengguna memilih tanpa reset otomatis
-                        }
-                    }
-                });
-
-                // Mengambil data lebih lanjut jika diperlukan
-                // getData();
-
-            } catch (SQLException | HeadlessException e) {
-                // Tangani exception jika ada kesalahan
-                e.printStackTrace();
-            }
-        }
 
 
     
@@ -230,7 +172,7 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
                 txtIdAgen.setText("");
                 txtIdProduk.setText("");
                 txtHarga.setText("");
-                cbAgen.setSelectedIndex(0);
+
                 cbProduk.setSelectedIndex(0);
             cbProduk.removeAllItems();
             cbProduk.addItem("Silakan pilih produk...");
@@ -314,9 +256,7 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        cbAgen = new javax.swing.JComboBox<>();
         cbProduk = new javax.swing.JComboBox<>();
-        jLabel5 = new javax.swing.JLabel();
         spinJProduk = new javax.swing.JSpinner();
         jLabel6 = new javax.swing.JLabel();
         btnHapus = new javax.swing.JButton();
@@ -341,7 +281,7 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
         txtIdPembelian = new javax.swing.JTextField();
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
-        jLabel1.setText("Form Pembelian");
+        jLabel1.setText("Form Penjualan");
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -356,12 +296,7 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        cbAgen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Yeni" }));
-
         cbProduk.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        jLabel5.setText("Agen");
 
         SpinnerNumberModel model = new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1);
         spinJProduk.setModel(model);
@@ -496,6 +431,7 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -503,42 +439,6 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(24, 24, 24)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(btnBersihkan, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(18, 18, 18)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(btnSubmit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(btnKembali, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(100, 100, 100)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtTotalHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtSubHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(jLabel8)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jLabel6)
-                                                        .addComponent(jLabel5))
-                                                    .addGap(54, 54, 54)
-                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                        .addComponent(cbProduk, 0, 147, Short.MAX_VALUE)
-                                                        .addComponent(cbAgen, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                                .addComponent(txtIdPembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(txtJumlahP, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(spinJProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                             .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(txtIdAgen, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -548,15 +448,45 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
                                 .addComponent(txtStok, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel7)
-                                .addGap(18, 18, 18)
-                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(28, 28, 28)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(21, 21, 21)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel8)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(btnBersihkan, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGap(18, 18, 18)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(btnSubmit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(btnKembali, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGap(100, 100, 100)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(txtTotalHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(txtSubHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(txtIdPembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(188, 188, 188)
+                                            .addComponent(txtJumlahP, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(jLabel6)
+                                            .addGap(40, 40, 40)
+                                            .addComponent(cbProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(spinJProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                        .addGap(36, 36, 36)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel7)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(19, Short.MAX_VALUE))
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -569,19 +499,11 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(42, 42, 42)
-                                .addComponent(jLabel6))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel5)
-                                    .addComponent(cbAgen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(cbProduk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(spinJProduk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(cbProduk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(spinJProduk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(52, 52, 52)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtJumlahP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtIdPembelian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -606,12 +528,12 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(55, Short.MAX_VALUE))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(67, Short.MAX_VALUE))
         );
 
         pack();
@@ -681,14 +603,14 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         int idAgen = Integer.parseInt(txtIdAgen.getText());
         int idProduk = Integer.parseInt(txtIdProduk.getText());
-        String nama_agen = cbAgen.getSelectedItem().toString();
         String nama_produk = cbProduk.getSelectedItem().toString();
         int jumlah_produk = (int) spinJProduk.getValue();
         double harga = Double.parseDouble(txtHarga.getText());
         double subTotal = Double.parseDouble(txtSubHarga.getText());
         double totalHarga = Double.parseDouble(txtTotalHarga.getText());
-        String keterangan = "Telah berhasil memesan Produk: " + nama_produk + "| Jumlah Produk: "+ jumlah_produk + "| Harga Satuan: "+ harga
-                +"| dari agen "+nama_agen;
+//        String keterangan = "Telah berhasil memesan Produk: " + nama_produk + "| Jumlah Produk: "+ jumlah_produk + "| Harga Satuan: "+ harga
+//                +"| dari agen "+nama_agen;
+        
 //        System.out.println("idAgen      : " + idAgen);
 //        System.out.println("nama_agen   : " + nama_agen);
 //        System.out.println("idProduk    : " + idProduk);
@@ -713,7 +635,7 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
                 if (totalStok > 0)
                 {
                     pstPembelian.setInt(1, idAgen);
-                    pstPembelian.setString(2, keterangan);
+//                    pstPembelian.setString(2, keterangan);
                     pstPembelian.setDouble(3, totalHarga);
 
                     pstPembelian.executeUpdate();
@@ -836,8 +758,8 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
 
             if (sql.next()) {
                 String idPembelian = sql.getString("idPembelian");
-                int idAgen = sql.getInt("idAgen");
-                int idProduk = sql.getInt("idProduk");
+                int idAgen = sql.getInt("idAgen") -1;
+                int idProduk = sql.getInt("idProduk") -1;
                 int jumlah = sql.getInt("jumlah");
                 txtIdPembelian.setText(idPembelian);
 
@@ -846,9 +768,9 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
                     cbProduk.setSelectedIndex(idProduk);
                 }
                 
-                if (idAgen < cbAgen.getItemCount()) {
-                    cbAgen.setSelectedIndex(idAgen);
-                }
+//                if (idAgen < cbAgen.getItemCount()) {
+//                    cbAgen.setSelectedIndex(idAgen);
+//                }
 
                 if (jumlah >= 1) {
                     txtJumlahP.setText(String.valueOf(jumlah));
@@ -877,10 +799,8 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnKembali;
     private javax.swing.JButton btnSubmit;
-    private javax.swing.JComboBox<String> cbAgen;
     private javax.swing.JComboBox<String> cbProduk;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
