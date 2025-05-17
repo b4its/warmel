@@ -6,12 +6,13 @@ package Project;
 
 import Project.Connection.Connections;
 import java.sql.Connection;
-
+import Project.Helper.CurrencyFormat;
 
 import Project.Pages.Produk.*;
 import Project.Pages.Agen.AgenMenu;
 import Project.Pages.Pembelian.PembelianMenu;
 import Project.Pages.Receipt.KeuanganMenu;
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -23,13 +24,36 @@ import javax.swing.JOptionPane;
  * @author brsap
  */
 public class Index extends javax.swing.JFrame {
-
+public static Index instance; // instance global
     /**
      * Creates new form Produk
      */
     public Index() {
         initComponents();
         addSubMenuKategori();
+        instance = this; // tetapkan saat frame dibuat
+        getPengeluaran();
+    }
+    
+    public void getPengeluaran()
+    {
+       try (Connection conn = (Connection) Connections.ConnectionDB()) {
+           CurrencyFormat formatIDCurrency = new CurrencyFormat();
+            String sql = "SELECT SUM(totalHarga) AS totalKeseluruhan FROM pembelian";
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql);
+
+                if (rs.next()) {
+                    double total = rs.getDouble("totalKeseluruhan");
+                    labelPengeluaran.setText((total != 0 ? formatIDCurrency.currencyFormat(total) : "0.00"));
+                }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Gagal memuat kategori dari database.");
+        }
+        
+
     }
     
     private void addSubMenuKategori() {
@@ -75,10 +99,10 @@ public class Index extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        labelPemasukan = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        labelPengeluaran = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         daftarAgenView = new javax.swing.JMenuItem();
@@ -141,9 +165,9 @@ public class Index extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Pemasukan:");
 
-        jLabel3.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("0");
+        labelPemasukan.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        labelPemasukan.setForeground(new java.awt.Color(255, 255, 255));
+        labelPemasukan.setText("0");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -153,7 +177,7 @@ public class Index extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(labelPemasukan, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(95, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -162,7 +186,7 @@ public class Index extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel3))
+                    .addComponent(labelPemasukan))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -172,9 +196,9 @@ public class Index extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Pengeluaran:");
 
-        jLabel5.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("0");
+        labelPengeluaran.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        labelPengeluaran.setForeground(new java.awt.Color(255, 255, 255));
+        labelPengeluaran.setText("0");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -184,7 +208,7 @@ public class Index extends javax.swing.JFrame {
                 .addGap(17, 17, 17)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(labelPengeluaran, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(47, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -193,7 +217,7 @@ public class Index extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel5))
+                    .addComponent(labelPengeluaran))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -436,9 +460,7 @@ public class Index extends javax.swing.JFrame {
     private javax.swing.JMenuItem daftarProdukView;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -446,6 +468,8 @@ public class Index extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JLabel labelPemasukan;
+    private javax.swing.JLabel labelPengeluaran;
     private javax.swing.JMenu menuKategori;
     private javax.swing.JDesktopPane panelViews;
     // End of variables declaration//GEN-END:variables
