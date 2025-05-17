@@ -50,7 +50,7 @@ CREATE TABLE detail_pembelian (
     idDetailPembelian INT(11) PRIMARY KEY AUTO_INCREMENT,
     idPembelian INT(11),
     idProduk INT(11),
-    jumlah INT(11),
+    jumlah INT,
     subtotal DECIMAL(15,2),
     INDEX (idPembelian),
     INDEX (idProduk),
@@ -72,7 +72,7 @@ CREATE TABLE detail_penjualan (
     idDetailPenjualan INT(11) PRIMARY KEY AUTO_INCREMENT,
     idPenjualan INT(11),
     idProduk INT(11),
-    jumlah INT(11),
+    jumlah INT,
     subtotal DECIMAL(15,2),
     INDEX (idPenjualan),
     INDEX (idProduk),
@@ -88,8 +88,3 @@ CREATE TABLE detail_penjualan (
 
 
 
-
-
-
-
-delete from pembelian; delete from detail_pembelian; delete from transaksi; delete from detail_transaksi;
