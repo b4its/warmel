@@ -34,6 +34,7 @@ public static Index instance; // instance global
         addSubMenuKategori();
         instance = this; // tetapkan saat frame dibuat
         getPengeluaran();
+        getPemasukan();
     }
     
     public void getPengeluaran()
@@ -47,6 +48,27 @@ public static Index instance; // instance global
                 if (rs.next()) {
                     double total = rs.getDouble("totalKeseluruhan");
                     labelPengeluaran.setText((total != 0 ? formatIDCurrency.currencyFormat(total) : "0.00"));
+                }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Gagal memuat kategori dari database.");
+        }
+        
+
+    }
+    
+        public void getPemasukan()
+    {
+       try (Connection conn = (Connection) Connections.ConnectionDB()) {
+           CurrencyFormat formatIDCurrency = new CurrencyFormat();
+            String sql = "SELECT SUM(totalHarga) AS totalKeseluruhan FROM penjualan";
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql);
+
+                if (rs.next()) {
+                    double total = rs.getDouble("totalKeseluruhan");
+                    labelPemasukan.setText((total != 0 ? formatIDCurrency.currencyFormat(total) : "0.00"));
                 }
 
         } catch (SQLException ex) {
