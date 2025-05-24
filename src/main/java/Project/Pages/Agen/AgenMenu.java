@@ -5,13 +5,15 @@
 package Project.Pages.Agen;
 
 import Project.Connection.Connections;
+import Project.Index;
 import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
-
+import java.sql.*;
+import java.util.*;
 
 /**
  *
@@ -22,8 +24,10 @@ public class AgenMenu extends javax.swing.JInternalFrame {
     /**
      * Creates new form Produk
      */
+    private Index halamanUtama;
     public boolean dataBaru;
     public AgenMenu() {
+        this.halamanUtama = Index.instance; // ✅ sekarang aman
         initComponents();
 
         getData();
@@ -40,6 +44,7 @@ public class AgenMenu extends javax.swing.JInternalFrame {
             // Membuat model tabel untuk menampilkan data
             DefaultTableModel model = new DefaultTableModel();
             model.addColumn("No");
+            model.addColumn("ID Agen");
             model.addColumn("Nama Agen");
             model.addColumn("Alamat");
             model.addColumn("Created");
@@ -52,6 +57,7 @@ public class AgenMenu extends javax.swing.JInternalFrame {
             while (sql.next()) {
                 model.addRow(new Object[]{
                     no++, // Menambahkan nomor urut
+                    sql.getString("idAgen"), // Menambahkan nama produk
                     sql.getString("namaAgen"), // Menambahkan nama produk
                     sql.getString("alamat"), // Menambahkan kategori
                     sql.getString("created_at"), // Menambahkan created_at
@@ -61,6 +67,11 @@ public class AgenMenu extends javax.swing.JInternalFrame {
 
             // Menampilkan model ke dalam tabel
             agenTabel.setModel(model);
+            
+            //sembunyikan idPembelian
+            agenTabel.getColumnModel().getColumn(1).setMinWidth(0);
+            agenTabel.getColumnModel().getColumn(1).setMaxWidth(0);
+            agenTabel.getColumnModel().getColumn(1).setWidth(0);
         }
         catch (SQLException | HeadlessException e) 
         {
@@ -92,6 +103,7 @@ public class AgenMenu extends javax.swing.JInternalFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         txtAlamat = new javax.swing.JTextArea();
         txtIdAgen = new javax.swing.JTextField();
+        btnTesting = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel1.setText("Daftar Agen");
@@ -155,6 +167,13 @@ public class AgenMenu extends javax.swing.JInternalFrame {
 
         txtIdAgen.setVisible(false);
 
+        btnTesting.setText("Cek Aja");
+        btnTesting.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTestingActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -166,21 +185,22 @@ public class AgenMenu extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnBersih)
-                                    .addComponent(btnHapus))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnKembali)
-                                    .addComponent(btnTambah)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2)
                                     .addComponent(jLabel3))
                                 .addGap(26, 26, 26)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(textNama)
                                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(txtIdAgen, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnBersih)
+                                    .addComponent(btnHapus)
+                                    .addComponent(txtIdAgen, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnTesting)
+                                    .addComponent(btnKembali)
+                                    .addComponent(btnTambah))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 466, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -227,7 +247,9 @@ public class AgenMenu extends javax.swing.JInternalFrame {
                             .addComponent(btnHapus)
                             .addComponent(btnKembali))
                         .addGap(26, 26, 26)
-                        .addComponent(txtIdAgen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtIdAgen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnTesting))))
                 .addContainerGap(51, Short.MAX_VALUE))
         );
 
@@ -244,7 +266,7 @@ public class AgenMenu extends javax.swing.JInternalFrame {
         dataBaru = false; // menampilkan data ke textboxt
         try {
             int row =agenTabel.getSelectedRow();
-            String tabel_klik=(agenTabel.getModel().getValueAt(row, 0).toString());
+            String tabel_klik=(agenTabel.getModel().getValueAt(row, 1).toString());
             java.sql.Connection conn = (Connection) Connections.ConnectionDB();
             java.sql.Statement stm = conn.createStatement();
             java.sql.ResultSet sql = stm.executeQuery("select * from agen where idAgen='"+tabel_klik+"'");
@@ -253,7 +275,7 @@ public class AgenMenu extends javax.swing.JInternalFrame {
                 String nama = sql.getString("namaAgen");
                 textNama.setText(nama);
                 String alamat = sql.getString("alamat");
-    
+                System.out.println("id Agen: "+idAgen);
                 txtAlamat.setText(alamat);
                 txtIdAgen.setText(idAgen);
             }
@@ -291,27 +313,187 @@ public class AgenMenu extends javax.swing.JInternalFrame {
             }
         }
         getData();
+        if (halamanUtama != null) {
+            halamanUtama.getPengeluaran();
+        }
     }//GEN-LAST:event_btnTambahActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
         // TODO add your handling code here:
-        try { // hapus data
-            String sql ="delete from agen where idAgen='"+txtIdAgen.getText()+"'";
-            Connection conn = (Connection) Connections.ConnectionDB();
-            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-            JOptionPane.showMessageDialog(null, "Data akan terhapus..");
-            pst.execute();
-            
-            dataBaru=true;
-           
-            // kosongkan data
-            textNama.setText("");
-            txtIdAgen.setText("");
-            
-        } catch (SQLException | HeadlessException e) {}
+        Connection conn = null; // Dideklarasi di luar try
+
+        try {
+            conn = Connections.ConnectionDB(); // Inisialisasi di dalam try
+
+            String queryRelasiAgen = "SELECT " +
+                "pembelian.idPembelian, " +
+                "pembelian.idAgen, " +
+                "pembelian.totalHarga, " +
+                "detail_pembelian.idDetailPembelian, " +
+                "detail_pembelian.idProduk, " +
+                "detail_pembelian.jumlah, " +
+                "produk.stok " +
+                "FROM pembelian " +
+                "JOIN detail_pembelian ON pembelian.idPembelian = detail_pembelian.idPembelian " +
+                "JOIN produk ON detail_pembelian.idProduk = produk.idProduk " +
+                "WHERE pembelian.idAgen = '" + txtIdAgen.getText() + "'";
+
+            Statement stm = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet pstShowData = stm.executeQuery(queryRelasiAgen);
+
+            conn.setAutoCommit(false); // Mulai transaksi
+
+            // Map untuk rekap data
+            Map<String, Integer> mapJumlahPerProduk = new HashMap<>();
+            Map<String, Integer> mapStokPerProduk = new HashMap<>();
+            Set<String> idPembelians = new HashSet<>();
+
+            while (pstShowData.next()) {
+                String idProduk = pstShowData.getString("idProduk");
+                int jumlah = pstShowData.getInt("jumlah");
+                int stok = pstShowData.getInt("stok");
+                String idPembelian = pstShowData.getString("idPembelian");
+
+                idPembelians.add(idPembelian);
+                mapJumlahPerProduk.put(idProduk,
+                    mapJumlahPerProduk.getOrDefault(idProduk, 0) + jumlah);
+                mapStokPerProduk.putIfAbsent(idProduk, stok);
+            }
+
+            String queryUpdateProduk = "UPDATE produk SET stok = ? WHERE idProduk = ?";
+            PreparedStatement pstUpdateProduk = conn.prepareStatement(queryUpdateProduk);
+
+            for (String idProdukKey : mapJumlahPerProduk.keySet()) {
+                int jumlahTotal = mapJumlahPerProduk.get(idProdukKey);
+                int stokAwal = mapStokPerProduk.get(idProdukKey);
+                int stokAkhir = Math.max(0, stokAwal - jumlahTotal);
+
+                pstUpdateProduk.setInt(1, stokAkhir);
+                pstUpdateProduk.setString(2, idProdukKey);
+                pstUpdateProduk.executeUpdate();
+            }
+
+            String queryDeletePembelian = "DELETE FROM pembelian WHERE idPembelian = ?";
+            PreparedStatement pstDeletePembelian = conn.prepareStatement(queryDeletePembelian);
+
+            for (String idPembelian : idPembelians) {
+                pstDeletePembelian.setString(1, idPembelian);
+                pstDeletePembelian.executeUpdate();
+            }
+            String queryDeleteAgen = "DELETE FROM agen WHERE idAgen = ?";
+            PreparedStatement pstDeleteAgen = conn.prepareStatement(queryDeleteAgen);
+            pstDeleteAgen.setString(1, txtIdAgen.getText());
+            pstDeleteAgen.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Agen telah berhasil di hapus..");
+            conn.commit();
+
+            System.out.println("✅ Transaksi berhasil! Data stok dan pembelian diperbarui.");
+
+        } catch (Exception e) {
+            try {
+                if (conn != null) conn.rollback(); // Hanya rollback jika conn tidak null
+            } catch (SQLException rollbackError) {
+                rollbackError.printStackTrace();
+            }
+            System.err.println("❌ Terjadi kesalahan: " + e.getMessage());
+
+        } finally {
+            try {
+                if (conn != null) conn.setAutoCommit(true); // Reset autocommit
+                if (conn != null) conn.close(); // Tutup koneksi
+            } catch (SQLException closeError) {
+                closeError.printStackTrace();
+            }
+        }
+
 
         getData();
+        if (halamanUtama != null) {
+            halamanUtama.getPengeluaran();
+       }
     }//GEN-LAST:event_btnHapusActionPerformed
+
+    private void btnTestingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTestingActionPerformed
+        // TODO add your handling code here:
+        try{
+            String queryRelasiAgen = "SELECT " +
+                "pembelian.idPembelian, " +
+                "pembelian.idAgen, " +
+                "pembelian.totalHarga, " +
+                "detail_pembelian.idDetailPembelian, " +
+                "detail_pembelian.idProduk, " +
+                "detail_pembelian.jumlah, " +
+                "produk.stok " +
+                "FROM pembelian " +
+                "JOIN detail_pembelian ON pembelian.idPembelian = detail_pembelian.idPembelian " +
+                "JOIN produk ON detail_pembelian.idProduk = produk.idProduk " +
+                "WHERE pembelian.idAgen = '" + txtIdAgen.getText() + "'";
+
+            Connection conn = Connections.ConnectionDB();
+            Statement stm = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet pstShowData = stm.executeQuery(queryRelasiAgen);
+
+            // Map untuk rekap data per produk
+            Map<String, Integer> mapJumlahPerProduk = new HashMap<>();
+            Map<String, Integer> mapStokPerProduk = new HashMap<>();
+            Set<String> idPembelians = new HashSet<>();
+
+            // Loop pertama: kumpulkan data
+            while (pstShowData.next()) {
+                String idProduk = pstShowData.getString("idProduk");
+                int jumlah = pstShowData.getInt("jumlah");
+                int stok = pstShowData.getInt("stok");
+                String idPembelian = pstShowData.getString("idPembelian");
+
+                // Simpan idPembelian agar nanti bisa dihapus (1x)
+                idPembelians.add(idPembelian);
+
+                // Rekap jumlah beli per produk
+                if (mapJumlahPerProduk.containsKey(idProduk)) {
+                    mapJumlahPerProduk.put(idProduk, mapJumlahPerProduk.get(idProduk) + jumlah);
+                } else {
+                    mapJumlahPerProduk.put(idProduk, jumlah);
+                    mapStokPerProduk.put(idProduk, stok); // Simpan stok awal produk ini
+                }
+            }
+
+            // Proses update stok per produk
+            for (String idProdukKey : mapJumlahPerProduk.keySet()) {
+                int jumlahTotal = mapJumlahPerProduk.get(idProdukKey);
+                int stokAwal = mapStokPerProduk.get(idProdukKey);
+                int stokAkhir = (stokAwal >= jumlahTotal) ? stokAwal - jumlahTotal : 0;
+
+                System.out.println("idProduk: " + idProdukKey);
+                System.out.println("Total Jumlah Dibeli: " + jumlahTotal);
+                System.out.println("Stok Awal: " + stokAwal);
+                System.out.println("Stok Akhir: " + stokAkhir);
+
+                // Update stok produk
+                String queryUpdateProduk = "UPDATE produk SET stok = ? WHERE idProduk = ?";
+                PreparedStatement pstUpdateProduk = conn.prepareStatement(queryUpdateProduk);
+                pstUpdateProduk.setInt(1, stokAkhir);
+                pstUpdateProduk.setString(2, idProdukKey);
+                pstUpdateProduk.executeUpdate();
+            }
+
+            // Proses delete pembelian (1x per id)
+            for (String idPembelian : idPembelians) {
+                String queryDeletePembelian = "DELETE FROM pembelian WHERE idPembelian = ?";
+                PreparedStatement pstDeletePembelian = conn.prepareStatement(queryDeletePembelian);
+                pstDeletePembelian.setString(1, idPembelian);
+                pstDeletePembelian.executeUpdate();
+            }
+
+            System.out.println("✅ Semua stok produk berhasil diperbarui dan data pembelian telah dihapus.");
+
+
+            
+
+            //testing
+
+            
+        } catch (SQLException | HeadlessException e) {}
+    }//GEN-LAST:event_btnTestingActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -321,6 +503,7 @@ public class AgenMenu extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnKembali;
     private javax.swing.JButton btnTambah;
+    private javax.swing.JButton btnTesting;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
