@@ -653,9 +653,11 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
 
                 double subTotalLama = (double) existingItem.get("subTotal");
                 double subTotalBaru = subTotalLama + subTotal;
+                existingItem.put("jumlah", jumlahBaru);
                 existingItem.put("subTotal", subTotalBaru);
-
+                
                 produkDitemukan = true;
+              //  getData();
                 break;
             }
         }
@@ -786,6 +788,8 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
             ) {
             // Buat penampung nama-nama produk
             List<String> listNamaProduk = new ArrayList<>();
+            List<Integer> listStokProduk = new ArrayList<>();
+            List<Integer> listJumlahProduk = new ArrayList<>();
             List<String> listTotalHarga = new ArrayList<>();
 
             for (Map.Entry<Integer, Map<String, Object>> entry : dataProdukMap.entrySet()) {
@@ -794,12 +798,15 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
                 int idProduk = (int) item.get("idProduk");
                 String namaProduk = (String) item.get("namaProduk");
                 int jumlah = (int) item.get("jumlah");
+                int stok = (int) item.get("stok");
                 
                 double subTotals = (double) item.get("subTotal");
 
                 // Tambahkan ke list nama produk
                 listNamaProduk.add(namaProduk);
                 listTotalHarga.add("Rp "+formatIDCurrency.currencyFormat(subTotals));
+                listStokProduk.add(stok);
+                listJumlahProduk.add(jumlah);
 
                 System.out.println("=========================");
                 System.out.println("ID Produk    : " + idProduk);
@@ -818,7 +825,7 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
             //kembalianMessages
             String kembalianMessages = (nominal == subTotal) ? "Tidak Ada Kembalian" : "Kembalian Anda\n" + formatIDCurrency.currencyFormat(kembalian);
             String kembalianHeadlineMessages = (nominal >= subTotal) ? "Info" : "Error";
-            if (nominal >= subTotal) {
+            if (nominal >= subTotal ) {
                 if (nominal == subTotal)
                 {
                     // tidak ada kembalian
@@ -835,9 +842,27 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
                           "|\n Kembalian: Rp "+formatIDCurrency.currencyFormat(kembalian)+"|";
                 }
                 System.out.println("Keterangan: " + keterangan);
+                
+                // cek status stok
+                boolean cekStokStatus = true;
+
+                for (int i = 0; i < listStokProduk.size(); i++) {
+                    if (listStokProduk.get(i) <= listJumlahProduk.get(i)) {
+                        cekStokStatus = false;
+                        break; // langsung keluar dari loop jika ada yang tidak valid
+                    }
+                }
+                
+                // jika benar maka akan disimpan datanya
+                if (cekStokStatus) {
+                    // Hanya satu kali penyimpanan
                     pstPenjualan.setString(1, keterangan);
                     pstPenjualan.setDouble(2, subTotal);
                     pstPenjualan.executeUpdate();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Jumlah Produk berlebihan, tidak bisa melanjutkan proses..", "Terjadi Kesalahan", JOptionPane.ERROR_MESSAGE);
+                }
+                    
                     
                 try (ResultSet generatedKeys = pstPenjualan.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
