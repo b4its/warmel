@@ -70,9 +70,10 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
                 
                 model.setRowCount(0); // Kosongkan isi tabel terlebih dahulu
                 double totalSubTotal = 0.00;
+                int number = 1;
                 for (Map.Entry<Integer, Map<String, Object>> entry : dataProdukMap.entrySet()) {
-                    int no = entry.getKey() + 1;
-                    
+                    // int no = entry.getKey() + 1;
+                    int no = number++;
                     Map<String, Object> item = entry.getValue();
                     
                     int idProduk = (int) item.get("idProduk");
@@ -82,6 +83,7 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
                     totalSubTotal += subTotal;
                     model.addRow(new Object[]{no, idProduk, namaProduk, jumlah, formatIDCurrency.currencyFormat(subTotal)});
                 }
+                txtTotalHargaa.setText(String.valueOf(totalSubTotal));
                 txtVisualTotalHarga.setText(formatIDCurrency.currencyFormat(totalSubTotal));
                 // Menampilkan model ke dalam tabel
                 penjualanTable.setModel(model);
@@ -171,7 +173,7 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
                         if (!firstSelection) {
                             txtIdProduk.setText("0");
                             txtTotalHarga.setText(""); // Reset harga jika pilihan tidak valid
-                            txtVisualSHarga.setText("");
+                            txtVisualSHarga.setText("Rp 0.000");
                         }
                     }
                 }
@@ -204,7 +206,6 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         penjualanTable = new javax.swing.JTable();
         jLabel7 = new javax.swing.JLabel();
-        txtIdAgen = new javax.swing.JTextField();
         txtIdProduk = new javax.swing.JTextField();
         txtHarga = new javax.swing.JTextField();
         txtTotalHarga = new javax.swing.JTextField();
@@ -220,6 +221,11 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
         jPanel4 = new javax.swing.JPanel();
         txtVisualTotalHarga = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        txtIdTabel = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        txtNominalBayar = new javax.swing.JTextField();
+        btnKonfirmasi = new javax.swing.JButton();
+        txtTotalHargaa = new javax.swing.JTextField();
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
         jLabel1.setText("Form Penjualan");
@@ -297,8 +303,6 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel7.setText("Sub Total");
-
-        txtIdAgen.setVisible(false);
 
         txtIdProduk.setVisible(false);
 
@@ -390,6 +394,20 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel9.setText("Total Harga");
 
+        txtIdTabel.setVisible(false);
+
+        jLabel2.setText("Nominal Bayar");
+
+        btnKonfirmasi.setBackground(new java.awt.Color(204, 255, 204));
+        btnKonfirmasi.setText("Bayar");
+        btnKonfirmasi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKonfirmasiActionPerformed(evt);
+            }
+        });
+
+        txtTotalHargaa.setVisible(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -398,15 +416,12 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(layout.createSequentialGroup()
-                                    .addContainerGap()
-                                    .addComponent(txtIdAgen, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
+                                    .addGap(16, 16, 16)
+                                    .addComponent(txtIdTabel, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                     .addComponent(txtIdProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                     .addComponent(txtStok, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -429,11 +444,6 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
                                                     .addComponent(btnTambahkan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                     .addComponent(btnKembali, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                             .addGroup(layout.createSequentialGroup()
-                                                .addGap(100, 100, 100)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(txtTotalHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(txtSubHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                            .addGroup(layout.createSequentialGroup()
                                                 .addComponent(txtIdPenjualan, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(188, 188, 188)
                                                 .addComponent(txtJumlahP, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -442,7 +452,14 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
                                                 .addGap(40, 40, 40)
                                                 .addComponent(cbProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(18, 18, 18)
-                                                .addComponent(spinJProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                                .addComponent(spinJProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(14, 14, 14)
+                                    .addComponent(txtTotalHargaa, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txtTotalHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtSubHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -455,7 +472,19 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addGap(36, 36, 36)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnKonfirmasi, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txtNominalBayar, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(6, 6, 6))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jLabel1)))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -467,7 +496,6 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
@@ -487,27 +515,41 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
                             .addComponent(btnKembali))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtIdAgen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtIdProduk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtStok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(txtSubHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(txtTotalHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(txtHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtIdTabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(txtSubHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addComponent(txtTotalHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtTotalHargaa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(27, 27, 27)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
                             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel9)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(54, Short.MAX_VALUE))
+                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(txtNominalBayar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnKonfirmasi, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         pack();
@@ -516,48 +558,30 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
         // TODO add your handling code here:
                 try { // hapus data
-                    String queryDeleteDetailPenjualan ="delete from detail_penjualan where idPenjualan='"+txtIdPenjualan.getText()+"'";
-                    String queryDeletePenjualan ="delete from penjualan where idPenjualan='"+txtIdPenjualan.getText()+"'";
-                    Connection conn = (Connection) Connections.ConnectionDB();
-                    
-                    int idProduk = Integer.parseInt(txtIdProduk.getText());
-                    int stok = Integer.parseInt(txtStok.getText());
-                    int jumlahProduk = Integer.parseInt(txtJumlahP.getText());
-                    int totalStok = stok - jumlahProduk;
+                    // Ambil nilai dari kolom ID produk (misalnya kolom ke-1 = index 1)
+                    String idProdukClicked = txtIdTabel.getText();
+                    System.out.println("Clicked ID: " + idProdukClicked);
 
-                    // proses hapus detail penjualan
-                    java.sql.PreparedStatement pstDeleteDetailPenjualan = conn.prepareStatement(queryDeleteDetailPenjualan);
-                    pstDeleteDetailPenjualan.execute();
-                    
-                    if (totalStok > 0)
-                    {
-                     String queryUpdateStok = "update produk set stok = ? where idProduk = ?";
-                        // update stok produk
-                        PreparedStatement pstUpdateStok = conn.prepareStatement(queryUpdateStok);
-                        pstUpdateStok.setInt(1, totalStok);
-                        pstUpdateStok.setInt(2, idProduk);
-                        pstUpdateStok.executeUpdate();
-                    }else{
-                     String queryUpdateStok = "update produk set stok = ? where idProduk = ?";
-                        // update stok produk
-                        PreparedStatement pstUpdateStok = conn.prepareStatement(queryUpdateStok);
-                        pstUpdateStok.setInt(1, 0);
-                        pstUpdateStok.setInt(2, idProduk);
-                        pstUpdateStok.executeUpdate();
+                    // Cari key dari dataProdukMap yang memiliki idProduk sama
+                    Integer keyToRemove = null;
+                    for (Map.Entry<Integer, Map<String, Object>> entry : dataProdukMap.entrySet()) {
+                        if (entry.getValue().get("idProduk").toString().equals(idProdukClicked)) {
+                            keyToRemove = entry.getKey();
+                            break;
+                        }
+                    }
+
+                    // Hapus jika ditemukan
+                    if (keyToRemove != null) {
+                        dataProdukMap.remove(keyToRemove);
+                        System.out.println("Data dengan ID " + idProdukClicked + " berhasil dihapus.");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Data tidak ditemukan di Map.");
                     }
                     
-                    // proses hapus penjualan
-                    java.sql.PreparedStatement pstDeletePenjualan = conn.prepareStatement(queryDeletePenjualan);
-                    pstDeletePenjualan.execute();
-                    JOptionPane.showMessageDialog(null, "Data berhasil dihapus..");
 
-                    dataBaru=true;
-
-                    
-                    
-
-                } catch (SQLException | HeadlessException e) {}
-
+                } catch (HeadlessException e) {}
+                txtIdTabel.setText("");
                 getData();
                 getProduk();
                 if (halamanUtama != null) {
@@ -568,6 +592,8 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
     private void btnBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBersihkanActionPerformed
         // TODO add your handling code here:
         txtIdPenjualan.setText("");
+        txtIdTabel.setText("");
+        txtNominalBayar.setText("");
         getData();
         getProduk();
         
@@ -602,8 +628,28 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
         System.out.println("subTotal     : " + subTotal);
 //        System.out.println("keterangan  : " + keterangan);
         // TODO add your handling code here:
-                    // Masukkan ke Map
-                    
+        // Masukkan data ke Map
+                   
+        boolean produkDitemukan = false;
+
+        for (Map.Entry<Integer, Map<String, Object>> entry : dataProdukMap.entrySet()) {
+            Map<String, Object> existingItem = entry.getValue();
+            if (existingItem.get("idProduk").equals(idProduk)) {
+                // Jika idProduk ditemukan, update jumlah dan subtotal
+                int jumlahLama = (int) existingItem.get("jumlah");
+                int jumlahBaru = jumlahLama + jumlah_produk;
+                existingItem.put("jumlah", jumlahBaru);
+
+                double subTotalLama = (double) existingItem.get("subTotal");
+                double subTotalBaru = subTotalLama + subTotal;
+                existingItem.put("subTotal", subTotalBaru);
+
+                produkDitemukan = true;
+                break;
+            }
+        }
+
+        if (!produkDitemukan) {
             Map<String, Object> item = new HashMap<>();
             item.put("idProduk", idProduk);
             item.put("namaProduk", nama_produk);
@@ -612,6 +658,8 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
 
             dataProdukMap.put(indexProduk, item);
             indexProduk++;
+        }
+
 
             // Tampilkan ke tabel
 //            DefaultTableModel model = (DefaultTableModel) penjualanTable.getModel();
@@ -754,42 +802,12 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
             }
 
             String tableClicked = penjualanTable.getModel().getValueAt(row, 1).toString();
+            txtIdTabel.setText(tableClicked);
             System.out.println("Clicked ID: " + tableClicked);
 
-            Connection conn = Connections.ConnectionDB();
-            String query = "select p.idPenjualan, p.idAgen, dp.idProduk, dp.jumlah from penjualan p join detail_penjualan dp on p.idPenjualan = dp.idPenjualan where dp.idPenjualan = ?;";
-            PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1, tableClicked);
-            ResultSet sql = ps.executeQuery();
 
-            if (sql.next()) {
-                String idPenjualan = sql.getString("idPenjualan");
-                int idAgen = sql.getInt("idAgen") -1;
-                int idProduk = sql.getInt("idProduk") -1;
-                int jumlah = sql.getInt("jumlah");
-                txtIdPenjualan.setText(idPenjualan);
 
-                // Validasi index
-                if (idProduk < cbProduk.getItemCount()) {
-                    cbProduk.setSelectedIndex(idProduk);
-                }
-                
-//                if (idAgen < cbAgen.getItemCount()) {
-//                    cbAgen.setSelectedIndex(idAgen);
-//                }
-
-                if (jumlah >= 1) {
-                    txtJumlahP.setText(String.valueOf(jumlah));
-                }
-                
-                System.out.println("ID Produk: " + idProduk);
-                System.out.println("ID Agen: " + idAgen);
-                System.out.println("Jumlah: " + String.valueOf(jumlah));
-            } else {
-                System.out.println("Tidak ada data ditemukan untuk ID tersebut.");
-            }
-
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -799,14 +817,41 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdPenjualanActionPerformed
 
+    private void btnKonfirmasiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKonfirmasiActionPerformed
+        // TODO add your handling code here:
+        // Misalnya dataProdukMap bertipe Map atau HashMap
+        if (dataProdukMap == null || dataProdukMap.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "anda belum menambahkan produk yang ingin di beli", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        try {
+            double nominal = Double.parseDouble(txtNominalBayar.getText());
+            double subTotal = Double.parseDouble(txtTotalHargaa.getText());
+            double kembalian = nominal - subTotal;
+
+            if (nominal < subTotal) {
+                JOptionPane.showMessageDialog(null, "Nominal bayar anda tidak mencukupi.", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Kembalian Anda\n" + formatIDCurrency.currencyFormat(kembalian), "Info", JOptionPane.INFORMATION_MESSAGE);  
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Ada kesalahan pada nominal bayar anda", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        txtNominalBayar.setText("");
+
+    }//GEN-LAST:event_btnKonfirmasiActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBersihkan;
     private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnKembali;
+    private javax.swing.JButton btnKonfirmasi;
     private javax.swing.JButton btnTambahkan;
     private javax.swing.JComboBox<String> cbProduk;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -819,13 +864,15 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
     private javax.swing.JTable penjualanTable;
     private javax.swing.JSpinner spinJProduk;
     private javax.swing.JTextField txtHarga;
-    private javax.swing.JTextField txtIdAgen;
     private javax.swing.JTextField txtIdPenjualan;
     private javax.swing.JTextField txtIdProduk;
+    private javax.swing.JTextField txtIdTabel;
     private javax.swing.JTextField txtJumlahP;
+    private javax.swing.JTextField txtNominalBayar;
     private javax.swing.JTextField txtStok;
     private javax.swing.JTextField txtSubHarga;
     private javax.swing.JTextField txtTotalHarga;
+    private javax.swing.JTextField txtTotalHargaa;
     private javax.swing.JLabel txtVisualSHarga;
     private javax.swing.JLabel txtVisualTHarga;
     private javax.swing.JLabel txtVisualTotalHarga;

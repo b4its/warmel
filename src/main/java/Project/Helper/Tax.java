@@ -12,7 +12,7 @@ public class Tax {
     private final int pajak;
     public Tax()
     {
-        pajak = 1000;
+        pajak = 7500;
     }
     
     public int getTax()

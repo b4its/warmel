@@ -23,16 +23,12 @@
           <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
-                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="txtIdAgen" min="-2" pref="56" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+                                  <Component id="txtIdTabel" min="-2" pref="52" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Component id="txtIdProduk" min="-2" pref="84" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Component id="txtStok" min="-2" pref="75" max="-2" attributes="0"/>
@@ -60,13 +56,6 @@
                                               </Group>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Component id="txtTotalHarga" min="-2" pref="210" max="-2" attributes="0"/>
-                                                  <Component id="txtSubHarga" alignment="0" min="-2" pref="210" max="-2" attributes="0"/>
-                                              </Group>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
                                               <Component id="txtIdPenjualan" min="-2" pref="75" max="-2" attributes="0"/>
                                               <EmptySpace min="-2" pref="188" max="-2" attributes="0"/>
                                               <Component id="txtJumlahP" min="-2" pref="75" max="-2" attributes="0"/>
@@ -79,6 +68,15 @@
                                               <Component id="spinJProduk" min="-2" pref="103" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
+                                  </Group>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                                  <Component id="txtTotalHargaa" min="-2" pref="89" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="txtTotalHarga" min="-2" pref="210" max="-2" attributes="0"/>
+                                      <Component id="txtSubHarga" alignment="0" min="-2" pref="210" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -99,7 +97,24 @@
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" min="-2" pref="477" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="jScrollPane1" min="-2" pref="477" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="btnKonfirmasi" min="-2" pref="258" max="-2" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="txtNominalBayar" min="-2" pref="163" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
+                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace pref="22" max="32767" attributes="0"/>
@@ -115,7 +130,6 @@
               <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane1" alignment="0" min="-2" pref="303" max="-2" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -139,16 +153,25 @@
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="txtIdAgen" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="txtIdProduk" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="txtStok" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="txtHarga" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtIdTabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                      <Component id="txtSubHarga" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                      <Component id="txtTotalHarga" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                              <Component id="txtSubHarga" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                              <Component id="txtTotalHarga" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="txtTotalHargaa" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
@@ -158,14 +181,24 @@
                           <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                           <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jLabel9" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jPanel4" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="jScrollPane1" min="-2" pref="303" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtNominalBayar" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="btnKonfirmasi" min="-2" pref="49" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLabel9" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="jPanel4" alignment="0" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace pref="54" max="32767" attributes="0"/>
+              <EmptySpace pref="26" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -298,11 +331,6 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Sub Total"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtIdAgen">
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="txtIdAgen.setVisible(false);"/>
-      </AuxValues>
     </Component>
     <Component class="javax.swing.JTextField" name="txtIdProduk">
       <AuxValues>
@@ -470,6 +498,34 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Total Harga"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtIdTabel">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="txtIdTabel.setVisible(false);"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel2">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Nominal Bayar"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtNominalBayar">
+    </Component>
+    <Component class="javax.swing.JButton" name="btnKonfirmasi">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="cc" green="ff" red="cc" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Bayar"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnKonfirmasiActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtTotalHargaa">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="txtTotalHargaa.setVisible(false);"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>
