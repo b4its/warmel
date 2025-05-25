@@ -17,8 +17,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
@@ -84,7 +86,7 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
                     model.addRow(new Object[]{no, idProduk, namaProduk, jumlah, formatIDCurrency.currencyFormat(subTotal)});
                 }
                 txtTotalHargaa.setText(String.valueOf(totalSubTotal));
-                txtVisualTotalHarga.setText(formatIDCurrency.currencyFormat(totalSubTotal));
+                txtVisualTotalHarga.setText("Rp "+formatIDCurrency.currencyFormat(totalSubTotal));
                 // Menampilkan model ke dalam tabel
                 penjualanTable.setModel(model);
 
@@ -397,6 +399,12 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
         txtIdTabel.setVisible(false);
 
         jLabel2.setText("Nominal Bayar");
+
+        txtNominalBayar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNominalBayarActionPerformed(evt);
+            }
+        });
 
         btnKonfirmasi.setBackground(new java.awt.Color(204, 255, 204));
         btnKonfirmasi.setText("Bayar");
@@ -825,22 +833,146 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
             return;
         }
         try {
-            double nominal = Double.parseDouble(txtNominalBayar.getText());
-            double subTotal = Double.parseDouble(txtTotalHargaa.getText());
-            double kembalian = nominal - subTotal;
+                // Hapus karakter underscore (_) dari input
+            String nominalText = txtNominalBayar.getText().replace("_", "").replace(",", "");
+            String subTotalText = txtTotalHargaa.getText().replace("_", "").replace(",", "");
 
-            if (nominal < subTotal) {
-                JOptionPane.showMessageDialog(null, "Nominal bayar anda tidak mencukupi.", "Error", JOptionPane.ERROR_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(null, "Kembalian Anda\n" + formatIDCurrency.currencyFormat(kembalian), "Info", JOptionPane.INFORMATION_MESSAGE);  
+            double nominal = Double.parseDouble(nominalText);
+            double subTotal = Double.parseDouble(subTotalText);
+            double kembalian = nominal - subTotal;
+            String queryPenjualan = "INSERT INTO penjualan (keterangan, totalHarga, created_at) VALUES (?, ?, NOW())";
+            
+            String queryDetailPenjualan = "INSERT INTO detail_penjualan (idPenjualan, idProduk, jumlah, subtotal) VALUES (?, ?, ?, ?)";
+            String queryUpdateStok = "UPDATE produk SET stok = stok + ? WHERE idProduk = ?";
+            try (
+                Connection conn = Connections.ConnectionDB();
+                PreparedStatement pstPenjualan = conn.prepareStatement(queryPenjualan, Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement pstUpdateStok = conn.prepareStatement(queryUpdateStok);
+                PreparedStatement pstDetailPenjualan = conn.prepareStatement(queryDetailPenjualan);  
+            ) {
+            // Buat penampung nama-nama produk
+            List<String> listNamaProduk = new ArrayList<>();
+            List<String> listTotalHarga = new ArrayList<>();
+            for (Map.Entry<Integer, Map<String, Object>> entry : dataProdukMap.entrySet()) {
+                Map<String, Object> item = entry.getValue();
+
+                int idProduk = (int) item.get("idProduk");
+                String namaProduk = (String) item.get("namaProduk");
+                int jumlah = (int) item.get("jumlah");
+                double subTotals = (double) item.get("subTotal");
+
+                // Tambahkan ke list nama produk
+                listNamaProduk.add(namaProduk);
+                listTotalHarga.add("Rp "+formatIDCurrency.currencyFormat(subTotals));
+
+                System.out.println("=========================");
+                System.out.println("ID Produk    : " + idProduk);
+                System.out.println("Nama Produk  : " + namaProduk);
+                System.out.println("Jumlah       : " + jumlah);
+                System.out.println("Subtotal     : " + subTotals);
+
+                // Kalau kamu masih perlu insert tiap item, bisa lakukan di sini (opsional)
             }
+
+            // Setelah loop selesai, gabungkan nama produk dengan koma
+            String semuaNamaProduk = String.join(", ", listNamaProduk);
+            String semuaTotalHarga = String.join(", ", listTotalHarga);
+            String keterangan = "";
+            if (nominal >= subTotal) {
+                if (nominal == subTotal)
+                {
+                    JOptionPane.showMessageDialog(null, "Tidak Ada Kembalian", "Info", JOptionPane.INFORMATION_MESSAGE);
+                    keterangan = "Telah berhasil menjual produk: " + semuaNamaProduk+
+                    "|\nSub Total Harga per Produk: "+semuaTotalHarga+"|\nTotal Harga Keseluruhan: " + formatIDCurrency.currencyFormat(subTotal)+
+                      "|\nNominal Bayar: " +formatIDCurrency.currencyFormat(nominal)+
+                      "\n Kembalian: Tidak Ada Kembalian|";
+                } else 
+                {
+                    JOptionPane.showMessageDialog(null, "Kembalian Anda\n" + formatIDCurrency.currencyFormat(kembalian), "Info", JOptionPane.INFORMATION_MESSAGE);  
+                    keterangan = "Telah berhasil menjual produk: " + semuaNamaProduk+
+                        "|\nSub Total Harga per Produk: "+semuaTotalHarga+"|\nTotal Harga Keseluruhan: " + formatIDCurrency.currencyFormat(subTotal)+
+                          "|\nNominal Bayar: Rp " +formatIDCurrency.currencyFormat(nominal)+
+                          "|\n Kembalian: Rp "+formatIDCurrency.currencyFormat(kembalian)+"|";
+                }
+                System.out.println("Keterangan: " + keterangan);
+                    pstPenjualan.setString(1, keterangan);
+                    pstPenjualan.setDouble(2, subTotal);
+                    pstPenjualan.executeUpdate();
+                    
+                try (ResultSet generatedKeys = pstPenjualan.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int idPenjualan = generatedKeys.getInt(1);
+                        System.out.println("ID Penjualan Baru: " + idPenjualan);
+                        // insert ke detail_penjualan atau update stok, dll
+                        for (Map.Entry<Integer, Map<String, Object>> entry : dataProdukMap.entrySet()) {
+                            Map<String, Object> item = entry.getValue();
+                            
+                            int idProduk = (int) item.get("idProduk");
+                            String namaProduk = (String) item.get("namaProduk");
+                            int jumlah = (int) item.get("jumlah");
+                            double subTotalProduk = (double) item.get("subTotal");
+
+
+                            System.out.println("=========================");
+                            System.out.println("ID Produk    : " + idProduk);
+                            System.out.println("Nama Produk  : " + namaProduk);
+                            System.out.println("Jumlah       : " + jumlah);
+                            System.out.println("Subtotal     : " + subTotalProduk);
+                            
+                            // perbarui stok
+                            pstUpdateStok.setInt(1, jumlah);
+                            pstUpdateStok.setInt(2, idProduk);
+                            pstUpdateStok.executeUpdate();
+                            
+                            // menambahkan detail pembelian
+                                pstDetailPenjualan.setInt(1, idPenjualan);
+                                pstDetailPenjualan.setInt(2, idProduk);
+                                pstDetailPenjualan.setInt(3, jumlah);
+                                pstDetailPenjualan.setDouble(4, subTotalProduk);
+                                pstDetailPenjualan.executeUpdate();
+
+                            // Kalau kamu masih perlu insert tiap item, bisa lakukan di sini (opsional)
+                        }
+                    } else {
+                        System.out.println("Gagal mendapatkan ID penjualan.");
+                    }
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Nominal bayar anda tidak mencukupi.", "Error", JOptionPane.ERROR_MESSAGE);
+
+            }
+            // Contoh keterangan
+
+
+
+                
+
+
+
+
+
+            } catch (SQLException | NumberFormatException e) {
+                e.printStackTrace();
+            }
+            dataProdukMap.clear();
+            getData();
+            
+            
+
+
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Ada kesalahan pada nominal bayar anda", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
         txtNominalBayar.setText("");
+        halamanUtama.getPemasukan();
 
     }//GEN-LAST:event_btnKonfirmasiActionPerformed
+
+    private void txtNominalBayarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNominalBayarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNominalBayarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -58,6 +58,8 @@ CREATE TABLE detail_pembelian (
     CONSTRAINT fk_detailpembelian_produk FOREIGN KEY (idProduk) REFERENCES produk(idProduk)
 ) ENGINE=InnoDB;
 
+
+
 -- Tabel Penjualan
 CREATE TABLE penjualan (
     idPenjualan INT(11) PRIMARY KEY AUTO_INCREMENT,
@@ -67,20 +69,24 @@ CREATE TABLE penjualan (
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
--- Tabel Detail Pembelian (dengan ON DELETE CASCADE untuk fk_detailpembelian_pembelian)
-CREATE TABLE detail_pembelian (
-    idDetailPembelian INT(11) PRIMARY KEY AUTO_INCREMENT,
-    idPembelian INT(11),
+-- Tabel Detail Penjualan (relasi ke penjualan dan produk)
+CREATE TABLE detail_penjualan (
+    idDetailPenjualan INT(11) PRIMARY KEY AUTO_INCREMENT,
+    idPenjualan INT(11),
     idProduk INT(11),
     jumlah INT,
     subtotal DECIMAL(15,2),
-    INDEX (idPembelian),
+    INDEX (idPenjualan),
     INDEX (idProduk),
-    CONSTRAINT fk_detailpembelian_pembelian FOREIGN KEY (idPembelian) 
-        REFERENCES pembelian(idPembelian) ON DELETE CASCADE,
-    CONSTRAINT fk_detailpembelian_produk FOREIGN KEY (idProduk) 
+    CONSTRAINT fk_detailpenjualan_penjualan FOREIGN KEY (idPenjualan) 
+        REFERENCES penjualan(idPenjualan) ON DELETE CASCADE,
+    CONSTRAINT fk_detailpenjualan_produk FOREIGN KEY (idProduk) 
         REFERENCES produk(idProduk)
 ) ENGINE=InnoDB;
+
+
+DROP TABLE IF EXISTS detail_penjualan;
+DROP TABLE IF EXISTS penjualan;
 
 
 
