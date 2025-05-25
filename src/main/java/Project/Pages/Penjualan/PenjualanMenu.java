@@ -68,6 +68,7 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
                 model.addColumn("ID Produk");
                 model.addColumn("Nama Produk");
                 model.addColumn("Jumlah");
+                model.addColumn("Stok");
                 model.addColumn("Sub Total");
                 
                 model.setRowCount(0); // Kosongkan isi tabel terlebih dahulu
@@ -81,9 +82,11 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
                     int idProduk = (int) item.get("idProduk");
                     String namaProduk = (String) item.get("namaProduk");
                     int jumlah = (int) item.get("jumlah");
+                    
+                    int stok = (int) (item.get("stok"));
                     double subTotal = (double) item.get("subTotal");
                     totalSubTotal += subTotal;
-                    model.addRow(new Object[]{no, idProduk, namaProduk, jumlah, formatIDCurrency.currencyFormat(subTotal)});
+                    model.addRow(new Object[]{no, idProduk, namaProduk, jumlah, stok, formatIDCurrency.currencyFormat(subTotal)});
                 }
                 txtTotalHargaa.setText(String.valueOf(totalSubTotal));
                 txtVisualTotalHarga.setText("Rp "+formatIDCurrency.currencyFormat(totalSubTotal));
@@ -639,6 +642,7 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
         // Masukkan data ke Map
                    
         boolean produkDitemukan = false;
+        int stok = Integer.parseInt(txtStok.getText().trim());
 
         for (Map.Entry<Integer, Map<String, Object>> entry : dataProdukMap.entrySet()) {
             Map<String, Object> existingItem = entry.getValue();
@@ -646,7 +650,6 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
                 // Jika idProduk ditemukan, update jumlah dan subtotal
                 int jumlahLama = (int) existingItem.get("jumlah");
                 int jumlahBaru = jumlahLama + jumlah_produk;
-                existingItem.put("jumlah", jumlahBaru);
 
                 double subTotalLama = (double) existingItem.get("subTotal");
                 double subTotalBaru = subTotalLama + subTotal;
@@ -662,87 +665,13 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
             item.put("idProduk", idProduk);
             item.put("namaProduk", nama_produk);
             item.put("jumlah", jumlah_produk);
+            item.put("stok", stok);
             item.put("subTotal", subTotal);
 
             dataProdukMap.put(indexProduk, item);
             indexProduk++;
         }
 
-
-            // Tampilkan ke tabel
-//            DefaultTableModel model = (DefaultTableModel) penjualanTable.getModel();
-//            int no = 1;
-//            
-//            model.addRow(new Object[] {
-//                   no++,
-//                    idProduk,
-//                    nama_produk,
-//                    jumlah_produk,
-//                    formatIDCurrency.currencyFormat(subTotal)
-//                });
-//            model.addRow(new Object[]{idProduk, nama_produk, jumlah_produk, subTotal});
-
-            
-            
-//        if (dataBaru == true) {  // prosess simpan atau edit
-//            String queryPenjualan = "INSERT INTO penjualan (keterangan, totalHarga, created_at) VALUES (?, ?, NOW())";
-//
-//            try (
-//                 Connection conn = Connections.ConnectionDB();
-//                 PreparedStatement pstPenjualan = conn.prepareStatement(queryPenjualan, Statement.RETURN_GENERATED_KEYS);
-//           
-//                    ) {
-//                int stokAwal = Integer.parseInt(txtStok.getText());
-//                int totalStok = stokAwal - jumlah_produk;
-//                System.out.println("Total Stok: "+totalStok);
-//                if (totalStok > 0)
-//                {
-//                    pstPenjualan.setString(1, keterangan);
-//                    pstPenjualan.setDouble(2, totalHarga);
-//
-//                    pstPenjualan.executeUpdate();
-//
-//                    try (ResultSet generatedKeys = pstPenjualan.getGeneratedKeys()) {
-//                        if (generatedKeys.next()) {
-//                            int idPenjualan = generatedKeys.getInt(1);
-//                            String queryUpdateStok = "update produk set stok = ? where idProduk = ?";
-//                                // update stok produk
-//                                PreparedStatement pstUpdateStok = conn.prepareStatement(queryUpdateStok);
-//                                pstUpdateStok.setInt(1, totalStok);
-//                                pstUpdateStok.setInt(2, idProduk);
-//                                pstUpdateStok.executeUpdate();
-//                                
-//                                // penambahan detail penjualan
-//                            String queryDetailPenjualan = "INSERT INTO detail_penjualan (idPenjualan, idProduk, jumlah, subtotal) VALUES (?, ?, ?, ?)";
-//                                PreparedStatement pstDetail_Penjualan = conn.prepareStatement(queryDetailPenjualan);
-//                                pstDetail_Penjualan.setInt(1, idPenjualan);
-//                                pstDetail_Penjualan.setInt(2, idProduk);
-//                                pstDetail_Penjualan.setInt(3, jumlah_produk);
-//                                pstDetail_Penjualan.setDouble(4, subTotal);
-//                                pstDetail_Penjualan.executeUpdate();
-//                            JOptionPane.showMessageDialog(null, "Pembelian anda telah berhasil");
-//
-//
-//                        } else {
-//                            JOptionPane.showMessageDialog(null, "Penjualan anda gagal");
-//
-//                            System.out.println("ID penjualan tidak tersedia.");
-//                        }
-//                    }
-//            
-//                }
-//                
-//            } catch (SQLException | NumberFormatException e) {
-//                e.printStackTrace();
-//            }
-//
-//        } 
-//        
-//        else {
-//            
-//            txtIdPenjualan.setText("");
-//            JOptionPane.showMessageDialog(null, "Penjualan anda gagal, silahkan untuk bersihkan terlebih dahulu");
-//        }
         
         getProduk();
         getData();
@@ -832,6 +761,7 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "anda belum menambahkan produk yang ingin di beli", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        
         try {
                 // Hapus karakter underscore (_) dari input
             String nominalText = txtNominalBayar.getText().replace("_", "").replace(",", "");
@@ -843,22 +773,28 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
             String queryPenjualan = "INSERT INTO penjualan (keterangan, totalHarga, created_at) VALUES (?, ?, NOW())";
             
             String queryDetailPenjualan = "INSERT INTO detail_penjualan (idPenjualan, idProduk, jumlah, subtotal) VALUES (?, ?, ?, ?)";
-            String queryUpdateStok = "UPDATE produk SET stok = stok + ? WHERE idProduk = ?";
+            //cek stok
+            String cekStokQuery = "SELECT stok FROM produk WHERE idProduk = ?";
+            String queryUpdateStok = "UPDATE produk SET stok = stok - ? WHERE idProduk = ?";
             try (
                 Connection conn = Connections.ConnectionDB();
                 PreparedStatement pstPenjualan = conn.prepareStatement(queryPenjualan, Statement.RETURN_GENERATED_KEYS);
                 PreparedStatement pstUpdateStok = conn.prepareStatement(queryUpdateStok);
+                PreparedStatement cekProdukStok = conn.prepareStatement(cekStokQuery);
                 PreparedStatement pstDetailPenjualan = conn.prepareStatement(queryDetailPenjualan);  
+
             ) {
             // Buat penampung nama-nama produk
             List<String> listNamaProduk = new ArrayList<>();
             List<String> listTotalHarga = new ArrayList<>();
+
             for (Map.Entry<Integer, Map<String, Object>> entry : dataProdukMap.entrySet()) {
                 Map<String, Object> item = entry.getValue();
 
                 int idProduk = (int) item.get("idProduk");
                 String namaProduk = (String) item.get("namaProduk");
                 int jumlah = (int) item.get("jumlah");
+                
                 double subTotals = (double) item.get("subTotal");
 
                 // Tambahkan ke list nama produk
@@ -878,17 +814,21 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
             String semuaNamaProduk = String.join(", ", listNamaProduk);
             String semuaTotalHarga = String.join(", ", listTotalHarga);
             String keterangan = "";
+            
+            //kembalianMessages
+            String kembalianMessages = (nominal == subTotal) ? "Tidak Ada Kembalian" : "Kembalian Anda\n" + formatIDCurrency.currencyFormat(kembalian);
+            String kembalianHeadlineMessages = (nominal >= subTotal) ? "Info" : "Error";
             if (nominal >= subTotal) {
                 if (nominal == subTotal)
                 {
-                    JOptionPane.showMessageDialog(null, "Tidak Ada Kembalian", "Info", JOptionPane.INFORMATION_MESSAGE);
+                    // tidak ada kembalian
                     keterangan = "Telah berhasil menjual produk: " + semuaNamaProduk+
                     "|\nSub Total Harga per Produk: "+semuaTotalHarga+"|\nTotal Harga Keseluruhan: " + formatIDCurrency.currencyFormat(subTotal)+
                       "|\nNominal Bayar: " +formatIDCurrency.currencyFormat(nominal)+
                       "\n Kembalian: Tidak Ada Kembalian|";
                 } else 
                 {
-                    JOptionPane.showMessageDialog(null, "Kembalian Anda\n" + formatIDCurrency.currencyFormat(kembalian), "Info", JOptionPane.INFORMATION_MESSAGE);  
+                    // ada kembalian
                     keterangan = "Telah berhasil menjual produk: " + semuaNamaProduk+
                         "|\nSub Total Harga per Produk: "+semuaTotalHarga+"|\nTotal Harga Keseluruhan: " + formatIDCurrency.currencyFormat(subTotal)+
                           "|\nNominal Bayar: Rp " +formatIDCurrency.currencyFormat(nominal)+
@@ -911,7 +851,7 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
                             String namaProduk = (String) item.get("namaProduk");
                             int jumlah = (int) item.get("jumlah");
                             double subTotalProduk = (double) item.get("subTotal");
-
+                            int stok = (int) item.get("stok");
 
                             System.out.println("=========================");
                             System.out.println("ID Produk    : " + idProduk);
@@ -919,28 +859,58 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
                             System.out.println("Jumlah       : " + jumlah);
                             System.out.println("Subtotal     : " + subTotalProduk);
                             
-                            // perbarui stok
-                            pstUpdateStok.setInt(1, jumlah);
-                            pstUpdateStok.setInt(2, idProduk);
-                            pstUpdateStok.executeUpdate();
+                            // Cek stok terlebih dahulu
+                            cekProdukStok.setInt(1, idProduk);
+                            ResultSet rsProdukStok = cekProdukStok.executeQuery();
                             
-                            // menambahkan detail pembelian
-                                pstDetailPenjualan.setInt(1, idPenjualan);
-                                pstDetailPenjualan.setInt(2, idProduk);
-                                pstDetailPenjualan.setInt(3, jumlah);
-                                pstDetailPenjualan.setDouble(4, subTotalProduk);
-                                pstDetailPenjualan.executeUpdate();
+                            try{
+                                if (rsProdukStok.next()) {
+                                        if (stok >= jumlah) {
+                                            // perbarui stok
+                                            pstUpdateStok.setInt(1, jumlah);
+                                            pstUpdateStok.setInt(2, idProduk);
+                                            pstUpdateStok.executeUpdate();
+                                            
+                                            // menambahkan detail pembelian
+                                            pstDetailPenjualan.setInt(1, idPenjualan);
+                                            pstDetailPenjualan.setInt(2, idProduk);
+                                            pstDetailPenjualan.setInt(3, jumlah);
+                                            pstDetailPenjualan.setDouble(4, subTotalProduk);
+                                            pstDetailPenjualan.executeUpdate();
+                                            JOptionPane.showMessageDialog(null, "\nNama Produk: " + namaProduk + 
+                                                    "|\nJumlah Produk: " + jumlah + 
+   
+                                                    "|\nTotal Harga: Rp " + formatIDCurrency.currencyFormat(subTotalProduk) +
+                                                    "|\nTelah Berhasil"
+                                                    , 
+                                                    "Pembelian Produk", JOptionPane.INFORMATION_MESSAGE);
+
+                                        } else {
+                                            
+                                            System.out.println("Stok tidak mencukupi!");
+                                            JOptionPane.showMessageDialog(null, "Jumlah Produk berlebihan, tidak bisa melanjutkan proses..", "Terjadi Kesalahan", JOptionPane.ERROR_MESSAGE);
+                                            // Bisa throw exception atau tampilkan pesan ke user
+                                        }
+                                    }
+                            } catch (Exception e)
+                            {
+                                    e.printStackTrace();
+                            }
+
+                            
+                            
 
                             // Kalau kamu masih perlu insert tiap item, bisa lakukan di sini (opsional)
                         }
+                            JOptionPane.showMessageDialog(null, kembalianMessages, kembalianHeadlineMessages, JOptionPane.INFORMATION_MESSAGE);
+                        dataProdukMap.clear();
                     } else {
                         System.out.println("Gagal mendapatkan ID penjualan.");
                     }
                 }
 
             } else {
-                JOptionPane.showMessageDialog(null, "Nominal bayar anda tidak mencukupi.", "Error", JOptionPane.ERROR_MESSAGE);
-
+                JOptionPane.showMessageDialog(null, "Nominal bayar anda tidak mencukupi.", kembalianHeadlineMessages, JOptionPane.ERROR_MESSAGE);
             }
             // Contoh keterangan
 
@@ -955,7 +925,6 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
             } catch (SQLException | NumberFormatException e) {
                 e.printStackTrace();
             }
-            dataProdukMap.clear();
             getData();
             
             
