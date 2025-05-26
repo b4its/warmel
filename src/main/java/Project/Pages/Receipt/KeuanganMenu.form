@@ -308,8 +308,14 @@
       </SubComponents>
     </Container>
     <Component class="javax.swing.JTextField" name="txtTablePemasukan">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="txtTablePemasukan.setVisible(false);"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JTextField" name="txtTablePengeluaran">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="txtTablePengeluaran.setVisible(false);"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="btnDetailPengeluaran">
       <Properties>

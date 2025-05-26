@@ -311,6 +311,10 @@ public class KeuanganMenu extends javax.swing.JInternalFrame {
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
+        txtTablePemasukan.setVisible(false);
+
+        txtTablePengeluaran.setVisible(false);
+
         btnDetailPengeluaran.setText("Detail Pengeluaran");
 
         btnDetailPemasukan1.setText("Detail Pemasukan");
