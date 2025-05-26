@@ -107,7 +107,7 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
     private void getProduk() {
         try (Connection conn = (Connection) Connections.ConnectionDB();
              java.sql.Statement stm = conn.createStatement();
-             java.sql.ResultSet queryProduk = stm.executeQuery("SELECT idProduk, namaProduk, hargaBeli, stok FROM produk");
+             java.sql.ResultSet queryProduk = stm.executeQuery("SELECT idProduk, namaProduk, hargaJual, stok FROM produk");
                 ) {
                 spinJProduk.setValue(1);
                 txtJumlahP.setText("");
@@ -130,11 +130,11 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
             while (queryProduk.next()) {
                 String idProduk = queryProduk.getString("idProduk");
                 String namaProduk = queryProduk.getString("namaProduk");
-                String hargaBeli = queryProduk.getString("hargaBeli");
+                String hargaJual = queryProduk.getString("hargaJual");
                 String stok = queryProduk.getString("stok");
 
                 produkMap.put(namaProduk, idProduk);
-                hargaMap.put(namaProduk, hargaBeli);
+                hargaMap.put(namaProduk, hargaJual);
                 stokMap.put(namaProduk, stok);
                 cbProduk.addItem(namaProduk);
             }
@@ -150,11 +150,11 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
                         String idProduk = produkMap.get(selectedProduk);
                         txtHarga.setText(hargaMap.get(selectedProduk));
                         txtStok.setText(stokMap.get(selectedProduk));
-                        double hargaBeli = Double.parseDouble(hargaMap.get(selectedProduk));
+                        double hargaJual = Double.parseDouble(hargaMap.get(selectedProduk));
                         int jumlahBeli = (int) spinJProduk.getValue();
-                        double subHarga = hargaBeli * jumlahBeli;
+                        double subHarga = hargaJual * jumlahBeli;
                         double total = subHarga + taxInformation.getTax();
-                        double totalBiasa = hargaBeli + taxInformation.getTax();
+                        double totalBiasa = hargaJual + taxInformation.getTax();
                         String stringTotal = formatIDCurrency.currencyFormat(subHarga);
                         String stringTotalBiasa = formatIDCurrency.currencyFormat(totalBiasa);
                         txtIdProduk.setText(idProduk);
