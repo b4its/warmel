@@ -38,13 +38,25 @@ public class DetailPengeluaran extends javax.swing.JInternalFrame {
         try (
             Connection conn = Connections.ConnectionDB();
             PreparedStatement pstmt = conn.prepareStatement(
-                "SELECT p.idPembelian, p.keterangan, p.totalHarga, p.created_at, " +
-                "d.idDetailPembelian, d.idProduk, d.jumlah, d.subtotal " +
-                "FROM pembelian p " +
-                "JOIN detail_pembelian d ON p.idPembelian = d.idPembelian WHERE p.idPembelian = ?"
+                "SELECT \n" +
+                "    pembelian.idPembelian,\n" +
+                "    pembelian.created_at ,\n" +
+                "    pembelian.keterangan,\n" +
+                "    pembelian.totalHarga,\n" +
+                "    agen.idAgen,\n" +
+                "    detail_pembelian.idDetailPembelian,\n" +
+                "    detail_pembelian.idProduk,\n" +
+                "    detail_pembelian.jumlah,\n" +
+                "    detail_pembelian.subtotal,\n" +
+                "    produk.namaProduk,\n" +
+                "    produk.stok\n" + // asumsikan kamu ingin stok produk juga
+                "FROM pembelian\n" +
+                "JOIN agen ON pembelian.idAgen = agen.idAgen\n" +
+                "JOIN detail_pembelian ON pembelian.idPembelian = detail_pembelian.idPembelian\n" +
+                "JOIN produk ON detail_pembelian.idProduk = produk.idProduk WHERE pembelian.idPembelian = ?"
             );
         ) {
-            String idPengeluaran = menuKeuangan.getIdPemasukan();
+            String idPengeluaran = menuKeuangan.getIdPengeluaran();
             System.out.println("ID Pengeluaran: " + idPengeluaran);
 
             pstmt.setString(1, idPengeluaran);

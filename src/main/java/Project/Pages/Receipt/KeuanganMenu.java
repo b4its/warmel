@@ -154,7 +154,7 @@ public class KeuanganMenu extends javax.swing.JInternalFrame {
                     System.out.println("==========================");
                     System.out.println("Kode Pengeluaran: " + codePengeluaran);
                     System.out.println("Created At: " + created_at);
-                    System.out.println("Total Pemasukan: " + totalPengeluaran);
+                    System.out.println("Total Pengeluaran: " + totalPengeluaran);
                 model.addRow(new Object[] {
                     no++, // Menambahkan nomor urut
                     idPembelian,
@@ -180,6 +180,11 @@ public class KeuanganMenu extends javax.swing.JInternalFrame {
         public String getIdPemasukan(){
             String idPemasukan = txtTablePemasukan.getText();
             return idPemasukan;
+        }
+        
+        public String getIdPengeluaran(){
+            String idPengeluaran = txtTablePengeluaran.getText();
+            return idPengeluaran;
         }
         
     /**
