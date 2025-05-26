@@ -368,11 +368,11 @@ public static Index instance; // instance global
         // TODO add your handling code here:
         
         KeuanganMenu laporanKeuangan = new KeuanganMenu();
-        panelViews.removeAll();
+   
         panelViews.add(laporanKeuangan);
         panelViews.revalidate();
         panelViews.repaint();
-        laporanKeuangan.show();
+        laporanKeuangan.setVisible(true);
     
 
     }//GEN-LAST:event_daftarKeuanganViewActionPerformed
@@ -512,7 +512,7 @@ public static Index instance; // instance global
     private javax.swing.JLabel labelPemasukan;
     private javax.swing.JLabel labelPengeluaran;
     private javax.swing.JMenu menuKategori;
-    private javax.swing.JDesktopPane panelViews;
+    public javax.swing.JDesktopPane panelViews;
     private javax.swing.JMenuItem penjualanView;
     // End of variables declaration//GEN-END:variables
 }

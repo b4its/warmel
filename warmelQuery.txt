@@ -65,8 +65,7 @@ CREATE TABLE penjualan (
     idPenjualan INT(11) PRIMARY KEY AUTO_INCREMENT,
     keterangan TEXT,
     totalHarga DECIMAL(15,2),
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
 -- Tabel Detail Penjualan (relasi ke penjualan dan produk)

@@ -830,16 +830,16 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
                 {
                     // tidak ada kembalian
                     keterangan = "Telah berhasil menjual produk: " + semuaNamaProduk+
-                    "|\nSub Total Harga per Produk: "+semuaTotalHarga+"|\nTotal Harga Keseluruhan: " + formatIDCurrency.currencyFormat(subTotal)+
-                      "|\nNominal Bayar: " +formatIDCurrency.currencyFormat(nominal)+
+                    "\nSub Total Harga per Produk: "+semuaTotalHarga+"|\nTotal Harga Keseluruhan: " + formatIDCurrency.currencyFormat(subTotal)+
+                      "\nNominal Bayar: " +formatIDCurrency.currencyFormat(nominal)+
                       "\n Kembalian: Tidak Ada Kembalian|";
                 } else 
                 {
                     // ada kembalian
                     keterangan = "Telah berhasil menjual produk: " + semuaNamaProduk+
-                        "|\nSub Total Harga per Produk: "+semuaTotalHarga+"|\nTotal Harga Keseluruhan: " + formatIDCurrency.currencyFormat(subTotal)+
-                          "|\nNominal Bayar: Rp " +formatIDCurrency.currencyFormat(nominal)+
-                          "|\n Kembalian: Rp "+formatIDCurrency.currencyFormat(kembalian)+"|";
+                        "\nSub Total Harga per Produk: "+semuaTotalHarga+"|\nTotal Harga Keseluruhan: " + formatIDCurrency.currencyFormat(subTotal)+
+                          "\nNominal Bayar: Rp " +formatIDCurrency.currencyFormat(nominal)+
+                          "\n Kembalian: Rp "+formatIDCurrency.currencyFormat(kembalian)+"|";
                 }
                 System.out.println("Keterangan: " + keterangan);
                 
