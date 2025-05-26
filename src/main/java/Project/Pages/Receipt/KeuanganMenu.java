@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 
 import Project.Index;
 import Project.Pages.Receipt.Detail.DetailPemasukan;
+import Project.Pages.Receipt.Detail.DetailPengeluaran;
 /**
  *
  * @author brsap
@@ -316,6 +317,11 @@ public class KeuanganMenu extends javax.swing.JInternalFrame {
         txtTablePengeluaran.setVisible(false);
 
         btnDetailPengeluaran.setText("Detail Pengeluaran");
+        btnDetailPengeluaran.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDetailPengeluaranActionPerformed(evt);
+            }
+        });
 
         btnDetailPemasukan1.setText("Detail Pemasukan");
         btnDetailPemasukan1.addActionListener(new java.awt.event.ActionListener() {
@@ -471,6 +477,13 @@ public class KeuanganMenu extends javax.swing.JInternalFrame {
         halamanUtama.panelViews.add(frameTes);
         frameTes.setVisible(true);
     }//GEN-LAST:event_btnDetailPemasukan1ActionPerformed
+
+    private void btnDetailPengeluaranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailPengeluaranActionPerformed
+        // TODO add your handling code here:
+        DetailPengeluaran frameTes = new DetailPengeluaran();
+        halamanUtama.panelViews.add(frameTes);
+        frameTes.setVisible(true);
+    }//GEN-LAST:event_btnDetailPengeluaranActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

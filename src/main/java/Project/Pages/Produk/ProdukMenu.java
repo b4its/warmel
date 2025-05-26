@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.proteanit.sql.DbUtils;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
@@ -534,6 +535,37 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
 
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
         // TODO add your handling code here:
+        try {
+            // Ambil nilai pencarian dari txtCari
+            String keyword = txtCari.getText();
+
+            // SQL query untuk mencari data yang sesuai dengan keyword
+            String sql = "SELECT * FROM produk WHERE namaProduk LIKE ?";
+
+            // Buat koneksi ke database
+            Connection conn = (Connection) Connections.ConnectionDB();
+
+            // Gunakan PreparedStatement untuk menghindari SQL injection
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+
+            // Menggunakan parameter LIKE dengan tanda '%' untuk mencari data yang mengandung keyword
+            pst.setString(1, "%" + keyword + "%");
+
+            // Eksekusi query
+            java.sql.ResultSet rs = pst.executeQuery();
+
+            // Periksa apakah hasil query mengembalikan data
+            if (!rs.isBeforeFirst()) {
+                // Jika tidak ada data
+                JOptionPane.showMessageDialog(null, "Data tidak ditemukan!");
+            } else {
+                // Jika ada data, tampilkan ke dalam kategoriProdukTable
+                produkTable.setModel(DbUtils.resultSetToTableModel(rs));
+            }
+
+        } catch (SQLException | HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "Terjadi kesalahan: " + e.getMessage());
+        }
         
     }//GEN-LAST:event_btnCariActionPerformed
 
