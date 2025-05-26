@@ -104,7 +104,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="labelKodePengeluaran">
       <Properties>
-        <Property name="text" type="java.lang.String" value="IN-00"/>
+        <Property name="text" type="java.lang.String" value="OUT-00"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="labelTotalHarga">

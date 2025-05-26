@@ -125,7 +125,7 @@ public class DetailPengeluaran extends javax.swing.JInternalFrame {
 
         jLabel3.setText("Keterangan:");
 
-        labelKodePengeluaran.setText("IN-00");
+        labelKodePengeluaran.setText("OUT-00");
 
         labelTotalHarga.setText("Rp 0.000");
 
