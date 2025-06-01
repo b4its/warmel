@@ -116,6 +116,7 @@ public class AgenMenu extends javax.swing.JInternalFrame {
 
         textNama.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
 
+        btnBersih.setBackground(new java.awt.Color(255, 204, 255));
         btnBersih.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnBersih.setText("Bersihkan");
         btnBersih.addActionListener(new java.awt.event.ActionListener() {
@@ -124,6 +125,7 @@ public class AgenMenu extends javax.swing.JInternalFrame {
             }
         });
 
+        btnTambah.setBackground(new java.awt.Color(255, 204, 255));
         btnTambah.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnTambah.setText("Tambahkan/Update");
         btnTambah.addActionListener(new java.awt.event.ActionListener() {
@@ -132,6 +134,7 @@ public class AgenMenu extends javax.swing.JInternalFrame {
             }
         });
 
+        btnHapus.setBackground(new java.awt.Color(255, 204, 255));
         btnHapus.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnHapus.setText("Hapus");
         btnHapus.addActionListener(new java.awt.event.ActionListener() {
@@ -140,6 +143,7 @@ public class AgenMenu extends javax.swing.JInternalFrame {
             }
         });
 
+        btnKembali.setBackground(new java.awt.Color(255, 204, 255));
         btnKembali.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnKembali.setText("Kembali");
         btnKembali.addActionListener(new java.awt.event.ActionListener() {
@@ -148,6 +152,7 @@ public class AgenMenu extends javax.swing.JInternalFrame {
             }
         });
 
+        agenTabel.setBackground(new java.awt.Color(255, 204, 255));
         agenTabel.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -166,6 +171,7 @@ public class AgenMenu extends javax.swing.JInternalFrame {
         txtCari.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         txtCari.setText("cari  agen..");
 
+        btnCari.setBackground(new java.awt.Color(255, 204, 255));
         btnCari.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnCari.setText("Cari");
 
@@ -180,6 +186,7 @@ public class AgenMenu extends javax.swing.JInternalFrame {
         txtIdAgen.setVisible(false);
         txtIdAgen.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
 
+        btnTesting.setBackground(new java.awt.Color(255, 204, 255));
         btnTesting.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnTesting.setText("Cek Aja");
         btnTesting.addActionListener(new java.awt.event.ActionListener() {
@@ -203,26 +210,26 @@ public class AgenMenu extends javax.swing.JInternalFrame {
                         .addComponent(btnCari))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(30, 30, 30)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnBersih, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtIdAgen, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnHapus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnTesting)
+                                    .addComponent(btnTambah, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnKembali, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2)
                                     .addComponent(jLabel3))
                                 .addGap(26, 26, 26)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                    .addComponent(textNama)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnBersih)
-                                    .addComponent(btnHapus)
-                                    .addComponent(txtIdAgen, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnTesting)
-                                    .addComponent(btnKembali)
-                                    .addComponent(btnTambah))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 342, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(textNama)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 222, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 724, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(26, 26, 26)
                 .addComponent(jScrollBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
