@@ -270,6 +270,11 @@ public class AgenMenu extends javax.swing.JInternalFrame {
         btnCari.setBackground(new java.awt.Color(255, 204, 255));
         btnCari.setFont(new java.awt.Font("Gill Sans MT", 1, 14)); // NOI18N
         btnCari.setText("Cari");
+        btnCari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCariActionPerformed(evt);
+            }
+        });
 
         txtCari.setText("cari  agen..");
 
@@ -408,28 +413,108 @@ public class AgenMenu extends javax.swing.JInternalFrame {
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
         // TODO add your handling code here:
-        try { // hapus data
-            String sql ="delete from agen where idAgen='"+txtIdAgen.getText()+"'";
-            Connection conn = (Connection) Connections.ConnectionDB();
-            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-            JOptionPane.showMessageDialog(null, "Data akan terhapus..");
-            pst.execute();
-            
-            dataBaru=true;
-           
-            // kosongkan data
-            textNama.setText("");
-            txtIdAgen.setText("");
-            
-        } catch (SQLException | HeadlessException e) {}
+        Connection conn = null; // Dideklarasi di luar try
+
+        try {
+            conn = Connections.ConnectionDB(); // Inisialisasi di dalam try
+
+            String queryRelasiAgen = "SELECT " +
+                "pembelian.idPembelian, " +
+                "pembelian.idAgen, " +
+                "pembelian.totalHarga, " +
+                "detail_pembelian.idDetailPembelian, " +
+                "detail_pembelian.idProduk, " +
+                "detail_pembelian.jumlah, " +
+                "produk.stok " +
+                "FROM pembelian " +
+                "JOIN detail_pembelian ON pembelian.idPembelian = detail_pembelian.idPembelian " +
+                "JOIN produk ON detail_pembelian.idProduk = produk.idProduk " +
+                "WHERE pembelian.idAgen = '" + txtIdAgen.getText() + "'";
+
+            Statement stm = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet pstShowData = stm.executeQuery(queryRelasiAgen);
+
+            conn.setAutoCommit(false); // Mulai transaksi
+
+            // Map untuk rekap data
+            Map<String, Integer> mapJumlahPerProduk = new HashMap<>();
+            Map<String, Integer> mapStokPerProduk = new HashMap<>();
+            Set<String> idPembelians = new HashSet<>();
+
+            while (pstShowData.next()) {
+                String idProduk = pstShowData.getString("idProduk");
+                int jumlah = pstShowData.getInt("jumlah");
+                int stok = pstShowData.getInt("stok");
+                String idPembelian = pstShowData.getString("idPembelian");
+
+                idPembelians.add(idPembelian);
+                mapJumlahPerProduk.put(idProduk,
+                    mapJumlahPerProduk.getOrDefault(idProduk, 0) + jumlah);
+                mapStokPerProduk.putIfAbsent(idProduk, stok);
+            }
+
+            String queryUpdateProduk = "UPDATE produk SET stok = ? WHERE idProduk = ?";
+            PreparedStatement pstUpdateProduk = conn.prepareStatement(queryUpdateProduk);
+
+            for (String idProdukKey : mapJumlahPerProduk.keySet()) {
+                int jumlahTotal = mapJumlahPerProduk.get(idProdukKey);
+                int stokAwal = mapStokPerProduk.get(idProdukKey);
+                int stokAkhir = Math.max(0, stokAwal - jumlahTotal);
+
+                pstUpdateProduk.setInt(1, stokAkhir);
+                pstUpdateProduk.setString(2, idProdukKey);
+                pstUpdateProduk.executeUpdate();
+            }
+
+            String queryDeletePembelian = "DELETE FROM pembelian WHERE idPembelian = ?";
+            PreparedStatement pstDeletePembelian = conn.prepareStatement(queryDeletePembelian);
+
+            for (String idPembelian : idPembelians) {
+                pstDeletePembelian.setString(1, idPembelian);
+                pstDeletePembelian.executeUpdate();
+            }
+            String queryDeleteAgen = "DELETE FROM agen WHERE idAgen = ?";
+            PreparedStatement pstDeleteAgen = conn.prepareStatement(queryDeleteAgen);
+            pstDeleteAgen.setString(1, txtIdAgen.getText());
+            pstDeleteAgen.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Agen telah berhasil di hapus..");
+            conn.commit();
+
+            System.out.println("✅ Transaksi berhasil! Data stok dan pembelian diperbarui.");
+
+        } catch (Exception e) {
+            try {
+                if (conn != null) conn.rollback(); // Hanya rollback jika conn tidak null
+            } catch (SQLException rollbackError) {
+                rollbackError.printStackTrace();
+            }
+            System.err.println("❌ Terjadi kesalahan: " + e.getMessage());
+
+        } finally {
+            try {
+                if (conn != null) conn.setAutoCommit(true); // Reset autocommit
+                if (conn != null) conn.close(); // Tutup koneksi
+            } catch (SQLException closeError) {
+                closeError.printStackTrace();
+            }
+        }
+
 
         getData();
+        if (halamanUtama != null) {
+            halamanUtama.getPengeluaran();
+       }
     }//GEN-LAST:event_btnHapusActionPerformed
 
     private void btnKembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKembaliActionPerformed
         // TODO add your handling code here:
         dispose();
     }//GEN-LAST:event_btnKembaliActionPerformed
+
+    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_btnCariActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
