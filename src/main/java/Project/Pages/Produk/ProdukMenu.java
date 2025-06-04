@@ -225,36 +225,24 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
         txtIdKategori = new javax.swing.JTextField();
         labelKategori = new javax.swing.JLabel();
 
-        setMaximumSize(new java.awt.Dimension(1535, 700));
-
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel1.setText("Daftar Produk");
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel2.setText("Nama Produk");
 
-        textNama.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-
-        jLabel3.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel3.setText("Kategori");
 
-        jLabel4.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel4.setText("Harga Beli");
 
-        textHBeli.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-
-        jLabel5.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel5.setText("Harga Jual");
 
-        textHJual.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-
-        jLabel6.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel6.setText("Stok");
 
-        spinStok.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-
-        cbKategori.setBackground(new java.awt.Color(255, 204, 255));
-        cbKategori.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         cbKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbKategori.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -262,8 +250,6 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
             }
         });
 
-        btnBersih.setBackground(new java.awt.Color(255, 204, 255));
-        btnBersih.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnBersih.setText("Bersihkan");
         btnBersih.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -271,8 +257,6 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
             }
         });
 
-        btnSubmit.setBackground(new java.awt.Color(255, 204, 255));
-        btnSubmit.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnSubmit.setText("Tambahkan/Update");
         btnSubmit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -280,8 +264,6 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
             }
         });
 
-        btnHapus.setBackground(new java.awt.Color(255, 204, 255));
-        btnHapus.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnHapus.setText("Hapus");
         btnHapus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -289,8 +271,6 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
             }
         });
 
-        btnKembali.setBackground(new java.awt.Color(255, 204, 255));
-        btnKembali.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnKembali.setText("Kembali");
         btnKembali.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -298,7 +278,6 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
             }
         });
 
-        produkTable.setBackground(new java.awt.Color(255, 204, 255));
         produkTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -314,11 +293,8 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(produkTable);
 
-        txtCari.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         txtCari.setText("cari produk..");
 
-        btnCari.setBackground(new java.awt.Color(255, 204, 255));
-        btnCari.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnCari.setText("Cari");
         btnCari.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -326,11 +302,7 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
             }
         });
 
-        txtIdProduk.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-
-        txtIdKategori.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-
-        labelKategori.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        labelKategori.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         labelKategori.setText("anda belum memilih..");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -341,56 +313,44 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnBersih)
-                            .addComponent(btnHapus, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(btnSubmit))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtIdKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnKembali, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(832, 832, 832))
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCari))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnBersih)
+                                    .addComponent(btnHapus))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnKembali)
+                                    .addComponent(btnSubmit)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel2)
-                                            .addComponent(jLabel3)
-                                            .addComponent(jLabel4)
-                                            .addComponent(jLabel5)
-                                            .addComponent(jLabel6))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                    .addComponent(textHJual, javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(textHBeli, javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(cbKategori, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(labelKategori)
-                                                .addGap(60, 60, 60))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(textNama, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(spinStok, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txtIdProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(555, 555, 555)))
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 737, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(59, 59, 59)))
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel6))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(textNama)
+                                    .addComponent(textHBeli, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                                    .addComponent(textHJual, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                                    .addComponent(spinStok)
+                                    .addComponent(cbKategori, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addComponent(labelKategori))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtIdProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtIdKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 466, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(12, 12, 12)
                 .addComponent(jScrollBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
@@ -402,7 +362,7 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
                     .addComponent(jLabel1)
                     .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCari))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -437,8 +397,8 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtIdProduk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtIdKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(46, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 449, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         pack();
