@@ -87,37 +87,105 @@ public class AgenMenu extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollBar1 = new javax.swing.JScrollBar();
-        jLabel1 = new javax.swing.JLabel();
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtAlamat = new javax.swing.JTextArea();
         textNama = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
         btnBersih = new javax.swing.JButton();
         btnTambah = new javax.swing.JButton();
         btnHapus = new javax.swing.JButton();
         btnKembali = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         agenTabel = new javax.swing.JTable();
-        txtCari = new javax.swing.JTextField();
         btnCari = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        txtAlamat = new javax.swing.JTextArea();
+        txtCari = new javax.swing.JTextField();
         txtIdAgen = new javax.swing.JTextField();
-        btnTesting = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setPreferredSize(new java.awt.Dimension(1535, 700));
 
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
-        jLabel1.setText("Daftar Agen");
+        jPanel1.setBackground(new java.awt.Color(255, 222, 253));
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        jLabel2.setText("Nama Agen");
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        textNama.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Gill Sans MT", 1, 14)); // NOI18N
+        jLabel2.setText("DAFTAR AGEN");
 
-        btnBersih.setBackground(new java.awt.Color(255, 204, 255));
-        btnBersih.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(jLabel2)
+                .addContainerGap(43, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2)
+                .addContainerGap(19, Short.MAX_VALUE))
+        );
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+
+        txtAlamat.setColumns(20);
+        txtAlamat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtAlamat.setRows(5);
+        jScrollPane2.setViewportView(txtAlamat);
+
+        textNama.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        jLabel3.setFont(new java.awt.Font("Gill Sans MT", 1, 14)); // NOI18N
+        jLabel3.setText("Alamat");
+
+        jLabel4.setFont(new java.awt.Font("Gill Sans MT", 1, 14)); // NOI18N
+        jLabel4.setText("Nama Agen");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                    .addComponent(textNama))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(textNama, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(16, 16, 16)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(82, 82, 82))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(41, Short.MAX_VALUE))
+        );
+
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+
+        btnBersih.setBackground(new java.awt.Color(204, 255, 255));
+        btnBersih.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnBersih.setText("Bersihkan");
         btnBersih.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -125,8 +193,8 @@ public class AgenMenu extends javax.swing.JInternalFrame {
             }
         });
 
-        btnTambah.setBackground(new java.awt.Color(255, 204, 255));
-        btnTambah.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnTambah.setBackground(new java.awt.Color(204, 255, 204));
+        btnTambah.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnTambah.setText("Tambahkan/Update");
         btnTambah.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -134,8 +202,8 @@ public class AgenMenu extends javax.swing.JInternalFrame {
             }
         });
 
-        btnHapus.setBackground(new java.awt.Color(255, 204, 255));
-        btnHapus.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnHapus.setBackground(new java.awt.Color(255, 204, 204));
+        btnHapus.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnHapus.setText("Hapus");
         btnHapus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -143,8 +211,8 @@ public class AgenMenu extends javax.swing.JInternalFrame {
             }
         });
 
-        btnKembali.setBackground(new java.awt.Color(255, 204, 255));
-        btnKembali.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnKembali.setBackground(new java.awt.Color(248, 248, 248));
+        btnKembali.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnKembali.setText("Kembali");
         btnKembali.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -152,7 +220,38 @@ public class AgenMenu extends javax.swing.JInternalFrame {
             }
         });
 
-        agenTabel.setBackground(new java.awt.Color(255, 204, 255));
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(btnKembali, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(btnBersih, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(29, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnBersih, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnKembali, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(39, Short.MAX_VALUE))
+        );
+
+        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
+
+        agenTabel.setBackground(new java.awt.Color(255, 232, 255));
         agenTabel.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -168,119 +267,94 @@ public class AgenMenu extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(agenTabel);
 
-        txtCari.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        txtCari.setText("cari  agen..");
-
         btnCari.setBackground(new java.awt.Color(255, 204, 255));
-        btnCari.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnCari.setFont(new java.awt.Font("Gill Sans MT", 1, 14)); // NOI18N
         btnCari.setText("Cari");
 
-        jLabel3.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        jLabel3.setText("Alamat");
+        txtCari.setText("cari  agen..");
 
-        txtAlamat.setColumns(20);
-        txtAlamat.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        txtAlamat.setRows(5);
-        jScrollPane2.setViewportView(txtAlamat);
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnCari))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 469, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(32, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnCari, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(19, Short.MAX_VALUE))
+        );
 
         txtIdAgen.setVisible(false);
         txtIdAgen.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
 
-        btnTesting.setBackground(new java.awt.Color(255, 204, 255));
-        btnTesting.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        btnTesting.setText("Cek Aja");
-        btnTesting.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTestingActionPerformed(evt);
-            }
-        });
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtIdAgen, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(35, 35, 35)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(527, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtIdAgen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(332, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCari))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(btnBersih, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtIdAgen, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnHapus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(btnTesting)
-                                    .addComponent(btnTambah, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnKembali, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3))
-                                .addGap(26, 26, 26)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(textNama)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 222, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 724, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(26, 26, 26)
-                .addComponent(jScrollBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCari))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(textNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(82, 82, 82))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnBersih)
-                            .addComponent(btnTambah))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnHapus)
-                            .addComponent(btnKembali))
-                        .addGap(26, 26, 26)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtIdAgen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnTesting)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 576, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnKembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKembaliActionPerformed
-        // TODO add your handling code here:
-        dispose();
-    }//GEN-LAST:event_btnKembaliActionPerformed
 
     private void agenTabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_agenTabelMouseClicked
         // TODO add your handling code here:
@@ -305,216 +379,19 @@ public class AgenMenu extends javax.swing.JInternalFrame {
 
     private void btnBersihActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBersihActionPerformed
         // TODO add your handling code here:
-        textNama.setText("");
-        txtAlamat.setText("");
     }//GEN-LAST:event_btnBersihActionPerformed
 
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
         // TODO add your handling code here:
-        if (dataBaru == true) { // prosess simpan atau edit
-            try {
-                String sql = "insert into agen (namaAgen, alamat) values('"+textNama.getText()+"','"+txtAlamat.getText()+"')";
-                java.sql.Connection conn = (Connection) Connections.ConnectionDB();
-                java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-                pst.execute();
-                JOptionPane.showMessageDialog(null, "berhasil disimpan");
-            } catch (SQLException | HeadlessException e) {
-                JOptionPane.showMessageDialog(null, e);
-            }
-        } else {
-            try {
-                String sql = "update agen SET namaAgen='"+textNama.getText()+"', alamat='"+txtAlamat.getText()+"' "
-                        + "where idAgen = '" + txtIdAgen.getText()+"'";
-                java.sql.Connection conn = (Connection) Connections.ConnectionDB();
-                java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-                pst.execute();
-                JOptionPane.showMessageDialog(null, "berhasil disimpan");
-            } catch (SQLException | HeadlessException e) {
-                JOptionPane.showMessageDialog(null, e);
-            }
-        }
-        getData();
-        if (halamanUtama != null) {
-            halamanUtama.getPengeluaran();
-        }
     }//GEN-LAST:event_btnTambahActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
         // TODO add your handling code here:
-        Connection conn = null; // Dideklarasi di luar try
-
-        try {
-            conn = Connections.ConnectionDB(); // Inisialisasi di dalam try
-
-            String queryRelasiAgen = "SELECT " +
-                "pembelian.idPembelian, " +
-                "pembelian.idAgen, " +
-                "pembelian.totalHarga, " +
-                "detail_pembelian.idDetailPembelian, " +
-                "detail_pembelian.idProduk, " +
-                "detail_pembelian.jumlah, " +
-                "produk.stok " +
-                "FROM pembelian " +
-                "JOIN detail_pembelian ON pembelian.idPembelian = detail_pembelian.idPembelian " +
-                "JOIN produk ON detail_pembelian.idProduk = produk.idProduk " +
-                "WHERE pembelian.idAgen = '" + txtIdAgen.getText() + "'";
-
-            Statement stm = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            ResultSet pstShowData = stm.executeQuery(queryRelasiAgen);
-
-            conn.setAutoCommit(false); // Mulai transaksi
-
-            // Map untuk rekap data
-            Map<String, Integer> mapJumlahPerProduk = new HashMap<>();
-            Map<String, Integer> mapStokPerProduk = new HashMap<>();
-            Set<String> idPembelians = new HashSet<>();
-
-            while (pstShowData.next()) {
-                String idProduk = pstShowData.getString("idProduk");
-                int jumlah = pstShowData.getInt("jumlah");
-                int stok = pstShowData.getInt("stok");
-                String idPembelian = pstShowData.getString("idPembelian");
-
-                idPembelians.add(idPembelian);
-                mapJumlahPerProduk.put(idProduk,
-                    mapJumlahPerProduk.getOrDefault(idProduk, 0) + jumlah);
-                mapStokPerProduk.putIfAbsent(idProduk, stok);
-            }
-
-            String queryUpdateProduk = "UPDATE produk SET stok = ? WHERE idProduk = ?";
-            PreparedStatement pstUpdateProduk = conn.prepareStatement(queryUpdateProduk);
-
-            for (String idProdukKey : mapJumlahPerProduk.keySet()) {
-                int jumlahTotal = mapJumlahPerProduk.get(idProdukKey);
-                int stokAwal = mapStokPerProduk.get(idProdukKey);
-                int stokAkhir = Math.max(0, stokAwal - jumlahTotal);
-
-                pstUpdateProduk.setInt(1, stokAkhir);
-                pstUpdateProduk.setString(2, idProdukKey);
-                pstUpdateProduk.executeUpdate();
-            }
-
-            String queryDeletePembelian = "DELETE FROM pembelian WHERE idPembelian = ?";
-            PreparedStatement pstDeletePembelian = conn.prepareStatement(queryDeletePembelian);
-
-            for (String idPembelian : idPembelians) {
-                pstDeletePembelian.setString(1, idPembelian);
-                pstDeletePembelian.executeUpdate();
-            }
-            String queryDeleteAgen = "DELETE FROM agen WHERE idAgen = ?";
-            PreparedStatement pstDeleteAgen = conn.prepareStatement(queryDeleteAgen);
-            pstDeleteAgen.setString(1, txtIdAgen.getText());
-            pstDeleteAgen.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Agen telah berhasil di hapus..");
-            conn.commit();
-
-            System.out.println("✅ Transaksi berhasil! Data stok dan pembelian diperbarui.");
-
-        } catch (Exception e) {
-            try {
-                if (conn != null) conn.rollback(); // Hanya rollback jika conn tidak null
-            } catch (SQLException rollbackError) {
-                rollbackError.printStackTrace();
-            }
-            System.err.println("❌ Terjadi kesalahan: " + e.getMessage());
-
-        } finally {
-            try {
-                if (conn != null) conn.setAutoCommit(true); // Reset autocommit
-                if (conn != null) conn.close(); // Tutup koneksi
-            } catch (SQLException closeError) {
-                closeError.printStackTrace();
-            }
-        }
-
-
-        getData();
-        if (halamanUtama != null) {
-            halamanUtama.getPengeluaran();
-       }
     }//GEN-LAST:event_btnHapusActionPerformed
 
-    private void btnTestingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTestingActionPerformed
+    private void btnKembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKembaliActionPerformed
         // TODO add your handling code here:
-        try{
-            String queryRelasiAgen = "SELECT " +
-                "pembelian.idPembelian, " +
-                "pembelian.idAgen, " +
-                "pembelian.totalHarga, " +
-                "detail_pembelian.idDetailPembelian, " +
-                "detail_pembelian.idProduk, " +
-                "detail_pembelian.jumlah, " +
-                "produk.stok " +
-                "FROM pembelian " +
-                "JOIN detail_pembelian ON pembelian.idPembelian = detail_pembelian.idPembelian " +
-                "JOIN produk ON detail_pembelian.idProduk = produk.idProduk " +
-                "WHERE pembelian.idAgen = '" + txtIdAgen.getText() + "'";
-
-            Connection conn = Connections.ConnectionDB();
-            Statement stm = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            ResultSet pstShowData = stm.executeQuery(queryRelasiAgen);
-
-            // Map untuk rekap data per produk
-            Map<String, Integer> mapJumlahPerProduk = new HashMap<>();
-            Map<String, Integer> mapStokPerProduk = new HashMap<>();
-            Set<String> idPembelians = new HashSet<>();
-
-            // Loop pertama: kumpulkan data
-            while (pstShowData.next()) {
-                String idProduk = pstShowData.getString("idProduk");
-                int jumlah = pstShowData.getInt("jumlah");
-                int stok = pstShowData.getInt("stok");
-                String idPembelian = pstShowData.getString("idPembelian");
-
-                // Simpan idPembelian agar nanti bisa dihapus (1x)
-                idPembelians.add(idPembelian);
-
-                // Rekap jumlah beli per produk
-                if (mapJumlahPerProduk.containsKey(idProduk)) {
-                    mapJumlahPerProduk.put(idProduk, mapJumlahPerProduk.get(idProduk) + jumlah);
-                } else {
-                    mapJumlahPerProduk.put(idProduk, jumlah);
-                    mapStokPerProduk.put(idProduk, stok); // Simpan stok awal produk ini
-                }
-            }
-
-            // Proses update stok per produk
-            for (String idProdukKey : mapJumlahPerProduk.keySet()) {
-                int jumlahTotal = mapJumlahPerProduk.get(idProdukKey);
-                int stokAwal = mapStokPerProduk.get(idProdukKey);
-                int stokAkhir = (stokAwal >= jumlahTotal) ? stokAwal - jumlahTotal : 0;
-
-                System.out.println("idProduk: " + idProdukKey);
-                System.out.println("Total Jumlah Dibeli: " + jumlahTotal);
-                System.out.println("Stok Awal: " + stokAwal);
-                System.out.println("Stok Akhir: " + stokAkhir);
-
-                // Update stok produk
-                String queryUpdateProduk = "UPDATE produk SET stok = ? WHERE idProduk = ?";
-                PreparedStatement pstUpdateProduk = conn.prepareStatement(queryUpdateProduk);
-                pstUpdateProduk.setInt(1, stokAkhir);
-                pstUpdateProduk.setString(2, idProdukKey);
-                pstUpdateProduk.executeUpdate();
-            }
-
-            // Proses delete pembelian (1x per id)
-            for (String idPembelian : idPembelians) {
-                String queryDeletePembelian = "DELETE FROM pembelian WHERE idPembelian = ?";
-                PreparedStatement pstDeletePembelian = conn.prepareStatement(queryDeletePembelian);
-                pstDeletePembelian.setString(1, idPembelian);
-                pstDeletePembelian.executeUpdate();
-            }
-
-            System.out.println("✅ Semua stok produk berhasil diperbarui dan data pembelian telah dihapus.");
-
-
-            
-
-            //testing
-
-            
-        } catch (SQLException | HeadlessException e) {}
-    }//GEN-LAST:event_btnTestingActionPerformed
+    }//GEN-LAST:event_btnKembaliActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -524,11 +401,15 @@ public class AgenMenu extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnKembali;
     private javax.swing.JButton btnTambah;
-    private javax.swing.JButton btnTesting;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JScrollBar jScrollBar1;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField textNama;

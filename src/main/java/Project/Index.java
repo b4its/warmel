@@ -7,7 +7,7 @@ package Project;
 import Project.Connection.Connections;
 import java.sql.Connection;
 import Project.Helper.CurrencyFormat;
-
+import Project.DashboardIndex;
 import Project.Pages.Produk.*;
 import Project.Pages.Agen.AgenMenu;
 import Project.Pages.Pembelian.PembelianMenu;
@@ -31,10 +31,20 @@ public static Index instance; // instance global
      */
     public Index() {
         initComponents();
+        dashboardViews();
         addSubMenuKategori();
         instance = this; // tetapkan saat frame dibuat
         getPengeluaran();
         getPemasukan();
+    }
+    
+    private void dashboardViews()
+    {
+        panelViews.removeAll();
+        panelViews.repaint();
+        DashboardIndex dashboard = new DashboardIndex(this);
+        panelViews.add(dashboard);
+        dashboard.show();
     }
     
     public void getPengeluaran()
@@ -142,12 +152,12 @@ public static Index instance; // instance global
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBackground(new java.awt.Color(255, 51, 255));
         jPanel1.setMaximumSize(new java.awt.Dimension(1581, 120));
 
         jPanel2.setBackground(new java.awt.Color(255, 204, 255));
 
-        jLabel2.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
         jLabel2.setText("Warung Mama Amel");
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon.png"))); // NOI18N
@@ -159,7 +169,7 @@ public static Index instance; // instance global
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 152, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addGap(16, 16, 16))
         );
@@ -176,14 +186,14 @@ public static Index instance; // instance global
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
-        jPanel3.setBackground(new java.awt.Color(51, 204, 0));
+        jPanel3.setBackground(new java.awt.Color(204, 255, 204));
 
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(51, 102, 0));
         jLabel1.setText("Pemasukan:");
 
         labelPemasukan.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        labelPemasukan.setForeground(new java.awt.Color(255, 255, 255));
+        labelPemasukan.setForeground(new java.awt.Color(51, 102, 0));
         labelPemasukan.setText("0");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -195,26 +205,26 @@ public static Index instance; // instance global
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(labelPemasukan, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(8, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelPemasukan))
                 .addContainerGap(47, Short.MAX_VALUE))
         );
 
-        jPanel4.setBackground(new java.awt.Color(204, 0, 51));
+        jPanel4.setBackground(new java.awt.Color(255, 204, 204));
 
         jLabel4.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setForeground(new java.awt.Color(102, 0, 0));
         jLabel4.setText("Pengeluaran:");
 
         labelPengeluaran.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        labelPengeluaran.setForeground(new java.awt.Color(255, 255, 255));
+        labelPengeluaran.setForeground(new java.awt.Color(102, 0, 0));
         labelPengeluaran.setText("0");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -245,11 +255,11 @@ public static Index instance; // instance global
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(382, 382, 382)
+                .addGap(175, 175, 175)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(66, 66, 66)
                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(58, 58, 58))
+                .addGap(265, 265, 265))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -265,13 +275,13 @@ public static Index instance; // instance global
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
 
-        panelViews.setBackground(new java.awt.Color(255, 255, 255));
+        panelViews.setBackground(new java.awt.Color(204, 255, 204));
 
         javax.swing.GroupLayout panelViewsLayout = new javax.swing.GroupLayout(panelViews);
         panelViews.setLayout(panelViewsLayout);
         panelViewsLayout.setHorizontalGroup(
             panelViewsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 1589, Short.MAX_VALUE)
         );
         panelViewsLayout.setVerticalGroup(
             panelViewsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -354,8 +364,8 @@ public static Index instance; // instance global
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
