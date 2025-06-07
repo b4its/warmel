@@ -19,6 +19,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -89,31 +90,31 @@ public static Index instance; // instance global
 
     }
     
-    private void addSubMenuKategori() {
-        try (Connection conn = (Connection) Connections.ConnectionDB()) {
-            String sql = "SELECT namaKategori FROM kategori";
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
+    public void addSubMenuKategori() {
+        SwingUtilities.invokeLater(() -> {
+            try (Connection conn = (Connection) Connections.ConnectionDB()) {
+                String sql = "SELECT namaKategori FROM kategori";
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql);
 
-            while (rs.next()) {
-                String namaKategori = rs.getString("namaKategori");
+                menuKategori.removeAll();
+                while (rs.next()) {
+                    String namaKategori = rs.getString("namaKategori");
 
-                JMenuItem item = new JMenuItem(namaKategori);
+                    JMenuItem item = new JMenuItem(namaKategori);
+                    item.addActionListener(e -> {
+                        System.out.println("Kategori dipilih: " + namaKategori);
+                    });
 
-                // Tambahkan aksi ketika submenu diklik
-                item.addActionListener(e -> {
-                    System.out.println("Kategori dipilih: " + namaKategori);
-                    // atau tampilkan data produk, dll
-                });
-
-                // Tambahkan ke menuKategori
-                menuKategori.add(item);
+                    menuKategori.add(item);
+                }
+                menuKategori.revalidate();
+                menuKategori.repaint();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Gagal memuat kategori dari database.");
             }
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Gagal memuat kategori dari database.");
-        }
+        });
     }
 
 
@@ -219,7 +220,7 @@ public static Index instance; // instance global
 
         jPanel4.setBackground(new java.awt.Color(255, 204, 204));
 
-        jLabel4.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(102, 0, 0));
         jLabel4.setText("Pengeluaran:");
 
@@ -245,7 +246,7 @@ public static Index instance; // instance global
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(labelPengeluaran))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);

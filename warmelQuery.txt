@@ -22,7 +22,10 @@ CREATE TABLE produk (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX (idKategori),
-    CONSTRAINT fk_produk_kategori FOREIGN KEY (idKategori) REFERENCES kategori(idKategori)
+    CONSTRAINT fk_produk_kategori 
+        FOREIGN KEY (idKategori) 
+        REFERENCES kategori(idKategori)
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- Tabel Agen

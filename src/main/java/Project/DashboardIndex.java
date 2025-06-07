@@ -4,6 +4,7 @@
  */
 package Project;
 import Project.Index;
+import Project.Pages.Produk.KategoriProdukMenu;
 import Project.Pages.Agen.AgenMenu;
 import Project.Pages.Receipt.Detail.DetailPemasukan;
 import javax.swing.*;
@@ -39,7 +40,7 @@ public class DashboardIndex extends javax.swing.JInternalFrame {
         btnAgen = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        btnProduk = new javax.swing.JButton();
+        btnKategoriProduk = new javax.swing.JButton();
         btnPembelian = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         btnPenjualan = new javax.swing.JButton();
@@ -76,6 +77,8 @@ public class DashboardIndex extends javax.swing.JInternalFrame {
         btnAgen.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
         btnAgen.setForeground(new java.awt.Color(255, 255, 255));
         btnAgen.setText("Agen");
+        btnAgen.setToolTipText("");
+        btnAgen.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 5));
         btnAgen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAgenActionPerformed(evt);
@@ -86,17 +89,24 @@ public class DashboardIndex extends javax.swing.JInternalFrame {
         jLabel2.setText("Daftar Agen");
 
         jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
-        jLabel3.setText("Daftar Produk");
+        jLabel3.setText("Daftar Kategori Produk");
 
-        btnProduk.setBackground(new java.awt.Color(0, 0, 204));
-        btnProduk.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
-        btnProduk.setForeground(new java.awt.Color(255, 255, 255));
-        btnProduk.setText("Produk");
+        btnKategoriProduk.setBackground(new java.awt.Color(0, 0, 204));
+        btnKategoriProduk.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
+        btnKategoriProduk.setForeground(new java.awt.Color(255, 255, 255));
+        btnKategoriProduk.setText("Kategori Produk");
+        btnKategoriProduk.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 5));
+        btnKategoriProduk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKategoriProdukActionPerformed(evt);
+            }
+        });
 
         btnPembelian.setBackground(new java.awt.Color(153, 0, 0));
         btnPembelian.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
         btnPembelian.setForeground(new java.awt.Color(255, 255, 255));
         btnPembelian.setText("Pembelian");
+        btnPembelian.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 5));
         btnPembelian.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPembelianActionPerformed(evt);
@@ -110,6 +120,7 @@ public class DashboardIndex extends javax.swing.JInternalFrame {
         btnPenjualan.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
         btnPenjualan.setForeground(new java.awt.Color(255, 255, 255));
         btnPenjualan.setText("Penjualan");
+        btnPenjualan.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 5));
 
         jLabel5.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         jLabel5.setText("Penjualan Produk");
@@ -118,6 +129,7 @@ public class DashboardIndex extends javax.swing.JInternalFrame {
         btnKeuangan.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
         btnKeuangan.setForeground(new java.awt.Color(0, 102, 0));
         btnKeuangan.setText("Keuangan");
+        btnKeuangan.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 5));
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -129,7 +141,7 @@ public class DashboardIndex extends javax.swing.JInternalFrame {
                         .addContainerGap()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(btnProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnKategoriProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel3))
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addGap(719, 719, 719)
@@ -156,7 +168,7 @@ public class DashboardIndex extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAgen, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnKategoriProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(74, 74, 74)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -222,13 +234,23 @@ public class DashboardIndex extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_btnAgenActionPerformed
 
+    private void btnKategoriProdukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKategoriProdukActionPerformed
+        // TODO add your handling code here:
+        
+        KategoriProdukMenu kategoriMenu = new KategoriProdukMenu();
+        halamanUtama.panelViews.removeAll();
+        halamanUtama.panelViews.repaint();
+        halamanUtama.panelViews.add(kategoriMenu);
+        kategoriMenu.setVisible(true);
+    }//GEN-LAST:event_btnKategoriProdukActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgen;
+    private javax.swing.JButton btnKategoriProduk;
     private javax.swing.JButton btnKeuangan;
     private javax.swing.JButton btnPembelian;
     private javax.swing.JButton btnPenjualan;
-    private javax.swing.JButton btnProduk;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
