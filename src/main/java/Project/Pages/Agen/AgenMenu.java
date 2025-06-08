@@ -5,6 +5,7 @@
 package Project.Pages.Agen;
 
 import Project.Connection.Connections;
+import Project.DashboardIndex;
 import Project.Index;
 import java.awt.HeadlessException;
 import java.sql.Connection;
@@ -25,11 +26,12 @@ public class AgenMenu extends javax.swing.JInternalFrame {
      * Creates new form Produk
      */
     private Index halamanUtama;
+    
     public boolean dataBaru;
     public AgenMenu() {
         this.halamanUtama = Index.instance; // ✅ sekarang aman
         initComponents();
-
+        this.halamanUtama = halamanUtama;
         getData();
         dataBaru = true;
     }
@@ -513,7 +515,11 @@ public class AgenMenu extends javax.swing.JInternalFrame {
 
     private void btnKembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKembaliActionPerformed
         // TODO add your handling code here:
-        dispose();
+        
+        halamanUtama.setVisible(false);
+        setVisible(false);
+        halamanUtama.setVisible(true);
+        halamanUtama.dashboardViews();
     }//GEN-LAST:event_btnKembaliActionPerformed
 
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed

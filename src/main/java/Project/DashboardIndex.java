@@ -6,6 +6,7 @@ package Project;
 import Project.Index;
 import Project.Pages.Produk.KategoriProdukMenu;
 import Project.Pages.Agen.AgenMenu;
+import Project.Pages.Pembelian.PembelianMenu;
 import Project.Pages.Receipt.Detail.DetailPemasukan;
 import javax.swing.*;
 /**
@@ -222,6 +223,11 @@ public class DashboardIndex extends javax.swing.JInternalFrame {
 
     private void btnPembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPembelianActionPerformed
         // TODO add your handling code here:
+        PembelianMenu menuPembelian = new PembelianMenu();
+        halamanUtama.panelViews.removeAll();
+        halamanUtama.panelViews.repaint();
+        halamanUtama.panelViews.add(menuPembelian);
+        menuPembelian.setVisible(true);
     }//GEN-LAST:event_btnPembelianActionPerformed
 
     private void btnAgenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgenActionPerformed

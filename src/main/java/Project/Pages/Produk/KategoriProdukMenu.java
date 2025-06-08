@@ -341,7 +341,10 @@ public class KategoriProdukMenu extends javax.swing.JInternalFrame {
 
     private void btnKembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKembaliActionPerformed
         // TODO add your handling code here:
-        dispose();
+        halamanUtama.setVisible(false);
+        setVisible(false);
+        halamanUtama.setVisible(true);
+        halamanUtama.dashboardViews();
     }//GEN-LAST:event_btnKembaliActionPerformed
 
     private void kategoriProdukTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_kategoriProdukTableMouseClicked

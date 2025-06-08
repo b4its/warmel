@@ -39,7 +39,7 @@ public static Index instance; // instance global
         getPemasukan();
     }
     
-    private void dashboardViews()
+    public void dashboardViews()
     {
         panelViews.removeAll();
         panelViews.repaint();
@@ -153,10 +153,10 @@ public static Index instance; // instance global
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
 
-        jPanel1.setBackground(new java.awt.Color(255, 51, 255));
+        jPanel1.setBackground(new java.awt.Color(255, 204, 255));
         jPanel1.setMaximumSize(new java.awt.Dimension(1581, 120));
 
-        jPanel2.setBackground(new java.awt.Color(255, 204, 255));
+        jPanel2.setBackground(new java.awt.Color(255, 245, 255));
 
         jLabel2.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
         jLabel2.setText("Warung Mama Amel");

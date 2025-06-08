@@ -16,6 +16,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import Project.Helper.CurrencyFormat;
+import Project.Index;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -38,10 +39,13 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
     /**
      * Creates new form 
      */
+    private Index halamanUtama;
     public boolean dataBaru;
     public ProdukMenu() {
         
         initComponents();
+        this.halamanUtama = Index.instance; 
+      
         AutoCompleteDecorator.decorate(cbKategori);
         getKategori();
         getData();
@@ -90,8 +94,6 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
             model.addColumn("Harga Beli");
             model.addColumn("Harga Jual");
             model.addColumn("Stok");
-            model.addColumn("Created");
-            model.addColumn("Updated At");
 
             // Menambahkan data ke dalam model
             int no = 1;  // Variabel untuk nomor urut
@@ -105,9 +107,7 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
                     sql.getString("namaKategori"), // Menambahkan kategori
                     formatIDCurrency.formatCurrency(sql.getDouble("hargaBeli")), // Menambahkan harga beli
                     formatIDCurrency.formatCurrency(sql.getDouble("hargaJual")), // Menambahkan harga jual
-                    sql.getInt("stok"), // Menambahkan stok
-                    sql.getString("created_at"), // Menambahkan created_at
-                    sql.getString("updated_at")  // Menambahkan updated_at
+                    sql.getInt("stok") // Menambahkan stok
                 });
             }
 
@@ -492,8 +492,10 @@ public class ProdukMenu extends javax.swing.JInternalFrame {
 
     private void btnKembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKembaliActionPerformed
         // TODO add your handling code here:
-        dispose();
-        
+        halamanUtama.setVisible(false);
+        setVisible(false);
+        halamanUtama.setVisible(true);
+        halamanUtama.dashboardViews();
     }//GEN-LAST:event_btnKembaliActionPerformed
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
@@ -664,8 +666,7 @@ getData();
                 model.addColumn("Harga Beli");
                 model.addColumn("Harga Jual");
                 model.addColumn("Stok");
-                model.addColumn("Created");
-                model.addColumn("Updated At");
+
 
                 int no = 1;
                 while (rs.next()) {
@@ -676,9 +677,7 @@ getData();
                         rs.getString("namaKategori"),
                         formatIDCurrency.formatCurrency(rs.getDouble("hargaBeli")),
                         formatIDCurrency.formatCurrency(rs.getDouble("hargaJual")),
-                        rs.getInt("stok"),
-                        rs.getString("created_at"),
-                        rs.getString("updated_at")
+                        rs.getInt("stok")
                     });
                 }
 
