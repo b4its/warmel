@@ -87,6 +87,8 @@ CREATE TABLE detail_penjualan (
 ) ENGINE=InnoDB;
 
 
+DROP TABLE IF EXISTS detail_pembelian;
+DROP TABLE IF EXISTS pembelian;
 DROP TABLE IF EXISTS detail_penjualan;
 DROP TABLE IF EXISTS penjualan;
 

@@ -57,9 +57,7 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
         
     }
     
-
-        private void getData() {
-
+    private void getData() {
         java.sql.Connection conn = null;
         java.sql.Statement stm = null;
         java.sql.ResultSet sql = null;
@@ -67,13 +65,11 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
         try {
             conn = (Connection) Connections.ConnectionDB();
 
-            // Memeriksa apakah koneksi berhasil
             if (conn == null) {
                 JOptionPane.showMessageDialog(null, "Koneksi ke database gagal.");
                 return;
             }
 
-            // Menjalankan query
             stm = conn.createStatement();
             sql = stm.executeQuery(
                 "SELECT \n" +
@@ -89,21 +85,24 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
                 "    detail_pembelian.jumlah,\n" +
                 "    detail_pembelian.subtotal,\n" +
                 "    produk.namaProduk,\n" +
-                "    produk.stok\n" + // asumsikan kamu ingin stok produk juga
+                "    produk.stok\n" +
                 "FROM pembelian\n" +
                 "JOIN agen ON pembelian.idAgen = agen.idAgen\n" +
                 "JOIN detail_pembelian ON pembelian.idPembelian = detail_pembelian.idPembelian\n" +
                 "JOIN produk ON detail_pembelian.idProduk = produk.idProduk"
             );
 
-            // Memeriksa apakah query mengembalikan hasil
+            DefaultTableModel model = new DefaultTableModel();
+
             if (!sql.isBeforeFirst()) {
-                JOptionPane.showMessageDialog(null, "Tidak ada data yang ditemukan.");
+                // Jika tidak ada data, buat 1 kolom dan 1 baris pesan
+                model.addColumn("Informasi");
+                model.addRow(new Object[]{"Saat ini tidak ada data yang tersedia, silahkan untuk melakukan pembelian produk"});
+                pembelianTable.setModel(model);
                 return;
             }
 
-            // Membuat model tabel untuk menampilkan data
-            DefaultTableModel model = new DefaultTableModel();
+            // Jika data tersedia
             model.addColumn("No");
             model.addColumn("Id Pembelian");
             model.addColumn("Nama Agen");
@@ -113,39 +112,35 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
             model.addColumn("Sub Total");
             model.addColumn("Total Keseluruhan");
 
-            // Menambahkan data ke dalam model
-            int no = 1;  // Variabel untuk nomor urut
+            int no = 1;
 
-            // Menambahkan data dari ResultSet ke model tabel
             while (sql.next()) {
                 model.addRow(new Object[]{
-                    no++, // Menambahkan nomor urut
-                    sql.getInt("idPembelian"), // Menambahkan nama produk
-                    sql.getString("namaAgen"), // Menambahkan nama produk
-                    sql.getString("namaProduk"), // Menambahkan kategori
-                    sql.getInt("jumlah"), // Menambahkan kategori
-                    sql.getInt("stok"), // Menambahkan kategori
-                    formatIDCurrency.currencyFormat(sql.getDouble("subtotal")), // Menambahkan kategori
+                    no++,
+                    sql.getInt("idPembelian"),
+                    sql.getString("namaAgen"),
+                    sql.getString("namaProduk"),
+                    sql.getInt("jumlah"),
+                    sql.getInt("stok"),
+                    formatIDCurrency.currencyFormat(sql.getDouble("subtotal")),
                     formatIDCurrency.currencyFormat(sql.getDouble("totalHarga")),
                 });
             }
 
-            // Menampilkan model ke dalam tabel
             pembelianTable.setModel(model);
-            
-            //sembunyikan idPembelian
+
+            // Sembunyikan kolom idPembelian
             pembelianTable.getColumnModel().getColumn(1).setMinWidth(0);
             pembelianTable.getColumnModel().getColumn(1).setMaxWidth(0);
             pembelianTable.getColumnModel().getColumn(1).setWidth(0);
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error SQL: " + e.getMessage());
-            e.printStackTrace(); // Untuk debugging
+            e.printStackTrace();
         } catch (HeadlessException e) {
             JOptionPane.showMessageDialog(null, "Error Antarmuka: " + e.getMessage());
-            e.printStackTrace(); // Untuk debugging
+            e.printStackTrace();
         } finally {
-            // Menutup koneksi dan statement di dalam blok finally untuk memastikan selalu ditutup
             try {
                 if (sql != null) sql.close();
                 if (stm != null) stm.close();
@@ -157,7 +152,6 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
         }
     }
 
-    
     private void getAgen() {
             try (Connection conn = (Connection) Connections.ConnectionDB();
                  java.sql.Statement stmAgen = conn.createStatement();
@@ -813,8 +807,8 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
         double harga = Double.parseDouble(txtHarga.getText());
         double subTotal = Double.parseDouble(txtSubHarga.getText());
         double totalHarga = Double.parseDouble(txtTotalHarga.getText());
-        String keterangan = "Telah berhasil memesan Produk: " + nama_produk + "| Jumlah Produk: "+ jumlah_produk + "| Harga Satuan: "+ harga
-                +"| dari agen "+nama_agen;
+        String keterangan = "Telah berhasil memesan\nProduk: " + nama_produk + "\nJumlah Produk: "+ jumlah_produk + "\nHarga Satuan: "+ harga
+                +"\ndari agen "+nama_agen;
 //        System.out.println("idAgen      : " + idAgen);
 //        System.out.println("nama_agen   : " + nama_agen);
 //        System.out.println("idProduk    : " + idProduk);
@@ -937,7 +931,10 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
 
     private void btnKembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKembaliActionPerformed
         // TODO add your handling code here:
-        dispose();
+        halamanUtama.setVisible(false);
+        setVisible(false);
+        halamanUtama.setVisible(true);
+        halamanUtama.dashboardViews();
     }//GEN-LAST:event_btnKembaliActionPerformed
 
     private void pembelianTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pembelianTableMouseClicked

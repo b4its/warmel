@@ -7,7 +7,9 @@ import Project.Index;
 import Project.Pages.Produk.KategoriProdukMenu;
 import Project.Pages.Agen.AgenMenu;
 import Project.Pages.Pembelian.PembelianMenu;
+import Project.Pages.Penjualan.PenjualanMenu;
 import Project.Pages.Receipt.Detail.DetailPemasukan;
+import Project.Pages.Receipt.KeuanganMenu;
 import javax.swing.*;
 /**
  *
@@ -122,6 +124,11 @@ public class DashboardIndex extends javax.swing.JInternalFrame {
         btnPenjualan.setForeground(new java.awt.Color(255, 255, 255));
         btnPenjualan.setText("Penjualan");
         btnPenjualan.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 5));
+        btnPenjualan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPenjualanActionPerformed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         jLabel5.setText("Penjualan Produk");
@@ -131,6 +138,11 @@ public class DashboardIndex extends javax.swing.JInternalFrame {
         btnKeuangan.setForeground(new java.awt.Color(0, 102, 0));
         btnKeuangan.setText("Keuangan");
         btnKeuangan.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 5));
+        btnKeuangan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKeuanganActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -249,6 +261,24 @@ public class DashboardIndex extends javax.swing.JInternalFrame {
         halamanUtama.panelViews.add(kategoriMenu);
         kategoriMenu.setVisible(true);
     }//GEN-LAST:event_btnKategoriProdukActionPerformed
+
+    private void btnKeuanganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKeuanganActionPerformed
+        // TODO add your handling code here:
+        halamanUtama.panelViews.removeAll();
+        halamanUtama.panelViews.repaint();
+        KeuanganMenu laporanKeuangan = new KeuanganMenu();
+        halamanUtama.panelViews.add(laporanKeuangan);
+        laporanKeuangan.show();
+    }//GEN-LAST:event_btnKeuanganActionPerformed
+
+    private void btnPenjualanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPenjualanActionPerformed
+        // TODO add your handling code here:
+        halamanUtama.panelViews.removeAll();
+        halamanUtama.panelViews.repaint();
+        PenjualanMenu menuPenjualan = new PenjualanMenu();
+        halamanUtama.panelViews.add(menuPenjualan);
+        menuPenjualan.show();
+    }//GEN-LAST:event_btnPenjualanActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

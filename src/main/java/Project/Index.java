@@ -58,7 +58,7 @@ public static Index instance; // instance global
 
                 if (rs.next()) {
                     double total = rs.getDouble("totalKeseluruhan");
-                    labelPengeluaran.setText((total != 0 ? formatIDCurrency.currencyFormat(total) : "0.00"));
+                    labelPengeluaran.setText((total != 0 ? "Rp "+formatIDCurrency.currencyFormat(total) : "0.00"));
                 }
 
         } catch (SQLException ex) {
@@ -79,7 +79,7 @@ public static Index instance; // instance global
 
                 if (rs.next()) {
                     double total = rs.getDouble("totalKeseluruhan");
-                    labelPemasukan.setText((total != 0 ? formatIDCurrency.currencyFormat(total) : "0.00"));
+                    labelPemasukan.setText((total != 0 ? "Rp "+ formatIDCurrency.currencyFormat(total) : "0.00"));
                 }
 
         } catch (SQLException ex) {
@@ -409,13 +409,11 @@ public static Index instance; // instance global
 
     private void daftarKeuanganViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_daftarKeuanganViewActionPerformed
         // TODO add your handling code here:
-        
-        KeuanganMenu laporanKeuangan = new KeuanganMenu();
-   
-        panelViews.add(laporanKeuangan);
-        panelViews.revalidate();
+        panelViews.removeAll();
         panelViews.repaint();
-        laporanKeuangan.setVisible(true);
+        KeuanganMenu laporanKeuangan = new KeuanganMenu();
+        panelViews.add(laporanKeuangan);
+        laporanKeuangan.show();
     
 
     }//GEN-LAST:event_daftarKeuanganViewActionPerformed

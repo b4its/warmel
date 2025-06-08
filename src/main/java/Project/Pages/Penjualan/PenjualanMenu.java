@@ -60,47 +60,61 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
     }
     
 
-        private void getData() {
+    private void getData() {
 
-                // Membuat model tabel untuk menampilkan data
-                DefaultTableModel model = new DefaultTableModel();
-                model.addColumn("No");
-                model.addColumn("ID Produk");
-                model.addColumn("Nama Produk");
-                model.addColumn("Jumlah");
-                model.addColumn("Stok");
-                model.addColumn("Sub Total");
-                
-                model.setRowCount(0); // Kosongkan isi tabel terlebih dahulu
-                double totalSubTotal = 0.00;
-                int number = 1;
-                for (Map.Entry<Integer, Map<String, Object>> entry : dataProdukMap.entrySet()) {
-                    // int no = entry.getKey() + 1;
-                    int no = number++;
-                    Map<String, Object> item = entry.getValue();
-                    
-                    int idProduk = (int) item.get("idProduk");
-                    String namaProduk = (String) item.get("namaProduk");
-                    int jumlah = (int) item.get("jumlah");
-                    
-                    int stok = (int) (item.get("stok"));
-                    double subTotal = (double) item.get("subTotal");
-                    totalSubTotal += subTotal;
-                    model.addRow(new Object[]{no, idProduk, namaProduk, jumlah, stok, formatIDCurrency.currencyFormat(subTotal)});
-                }
-                txtTotalHargaa.setText(String.valueOf(totalSubTotal));
-                txtVisualTotalHarga.setText("Rp "+formatIDCurrency.currencyFormat(totalSubTotal));
-                // Menampilkan model ke dalam tabel
-                penjualanTable.setModel(model);
+        // Membuat model tabel untuk menampilkan data
+        DefaultTableModel model = new DefaultTableModel();
 
-                //sembunyikan idPenjualan
-                penjualanTable.getColumnModel().getColumn(1).setMinWidth(0);
-                penjualanTable.getColumnModel().getColumn(1).setMaxWidth(0);
-                penjualanTable.getColumnModel().getColumn(1).setWidth(0);
-          
+        // Cek apakah dataProdukMap kosong
+        if (dataProdukMap == null || dataProdukMap.isEmpty()) {
+            model.addColumn("Informasi");
+            model.addRow(new Object[]{"Saat ini tidak ada data yang tersedia, silahkan untuk melakukan penjualan produk"});
+            penjualanTable.setModel(model);
+            return;
+        }
+
+        // Jika ada data, tampilkan normal
+        model.addColumn("No");
+        model.addColumn("ID Produk");
+        model.addColumn("Nama Produk");
+        model.addColumn("Jumlah");
+        model.addColumn("Stok");
+        model.addColumn("Sub Total");
+
+        model.setRowCount(0); // Kosongkan isi tabel terlebih dahulu
+        double totalSubTotal = 0.00;
+        int number = 1;
+
+        for (Map.Entry<Integer, Map<String, Object>> entry : dataProdukMap.entrySet()) {
+            int no = number++;
+            Map<String, Object> item = entry.getValue();
+
+            int idProduk = (int) item.get("idProduk");
+            String namaProduk = (String) item.get("namaProduk");
+            int jumlah = (int) item.get("jumlah");
+            int stok = (int) item.get("stok");
+            double subTotal = (double) item.get("subTotal");
+
+            totalSubTotal += subTotal;
+
+            model.addRow(new Object[]{
+                no, idProduk, namaProduk, jumlah, stok,
+                formatIDCurrency.currencyFormat(subTotal)
+            });
+        }
+
+        txtTotalHargaa.setText(String.valueOf(totalSubTotal));
+        txtVisualTotalHarga.setText("Rp " + formatIDCurrency.currencyFormat(totalSubTotal));
+
+        // Menampilkan model ke dalam tabel
+        penjualanTable.setModel(model);
+
+        // Sembunyikan kolom ID Produk
+        penjualanTable.getColumnModel().getColumn(1).setMinWidth(0);
+        penjualanTable.getColumnModel().getColumn(1).setMaxWidth(0);
+        penjualanTable.getColumnModel().getColumn(1).setWidth(0);
     }
 
-    
 
 
     
@@ -235,9 +249,9 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         penjualanTable = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
-        btnKonfirmasi = new javax.swing.JButton();
         txtNominalBayar = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        btnKonfirmasi = new javax.swing.JButton();
 
         jPanel8.setBackground(new java.awt.Color(255, 204, 255));
 
@@ -586,6 +600,15 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 241, 255));
 
+        txtNominalBayar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNominalBayarActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Dubai", 1, 14)); // NOI18N
+        jLabel2.setText("Nominal Bayar");
+
         btnKonfirmasi.setBackground(new java.awt.Color(204, 255, 204));
         btnKonfirmasi.setFont(new java.awt.Font("Dubai", 1, 14)); // NOI18N
         btnKonfirmasi.setText("Bayar");
@@ -595,40 +618,32 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
             }
         });
 
-        txtNominalBayar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNominalBayarActionPerformed(evt);
-            }
-        });
-
-        jLabel2.setText("Nominal Bayar");
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(22, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(btnKonfirmasi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(23, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtNominalBayar, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(17, 17, 17))
+                        .addComponent(btnKonfirmasi, javax.swing.GroupLayout.PREFERRED_SIZE, 580, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(txtNominalBayar, javax.swing.GroupLayout.PREFERRED_SIZE, 580, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(txtNominalBayar, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE))
+                .addGap(16, 16, 16)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtNominalBayar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnKonfirmasi, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(17, 17, 17))
+                .addContainerGap(59, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
@@ -637,19 +652,19 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 623, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(119, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
@@ -664,7 +679,7 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
                     .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                .addGap(21, 21, 21)
                 .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(63, Short.MAX_VALUE))
         );
@@ -693,7 +708,7 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 17, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -766,7 +781,7 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
 
         // Ambil total harga dari input
         double totalHarga = Double.parseDouble(txtTotalHarga.getText().trim());
-        String keterangan = "telah berhasil membeli produk: " + nama_produk + "| jumlah: " + StringJumlah;
+        String keterangan = "telah berhasil membeli produk: " + nama_produk + "\njumlah: " + StringJumlah;
 
         // Cetak hasil input ke konsol (debug/log)
         System.out.println("idProduk     : " + idProduk);
@@ -863,7 +878,10 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
 
     private void btnKembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKembaliActionPerformed
         // TODO add your handling code here:
-        dispose();
+        halamanUtama.setVisible(false);
+        setVisible(false);
+        halamanUtama.setVisible(true);
+        halamanUtama.dashboardViews();
     }//GEN-LAST:event_btnKembaliActionPerformed
 
     private void penjualanTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_penjualanTableMouseClicked
@@ -966,10 +984,10 @@ public class PenjualanMenu extends javax.swing.JInternalFrame {
                 if (nominal == subTotal)
                 {
                     // tidak ada kembalian
-                    keterangan = "Telah berhasil menjual produk: " + semuaNamaProduk+
-                    "\nSub Total Harga per Produk: "+semuaTotalHarga+"|\nTotal Harga Keseluruhan: " + formatIDCurrency.currencyFormat(subTotal)+
+                    keterangan = "Telah berhasil menjual\nproduk: " + semuaNamaProduk+
+                    "\nSub Total Harga per Produk: "+semuaTotalHarga+"\nTotal Harga Keseluruhan: " + formatIDCurrency.currencyFormat(subTotal)+
                       "\nNominal Bayar: " +formatIDCurrency.currencyFormat(nominal)+
-                      "\n Kembalian: Tidak Ada Kembalian|";
+                      "\nKembalian: Tidak Ada Kembalian";
                 } else 
                 {
                     // ada kembalian
