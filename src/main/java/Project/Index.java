@@ -68,7 +68,7 @@ public class Index extends javax.swing.JFrame {
 
             if (rs.next()) {
                 double total = rs.getDouble("totalKeseluruhan");
-                labelPengeluaran.setText((total != 0 ? "Rp " + formatIDCurrency.currencyFormat(total) : "0.00"));
+                labelPengeluaran.setText((total != 0 ? "Rp " + formatIDCurrency.currencyFormat(total) : "Rp 0.000"));
             }
 
         } catch (SQLException ex) {
@@ -86,7 +86,7 @@ public class Index extends javax.swing.JFrame {
 
             if (rs.next()) {
                 double total = rs.getDouble("totalKeseluruhan");
-                labelPemasukan.setText((total != 0 ? "Rp " + formatIDCurrency.currencyFormat(total) : "0.00"));
+                labelPemasukan.setText((total != 0 ? "Rp " + formatIDCurrency.currencyFormat(total) : "Rp 0.000"));
             }
 
         } catch (SQLException ex) {

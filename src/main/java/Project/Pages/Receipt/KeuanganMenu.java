@@ -212,7 +212,7 @@ public class KeuanganMenu extends javax.swing.JInternalFrame {
 
                     // Langkah 3: Tampilkan ke label
                     labelSaldoBersih.setText(
-                        (saldoSetelahTax != 0 ? "Rp " + formatIDCurrency.currencyFormat(saldoSetelahTax) : "0.00")
+                        (saldoSetelahTax != 0 ? "Rp " + formatIDCurrency.currencyFormat(saldoSetelahTax) : "Rp 0.000")
                     );
                 }
 
