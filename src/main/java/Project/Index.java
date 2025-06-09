@@ -99,21 +99,34 @@ public class Index extends javax.swing.JFrame {
     public void addSubMenuKategori() {
         SwingUtilities.invokeLater(() -> {
             try (Connection conn = (Connection) Connections.ConnectionDB()) {
-                String sql = "SELECT namaKategori FROM kategori";
+                String sql = "SELECT idKategori, namaKategori FROM kategori";
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(sql);
 
                 menuKategori.removeAll();
+
+                int index = 0;
                 while (rs.next()) {
+                    int idKategori = rs.getInt("idKategori");
                     String namaKategori = rs.getString("namaKategori");
+                    int currentIndex = index; // perlu untuk lambda expression
 
                     JMenuItem item = new JMenuItem(namaKategori);
                     item.addActionListener(e -> {
-                        System.out.println("Kategori dipilih: " + namaKategori);
+                        // Panggil frame dan lempar data
+                        panelViews.removeAll();
+                        panelViews.repaint();
+
+                        ProdukperKategori menu = new ProdukperKategori(idKategori, currentIndex, namaKategori);
+
+                        panelViews.add(menu);
+                        menu.setVisible(true);
                     });
 
                     menuKategori.add(item);
+                    index++;
                 }
+
                 menuKategori.revalidate();
                 menuKategori.repaint();
             } catch (SQLException ex) {
@@ -122,7 +135,6 @@ public class Index extends javax.swing.JFrame {
             }
         });
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
