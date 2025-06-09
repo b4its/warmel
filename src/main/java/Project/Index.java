@@ -26,7 +26,10 @@ import javax.swing.SwingUtilities;
  * @author brsap
  */
 public class Index extends javax.swing.JFrame {
-public static Index instance; // instance global
+    public static Index instance; // instance globa
+    private String queryTotalPengeluaran = "SELECT SUM(totalHarga) AS totalKeseluruhan FROM pembelian WHERE DATE(pembelian.created_at) = CURDATE()";
+    private String queryTotalPemasukan = "SELECT SUM(totalHarga) AS totalKeseluruhan FROM penjualan WHERE DATE(penjualan.created_at) = CURDATE()";
+
     /**
      * Creates new form Produk
      */
@@ -39,6 +42,14 @@ public static Index instance; // instance global
         getPemasukan();
     }
     
+    public void setCustomQueryTotalPengeluaran(String query) {
+        this.queryTotalPengeluaran = query;
+    }
+
+    public void setCustomQueryTotalPemasukan(String query) {
+        this.queryTotalPemasukan = query;
+    }
+    
     public void dashboardViews()
     {
         panelViews.removeAll();
@@ -48,47 +59,42 @@ public static Index instance; // instance global
         dashboard.show();
     }
     
-    public void getPengeluaran()
-    {
-       try (Connection conn = (Connection) Connections.ConnectionDB()) {
-           CurrencyFormat formatIDCurrency = new CurrencyFormat();
-            String sql = "SELECT SUM(totalHarga) AS totalKeseluruhan FROM pembelian";
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(sql);
+    public void getPengeluaran() {
+        try (Connection conn = (Connection) Connections.ConnectionDB()) {
+            CurrencyFormat formatIDCurrency = new CurrencyFormat();
 
-                if (rs.next()) {
-                    double total = rs.getDouble("totalKeseluruhan");
-                    labelPengeluaran.setText((total != 0 ? "Rp "+formatIDCurrency.currencyFormat(total) : "0.00"));
-                }
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(queryTotalPengeluaran); // pakai custom query
 
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Gagal memuat kategori dari database.");
-        }
-        
-
-    }
-    
-        public void getPemasukan()
-    {
-       try (Connection conn = (Connection) Connections.ConnectionDB()) {
-           CurrencyFormat formatIDCurrency = new CurrencyFormat();
-            String sql = "SELECT SUM(totalHarga) AS totalKeseluruhan FROM penjualan";
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(sql);
-
-                if (rs.next()) {
-                    double total = rs.getDouble("totalKeseluruhan");
-                    labelPemasukan.setText((total != 0 ? "Rp "+ formatIDCurrency.currencyFormat(total) : "0.00"));
-                }
+            if (rs.next()) {
+                double total = rs.getDouble("totalKeseluruhan");
+                labelPengeluaran.setText((total != 0 ? "Rp " + formatIDCurrency.currencyFormat(total) : "0.00"));
+            }
 
         } catch (SQLException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Gagal memuat kategori dari database.");
+            JOptionPane.showMessageDialog(this, "Gagal memuat data pengeluaran dari database.");
         }
-        
-
     }
+
+    public void getPemasukan() {
+        try (Connection conn = (Connection) Connections.ConnectionDB()) {
+            CurrencyFormat formatIDCurrency = new CurrencyFormat();
+
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(queryTotalPemasukan); // pakai custom query
+
+            if (rs.next()) {
+                double total = rs.getDouble("totalKeseluruhan");
+                labelPemasukan.setText((total != 0 ? "Rp " + formatIDCurrency.currencyFormat(total) : "0.00"));
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Gagal memuat data pemasukan dari database.");
+        }
+    }
+
     
     public void addSubMenuKategori() {
         SwingUtilities.invokeLater(() -> {

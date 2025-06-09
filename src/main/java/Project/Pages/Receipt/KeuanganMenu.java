@@ -21,6 +21,7 @@ import Project.Pages.Receipt.Detail.DetailPengeluaran;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import Project.Helper.Tax;
+import java.sql.PreparedStatement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 /**
@@ -28,6 +29,9 @@ import java.util.Date;
  * @author brsap
  */
 public class KeuanganMenu extends javax.swing.JInternalFrame {
+    private String queryPemasukan;
+    private String queryPengeluaran;
+    private String querySaldo;
     CurrencyFormat formatIDCurrency = new CurrencyFormat();
     Tax pajak = new Tax();
     /**
@@ -38,151 +42,146 @@ public class KeuanganMenu extends javax.swing.JInternalFrame {
 
     
     public KeuanganMenu() {
+        this.queryPemasukan = getDefaultQueryPemasukan();
+        this.queryPengeluaran = getDefaultQueryPengeluaran();
         initComponents();
-        instance = this; // ✅ set instance saat objek dibuat
-        this.halamanUtama = Index.instance; // ✅ sekarang aman
+        instance = this;
+        this.halamanUtama = Index.instance;
+        
+        // default
+        setCustomQueryPemasukan("SELECT * FROM penjualan WHERE DATE(created_at) = CURDATE()");
+        setCustomQueryPengeluaran("SELECT * FROM pembelian WHERE DATE(created_at) = CURDATE()");
+        setCustomQuerySaldo("SELECT COUNT(*) AS totalRecord, SUM(totalHarga) AS saldoBersih FROM penjualan WHERE DATE(created_at) = CURDATE()");
         getPemasukanData();
         getPengeluaranData();
         getSaldoBersih();
-
     }
-        private void getPemasukanData()
-    {
-        // menampilkan data dari database
-        try 
-        {
-            Connection conn = (Connection) Connections.ConnectionDB();
-            java.sql.Statement stm = conn.createStatement();
-            java.sql.ResultSet sql = stm.executeQuery("select idPenjualan, totalHarga, created_at from penjualan");
-            
-            // Membuat model tabel untuk menampilkan data
-            DefaultTableModel model = new DefaultTableModel();
 
-            // Menambahkan kolom baru untuk 'no'
+    // Setter agar bisa diubah dari luar
+    public void setCustomQueryPemasukan(String query) {
+        this.queryPemasukan = query;
+    }
+
+    public void setCustomQueryPengeluaran(String query) {
+        this.queryPengeluaran = query;
+    }
+    
+    public void setCustomQuerySaldo(String query) {
+        this.querySaldo = query;
+    }
+    // Getter query default (tanpa parameter)
+    private String getDefaultQueryPemasukan() {
+        return "SELECT idPenjualan, totalHarga, created_at FROM penjualan WHERE DATE(created_at) = CURDATE()";
+    }
+
+    private String getDefaultQueryPengeluaran() {
+        return "SELECT idPembelian, idAgen, totalHarga, created_at FROM pembelian WHERE DATE(created_at) = CURDATE()";
+    }
+
+    private void getPemasukanData() {
+        try {
+            Connection conn = (Connection) Connections.ConnectionDB();
+            Statement st = conn.createStatement();
+            ResultSet sql = st.executeQuery(queryPemasukan); // gunakan queryPemasukan langsung
+
+            DefaultTableModel model = new DefaultTableModel();
             model.addColumn("No");
             model.addColumn("ID Pemasukan");
             model.addColumn("Kode Transaksi Masuk");
             model.addColumn("Total Pemasukan");
-            
-  
 
-            // Menambahkan data ke dalam model
-            int no = 1;  // Variabel untuk nomor urut
+            int no = 1;
             while (sql.next()) {
                 String idPenjualan = sql.getString("idPenjualan");
                 String created_at = sql.getString("created_at");
-                
-                // Parse string menjadi LocalDateTime
+
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 LocalDateTime dateTime = LocalDateTime.parse(created_at, formatter);
 
-                // Ambil komponen
-                int minute = dateTime.getMinute();       // 55
-                int hour = dateTime.getHour();           // 7
-                int dayOfMonth = dateTime.getDayOfMonth(); // 26
-                int month = dateTime.getMonthValue();    // 5
+                String codeCreatedAt = String.format("%02d%02d%02d%d",
+                    dateTime.getMinute(),
+                    dateTime.getHour(),
+                    dateTime.getDayOfMonth(),
+                    dateTime.getMonthValue());
 
-                // Gabungkan jadi satu string sesuai format Anda
-                String codeCreatedAt = String.format("%02d%02d%02d%d", minute, hour, dayOfMonth, month);
-                String codePemasukan = "IN"+codeCreatedAt+"-"+idPenjualan;
+                String codePemasukan = "IN" + codeCreatedAt + "-" + idPenjualan;
                 String totalPemasukan = formatIDCurrency.currencyFormat(sql.getDouble("totalHarga"));
-                
-                //debugging
-                    System.out.println("==========================");
-                    System.out.println("Kode Pemasukan: " + codePemasukan);
-                    System.out.println("Created At: " + created_at);
-                    System.out.println("Total Pemasukan: " + totalPemasukan);
-                model.addRow(new Object[] {
-                    no++, // Menambahkan nomor urut
-                     // Menambahkan nama kategori
+
+                System.out.println("==========================");
+                System.out.println("Kode Pemasukan: " + codePemasukan);
+                System.out.println("Created At: " + created_at);
+                System.out.println("Total Pemasukan: " + totalPemasukan);
+
+                model.addRow(new Object[]{
+                    no++,
                     idPenjualan,
                     codePemasukan,
-                    totalPemasukan   // Menambahkan created_at
+                    totalPemasukan
                 });
             }
 
-            // Menampilkan model ke dalam tabel
             pemasukanTable.setModel(model);
-            
-            //sembunyikan idPenjualan
-                pemasukanTable.getColumnModel().getColumn(1).setMinWidth(0);
-                pemasukanTable.getColumnModel().getColumn(1).setMaxWidth(0);
-                pemasukanTable.getColumnModel().getColumn(1).setWidth(0);
-            
-        }
-        catch (SQLException | HeadlessException e) 
-        {
+            pemasukanTable.getColumnModel().getColumn(1).setMinWidth(0);
+            pemasukanTable.getColumnModel().getColumn(1).setMaxWidth(0);
+            pemasukanTable.getColumnModel().getColumn(1).setWidth(0);
+
+        } catch (SQLException | HeadlessException e) {
+            e.printStackTrace();
         }
     }
 
-        private void getPengeluaranData()
-    {
-        // menampilkan data dari database
-        try 
-        {
+    private void getPengeluaranData() {
+        try {
             Connection conn = (Connection) Connections.ConnectionDB();
-            java.sql.Statement stm = conn.createStatement();
-            java.sql.ResultSet sql = stm.executeQuery("select idPembelian, idAgen, totalHarga, created_at from pembelian");
-            
-            // Membuat model tabel untuk menampilkan data
-            DefaultTableModel model = new DefaultTableModel();
+            Statement st = conn.createStatement();
+            ResultSet sql = st.executeQuery(queryPengeluaran); // gunakan queryPengeluaran langsung
 
-            // Menambahkan kolom baru untuk 'no'
+            DefaultTableModel model = new DefaultTableModel();
             model.addColumn("No");
             model.addColumn("ID Pembelian");
             model.addColumn("Kode Transaksi Keluar");
             model.addColumn("Total Pengeluaran");
-            
-  
 
-            // Menambahkan data ke dalam model
-            int no = 1;  // Variabel untuk nomor urut
+            int no = 1;
             while (sql.next()) {
                 String idPembelian = sql.getString("idPembelian");
                 String idAgen = sql.getString("idAgen");
                 String created_at = sql.getString("created_at");
-                
-                // Parse string menjadi LocalDateTime
+
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 LocalDateTime dateTime = LocalDateTime.parse(created_at, formatter);
 
-                // Ambil komponen
-                int minute = dateTime.getMinute();       // 55
-                int hour = dateTime.getHour();           // 7
-                int dayOfMonth = dateTime.getDayOfMonth(); // 26
-                int month = dateTime.getMonthValue();    // 5
+                String codeCreatedAt = String.format("%02d%02d%02d%d",
+                    dateTime.getMinute(),
+                    dateTime.getHour(),
+                    dateTime.getDayOfMonth(),
+                    dateTime.getMonthValue());
 
-                // Gabungkan jadi satu string sesuai format Anda
-                String codeCreatedAt = String.format("%02d%02d%02d%d", minute, hour, dayOfMonth, month);
-                String codePengeluaran = "OUT"+codeCreatedAt+"-"+idPembelian+idAgen;
+                String codePengeluaran = "OUT" + codeCreatedAt + "-" + idPembelian + idAgen;
                 String totalPengeluaran = formatIDCurrency.currencyFormat(sql.getDouble("totalHarga"));
-                
-                //debugging
-                    System.out.println("==========================");
-                    System.out.println("Kode Pengeluaran: " + codePengeluaran);
-                    System.out.println("Created At: " + created_at);
-                    System.out.println("Total Pengeluaran: " + totalPengeluaran);
-                model.addRow(new Object[] {
-                    no++, // Menambahkan nomor urut
+
+                System.out.println("==========================");
+                System.out.println("Kode Pengeluaran: " + codePengeluaran);
+                System.out.println("Created At: " + created_at);
+                System.out.println("Total Pengeluaran: " + totalPengeluaran);
+
+                model.addRow(new Object[]{
+                    no++,
                     idPembelian,
                     codePengeluaran,
-                    totalPengeluaran   // Menambahkan created_at
+                    totalPengeluaran
                 });
             }
 
-            // Menampilkan model ke dalam tabel
             pengeluaranTable.setModel(model);
-            //sembunyikan idPenjualan
-                pengeluaranTable.getColumnModel().getColumn(1).setMinWidth(0);
-                pengeluaranTable.getColumnModel().getColumn(1).setMaxWidth(0);
-                pengeluaranTable.getColumnModel().getColumn(1).setWidth(0);
-            
-        }
-        catch (SQLException | HeadlessException e) 
-        {
+            pengeluaranTable.getColumnModel().getColumn(1).setMinWidth(0);
+            pengeluaranTable.getColumnModel().getColumn(1).setMaxWidth(0);
+            pengeluaranTable.getColumnModel().getColumn(1).setWidth(0);
+
+        } catch (SQLException | HeadlessException e) {
+            e.printStackTrace();
         }
     }
-
 
         public String getIdPemasukan(){
             String idPemasukan = txtTablePemasukan.getText();
@@ -200,9 +199,8 @@ public class KeuanganMenu extends javax.swing.JInternalFrame {
                 CurrencyFormat formatIDCurrency = new CurrencyFormat();
 
                 // Langkah 1: Ambil total record dan saldo bersih (subtotal)
-                String sql = "SELECT COUNT(*) AS totalRecord, SUM(subtotal) AS saldoBersih FROM detail_penjualan";
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(sql);
+                ResultSet rs = stmt.executeQuery(querySaldo); // gunakan custom query
 
                 if (rs.next()) {
                     int totalRecord = rs.getInt("totalRecord");       // total baris/record
@@ -224,7 +222,8 @@ public class KeuanganMenu extends javax.swing.JInternalFrame {
             }
 
         }
-    /**
+    
+        /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
@@ -238,6 +237,7 @@ public class KeuanganMenu extends javax.swing.JInternalFrame {
         dateInput = new com.toedter.calendar.JDateChooser();
         jLabel2 = new javax.swing.JLabel();
         btnTampilkan = new javax.swing.JButton();
+        btnTampilkanSemua = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
@@ -275,6 +275,15 @@ public class KeuanganMenu extends javax.swing.JInternalFrame {
             }
         });
 
+        btnTampilkanSemua.setBackground(new java.awt.Color(204, 255, 255));
+        btnTampilkanSemua.setFont(new java.awt.Font("Dubai", 1, 14)); // NOI18N
+        btnTampilkanSemua.setText("Lihat Semua");
+        btnTampilkanSemua.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTampilkanSemuaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -284,8 +293,9 @@ public class KeuanganMenu extends javax.swing.JInternalFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel2)
                     .addComponent(dateInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnTampilkan, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnTampilkan, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
+                    .addComponent(btnTampilkanSemua, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -296,7 +306,9 @@ public class KeuanganMenu extends javax.swing.JInternalFrame {
                 .addComponent(dateInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnTampilkan, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnTampilkanSemua, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(38, Short.MAX_VALUE))
         );
 
         jPanel7.setBackground(new java.awt.Color(255, 255, 255));
@@ -530,18 +542,18 @@ public class KeuanganMenu extends javax.swing.JInternalFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(19, 19, 19)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(32, 32, 32)
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(255, 255, 255)
-                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(82, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
@@ -552,13 +564,16 @@ public class KeuanganMenu extends javax.swing.JInternalFrame {
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(243, Short.MAX_VALUE))
         );
 
@@ -580,21 +595,34 @@ public class KeuanganMenu extends javax.swing.JInternalFrame {
 
     private void btnKembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKembaliActionPerformed
         // TODO add your handling code here:
-        dispose();
+        halamanUtama.setVisible(false);
+        setVisible(false);
+        halamanUtama.setVisible(true);
+        halamanUtama.dashboardViews();
     }//GEN-LAST:event_btnKembaliActionPerformed
 
     private void btnTampilkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTampilkanActionPerformed
-        // TODO add your handling code here:
-            Date tanggalDipilih = dateInput.getDate();
+    // get tanggal dari date input
+    Date tanggal = dateInput.getDate();
+    if (tanggal == null) {
+        JOptionPane.showMessageDialog(null, "Silakan pilih tanggal terlebih dahulu.");
+        return;
+    }
 
-            if (tanggalDipilih != null) {
-                // Format tanggal ke string
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                String tanggalFormatted = sdf.format(tanggalDipilih);
-                JOptionPane.showMessageDialog(null, "Tanggal yang dipilih: " + tanggalFormatted);
-            } else {
-                JOptionPane.showMessageDialog(null, "Silakan pilih tanggal terlebih dahulu.");
-            }
+    String tanggalFormat = new SimpleDateFormat("yyyy-MM-dd").format(tanggal);
+    // index
+        halamanUtama.setCustomQueryTotalPengeluaran("SELECT SUM(totalHarga) AS totalKeseluruhan FROM pembelian WHERE DATE(created_at) = '" + tanggalFormat + "'");
+        halamanUtama.setCustomQueryTotalPemasukan("SELECT SUM(totalHarga) AS totalKeseluruhan FROM penjualan WHERE DATE(created_at) = '" + tanggalFormat + "'");
+    // keuangan menu
+        setCustomQueryPemasukan("SELECT * FROM penjualan WHERE DATE(created_at) = '" + tanggalFormat + "'");
+        setCustomQueryPengeluaran("SELECT * FROM pembelian WHERE DATE(created_at) = '" + tanggalFormat + "'");
+        setCustomQuerySaldo("SELECT COUNT(*) AS totalRecord, SUM(totalHarga) AS saldoBersih FROM penjualan WHERE DATE(created_at) = '" + tanggalFormat + "'");
+            halamanUtama.getPemasukan();
+            halamanUtama.getPengeluaran();
+            getPemasukanData();
+            getPengeluaranData();
+            getSaldoBersih();
+
     }//GEN-LAST:event_btnTampilkanActionPerformed
 
     private void pemasukanTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pemasukanTableMouseClicked
@@ -651,12 +679,27 @@ public class KeuanganMenu extends javax.swing.JInternalFrame {
         frameTes.setVisible(true);
     }//GEN-LAST:event_btnDetailPengeluaranActionPerformed
 
+    private void btnTampilkanSemuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTampilkanSemuaActionPerformed
+        // TODO add your handling code here:
+        halamanUtama.setCustomQueryTotalPengeluaran("SELECT SUM(totalHarga) AS totalKeseluruhan FROM pembelian");
+        halamanUtama.setCustomQueryTotalPemasukan("SELECT SUM(totalHarga) AS totalKeseluruhan FROM penjualan");
+        setCustomQueryPemasukan("SELECT * FROM penjualan");
+        setCustomQueryPengeluaran("SELECT * FROM pembelian");
+        setCustomQuerySaldo("SELECT COUNT(*) AS totalRecord, SUM(totalHarga) AS saldoBersih FROM penjualan");
+            halamanUtama.getPemasukan();
+            halamanUtama.getPengeluaran();
+            getPemasukanData();
+            getPengeluaranData();
+            getSaldoBersih();
+    }//GEN-LAST:event_btnTampilkanSemuaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDetailPemasukan1;
     private javax.swing.JButton btnDetailPengeluaran;
     private javax.swing.JButton btnKembali;
     private javax.swing.JButton btnTampilkan;
+    private javax.swing.JButton btnTampilkanSemua;
     private com.toedter.calendar.JDateChooser dateInput;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

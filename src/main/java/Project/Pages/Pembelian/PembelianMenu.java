@@ -89,7 +89,8 @@ public class PembelianMenu extends javax.swing.JInternalFrame {
                 "FROM pembelian\n" +
                 "JOIN agen ON pembelian.idAgen = agen.idAgen\n" +
                 "JOIN detail_pembelian ON pembelian.idPembelian = detail_pembelian.idPembelian\n" +
-                "JOIN produk ON detail_pembelian.idProduk = produk.idProduk"
+                "JOIN produk ON detail_pembelian.idProduk = produk.idProduk\n" +
+                 "WHERE DATE(pembelian.created_at) = CURDATE()"
             );
 
             DefaultTableModel model = new DefaultTableModel();
