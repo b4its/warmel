@@ -1,4 +1,6 @@
-# Warung Mama Amel:
+# Warung Mama Amel
+## inventory apps with Point of Sales in java
+### about application:
 - Software 
     - Laragon
     - Xampp
